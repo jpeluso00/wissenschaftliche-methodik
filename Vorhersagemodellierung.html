@@ -81,7 +81,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#einleitung" id="toc-einleitung" class="nav-link active" data-scroll-target="#einleitung">Einleitung</a></li>
-  <li><a href="#explorative-datenanalyse-und-datenvorverarbeitung" id="toc-explorative-datenanalyse-und-datenvorverarbeitung" class="nav-link" data-scroll-target="#explorative-datenanalyse-und-datenvorverarbeitung">Explorative Datenanalyse und Datenvorverarbeitung</a></li>
+  <li><a href="#explorative-datenanalyse-und-datenvorverarbeitung" id="toc-explorative-datenanalyse-und-datenvorverarbeitung" class="nav-link" data-scroll-target="#explorative-datenanalyse-und-datenvorverarbeitung">Explorative Datenanalyse und Datenvorverarbeitung</a>
+  <ul class="collapse">
   <li><a href="#einfuehrungsphase" id="toc-einfuehrungsphase" class="nav-link" data-scroll-target="#einfuehrungsphase">Einfuehrungsphase</a>
   <ul class="collapse">
   <li><a href="#vermietungen-in-abhängigkeit-zur-einfuehrungsphase" id="toc-vermietungen-in-abhängigkeit-zur-einfuehrungsphase" class="nav-link" data-scroll-target="#vermietungen-in-abhängigkeit-zur-einfuehrungsphase">Vermietungen in Abhängigkeit zur Einfuehrungsphase</a></li>
@@ -109,6 +110,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#luftfeuchtigkeit" id="toc-luftfeuchtigkeit" class="nav-link" data-scroll-target="#luftfeuchtigkeit">Luftfeuchtigkeit</a>
   <ul class="collapse">
   <li><a href="#vermietungen-in-abhängigkeit-zur-luftfeuchtigkeit" id="toc-vermietungen-in-abhängigkeit-zur-luftfeuchtigkeit" class="nav-link" data-scroll-target="#vermietungen-in-abhängigkeit-zur-luftfeuchtigkeit">Vermietungen in Abhängigkeit zur Luftfeuchtigkeit</a></li>
+  </ul></li>
+  <li><a href="#preprocessing-der-daten" id="toc-preprocessing-der-daten" class="nav-link" data-scroll-target="#preprocessing-der-daten">Preprocessing der Daten</a>
+  <ul class="collapse">
+  <li><a href="#einfuehrungsphase-1" id="toc-einfuehrungsphase-1" class="nav-link" data-scroll-target="#einfuehrungsphase-1">Einfuehrungsphase</a></li>
+  <li><a href="#jahreszeit-1" id="toc-jahreszeit-1" class="nav-link" data-scroll-target="#jahreszeit-1">Jahreszeit</a></li>
+  <li><a href="#wetter-1" id="toc-wetter-1" class="nav-link" data-scroll-target="#wetter-1">Wetter</a></li>
+  <li><a href="#arbeitstag-1" id="toc-arbeitstag-1" class="nav-link" data-scroll-target="#arbeitstag-1">Arbeitstag</a></li>
+  <li><a href="#temperatur-1" id="toc-temperatur-1" class="nav-link" data-scroll-target="#temperatur-1">Temperatur</a></li>
+  <li><a href="#windgeschwindigkeit-1" id="toc-windgeschwindigkeit-1" class="nav-link" data-scroll-target="#windgeschwindigkeit-1">Windgeschwindigkeit</a></li>
+  <li><a href="#luftfeuchtigkeit-1" id="toc-luftfeuchtigkeit-1" class="nav-link" data-scroll-target="#luftfeuchtigkeit-1">Luftfeuchtigkeit</a></li>
+  <li><a href="#preprocessing-results" id="toc-preprocessing-results" class="nav-link" data-scroll-target="#preprocessing-results">Preprocessing Results</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#methodenbeschreibung" id="toc-methodenbeschreibung" class="nav-link" data-scroll-target="#methodenbeschreibung">Methodenbeschreibung</a></li>
   <li><a href="#anwendung-ergebnis-und-vorhersage" id="toc-anwendung-ergebnis-und-vorhersage" class="nav-link" data-scroll-target="#anwendung-ergebnis-und-vorhersage">Anwendung, Ergebnis und Vorhersage</a></li>
@@ -154,19 +167,270 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- Sollten Umlaute falsch angezeigt werden: "File -> Reopen with Encoding -> UTF8" -->
 <section id="einleitung" class="level1">
 <h1>Einleitung</h1>
-<p>Ungefährer Umfang: 0,5–1,5 Seiten.</p>
-<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+<!-- Umfang von 0,5-1,5 Seiten -->
 </section>
 <section id="explorative-datenanalyse-und-datenvorverarbeitung" class="level1">
 <h1>Explorative Datenanalyse und Datenvorverarbeitung</h1>
+<!-- Umfang von 2-4 Seiten -->
 <p>Daten einlesen:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load data</span></span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>anwendung <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"anwendung.csv"</span>) <span class="sc">|&gt;</span> <span class="fu">read.csv2</span>()</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"train.csv"</span>) <span class="sc">|&gt;</span> <span class="fu">read.csv2</span>()</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># show the head of the data</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the structure of the data</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(anwendung)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   200 obs. of  7 variables:
+ $ einfuehrungsphase  : chr  "Nein" "Ja" "Nein" "Ja" ...
+ $ jahreszeit         : chr  "Frühling" "Sommer" "Sommer" "Herbst" ...
+ $ wetter             : chr  "Gut" "Gut" "Nicht gut" "Nicht gut" ...
+ $ arbeitstag         : chr  "Nein" "Nein" "Ja" "Ja" ...
+ $ temperatur         : num  5.39 24.9 25.51 15.3 16.72 ...
+ $ windgeschwindigkeit: num  15.57 13.55 6.43 12.56 9.64 ...
+ $ luftfeuchtigkeit   : num  46.1 55.6 60.3 83.2 52.6 ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   500 obs. of  8 variables:
+ $ einfuehrungsphase  : chr  "Nein" "Nein" "Nein" "Nein" ...
+ $ jahreszeit         : chr  "Sommer" "Sommer" "Winter" "Frühling" ...
+ $ wetter             : chr  "Nicht gut" "Gut" "Gut" "Gut" ...
+ $ arbeitstag         : chr  "Ja" "Ja" "Ja" "Ja" ...
+ $ temperatur         : num  23.7 26.5 4.6 12.9 23.8 ...
+ $ windgeschwindigkeit: num  15.2 10.2 10.2 25.8 11.9 ...
+ $ luftfeuchtigkeit   : num  73.6 44 58.5 50 82.3 ...
+ $ vermietungen       : int  4127 8173 3783 5557 3350 4709 4609 5117 1851 2494 ...</code></pre>
+</div>
+</div>
+<section id="einfuehrungsphase" class="level2">
+<h2 class="anchored" data-anchor-id="einfuehrungsphase">Einfuehrungsphase</h2>
+<p>Handelt es sich um die Einführungsphase, d.h., ist das Angebot neu?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> einfuehrungsphase, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="vermietungen-in-abhängigkeit-zur-einfuehrungsphase" class="level3">
+<h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-einfuehrungsphase">Vermietungen in Abhängigkeit zur Einfuehrungsphase</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> einfuehrungsphase, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="jahreszeit" class="level2">
+<h2 class="anchored" data-anchor-id="jahreszeit">Jahreszeit</h2>
+<p>Jahreszeit. Kann man nicht viel mehr dazu sagen.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> jahreszeit, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="vermietungen-in-abhängigkeit-zur-jahreszeit" class="level3">
+<h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-jahreszeit">Vermietungen in Abhängigkeit zur Jahreszeit</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> jahreszeit, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="wetter" class="level2">
+<h2 class="anchored" data-anchor-id="wetter">Wetter</h2>
+<p>Die Wetterbeschreibung.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> wetter, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="vermietungen-in-abhängigkeit-zum-wetter" class="level3">
+<h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zum-wetter">Vermietungen in Abhängigkeit zum Wetter</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> wetter, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="arbeitstag" class="level2">
+<h2 class="anchored" data-anchor-id="arbeitstag">Arbeitstag</h2>
+<p>Handelt es sich um einen Werktag oder um Wochenende bzw. Feier- oder Ferientag?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> arbeitstag, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="vermietungen-in-abhängigkeit-zum-arbeitstag" class="level3">
+<h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zum-arbeitstag">Vermietungen in Abhängigkeit zum Arbeitstag</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> arbeitstag, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="temperatur" class="level2">
+<h2 class="anchored" data-anchor-id="temperatur">Temperatur</h2>
+<p>Temperatur in °C.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fav_stats</span>(train<span class="sc">$</span>temperatur)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   min     Q1 median    Q3   max     mean       sd   n missing
+ -3.59 7.4825  15.21 23.02 33.83 15.03484 8.778967 500       0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_dhistogram</span>(<span class="sc">~</span> temperatur, <span class="at">data=</span>train) <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_dens</span>(<span class="at">linewidth =</span> <span class="dv">2</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="vermietungen-in-abhängigkeit-zur-temperatur" class="level3">
+<h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-temperatur">Vermietungen in Abhängigkeit zur Temperatur</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(vermietungen <span class="sc">~</span> temperatur, <span class="at">data=</span>train) <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>()</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using method = 'loess'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="windgeschwindigkeit" class="level2">
+<h2 class="anchored" data-anchor-id="windgeschwindigkeit">Windgeschwindigkeit</h2>
+<p>Windgeschwindigkeit in km/h.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fav_stats</span>(train<span class="sc">$</span>windgeschwindigkeit)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  min     Q1 median      Q3   max     mean       sd   n missing
+ 1.49 8.9575  11.91 15.6925 34.41 12.86882 5.358726 500       0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_dhistogram</span>(<span class="sc">~</span> windgeschwindigkeit, <span class="at">data=</span>train) <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_dens</span>(<span class="at">linewidth =</span> <span class="dv">2</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="vermietungen-in-abhängigkeit-zur-temperatur-1" class="level3">
+<h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-temperatur-1">Vermietungen in Abhängigkeit zur Temperatur</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(vermietungen <span class="sc">~</span> windgeschwindigkeit, <span class="at">data=</span>train) <span class="sc">|&gt;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>()</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using method = 'loess'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="luftfeuchtigkeit" class="level2">
+<h2 class="anchored" data-anchor-id="luftfeuchtigkeit">Luftfeuchtigkeit</h2>
+<p>Luftfeuchtigkeit in %.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fav_stats</span>(train<span class="sc">$</span>luftfeuchtigkeit)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  min     Q1 median     Q3    max     mean       sd   n missing
+ 3.88 50.935 62.345 74.015 103.61 62.38542 15.46771 500       0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_dhistogram</span>(<span class="sc">~</span> luftfeuchtigkeit, <span class="at">data=</span>train) <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_dens</span>(<span class="at">linewidth =</span> <span class="dv">2</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="vermietungen-in-abhängigkeit-zur-luftfeuchtigkeit" class="level3">
+<h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-luftfeuchtigkeit">Vermietungen in Abhängigkeit zur Luftfeuchtigkeit</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(vermietungen <span class="sc">~</span> luftfeuchtigkeit, <span class="at">data=</span>train) <span class="sc">|&gt;</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>()</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using method = 'loess'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="preprocessing-der-daten" class="level2">
+<h2 class="anchored" data-anchor-id="preprocessing-der-daten">Preprocessing der Daten</h2>
+<p>https://www.geeksforgeeks.org/data-preprocessing-in-r/</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a copy of the original data frames</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>encoded_anwendung <span class="ot">&lt;-</span> anwendung</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>encoded_train <span class="ot">&lt;-</span> train</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  einfuehrungsphase jahreszeit    wetter arbeitstag temperatur
 1              Nein     Sommer Nicht gut         Ja      23.69
@@ -184,237 +448,126 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 6                8.38            68.01         4709</code></pre>
 </div>
 </div>
-</section>
-<section id="einfuehrungsphase" class="level1">
-<h1>Einfuehrungsphase</h1>
+<section id="einfuehrungsphase-1" class="level3">
+<h3 class="anchored" data-anchor-id="einfuehrungsphase-1">Einfuehrungsphase</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> einfuehrungsphase, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<section id="vermietungen-in-abhängigkeit-zur-einfuehrungsphase" class="level2">
-<h2 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-einfuehrungsphase">Vermietungen in Abhängigkeit zur Einfuehrungsphase</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> einfuehrungsphase, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define mappings</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>einfuehrungsphase_mapping <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Nein"</span> <span class="ot">=</span> <span class="dv">0</span>, <span class="st">"Ja"</span> <span class="ot">=</span> <span class="dv">1</span>) </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply the encoding</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>encoded_train<span class="sc">$</span>einfuehrungsphase <span class="ot">&lt;-</span> einfuehrungsphase_mapping[<span class="fu">as.character</span>(encoded_train<span class="sc">$</span>einfuehrungsphase)]</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-</section>
-<section id="jahreszeit" class="level1">
-<h1>Jahreszeit</h1>
+<section id="jahreszeit-1" class="level3">
+<h3 class="anchored" data-anchor-id="jahreszeit-1">Jahreszeit</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> jahreszeit, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<section id="vermietungen-in-abhängigkeit-zur-jahreszeit" class="level2">
-<h2 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-jahreszeit">Vermietungen in Abhängigkeit zur Jahreszeit</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> jahreszeit, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-</section>
-<section id="wetter" class="level1">
-<h1>Wetter</h1>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> wetter, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<section id="vermietungen-in-abhängigkeit-zum-wetter" class="level2">
-<h2 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zum-wetter">Vermietungen in Abhängigkeit zum Wetter</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> wetter, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-</section>
-<section id="arbeitstag" class="level1">
-<h1>Arbeitstag</h1>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> arbeitstag, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<section id="vermietungen-in-abhängigkeit-zum-arbeitstag" class="level2">
-<h2 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zum-arbeitstag">Vermietungen in Abhängigkeit zum Arbeitstag</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> arbeitstag, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-</section>
-<section id="temperatur" class="level1">
-<h1>Temperatur</h1>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fav_stats</span>(train<span class="sc">$</span>temperatur)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new data frame with the one-hot encoded variables </span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>encoded_jahreszeit <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">model.matrix</span>(<span class="sc">~</span> jahreszeit <span class="sc">-</span> <span class="dv">1</span>, encoded_train)) </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(encoded_jahreszeit)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   min     Q1 median    Q3   max     mean       sd   n missing
- -3.59 7.4825  15.21 23.02 33.83 15.03484 8.778967 500       0</code></pre>
+<pre><code>  jahreszeitFrühling jahreszeitHerbst jahreszeitSommer jahreszeitWinter
+1                  0                0                1                0
+2                  0                0                1                0
+3                  0                0                0                1
+4                  1                0                0                0
+5                  0                1                0                0
+6                  0                0                1                0</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_dhistogram</span>(<span class="sc">~</span> temperatur, <span class="at">data=</span>train) <span class="sc">|&gt;</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_dens</span>(<span class="at">linewidth =</span> <span class="dv">2</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<section id="vermietungen-in-abhängigkeit-zur-temperatur" class="level2">
-<h2 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-temperatur">Vermietungen in Abhängigkeit zur Temperatur</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(vermietungen <span class="sc">~</span> temperatur, <span class="at">data=</span>train) <span class="sc">|&gt;</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>()</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`geom_smooth()` using method = 'loess'</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the new columns to the encoded data frame and remove the old column</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>encoded_train <span class="ot">&lt;-</span> <span class="fu">cbind</span>(encoded_jahreszeit, encoded_train)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>encoded_train<span class="sc">$</span>jahreszeit <span class="ot">&lt;-</span> <span class="cn">NULL</span></span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-</section>
-<section id="windgeschwindigkeit" class="level1">
-<h1>Windgeschwindigkeit</h1>
+<section id="wetter-1" class="level3">
+<h3 class="anchored" data-anchor-id="wetter-1">Wetter</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fav_stats</span>(train<span class="sc">$</span>windgeschwindigkeit)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define mapping</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>wetter_mapping <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Schlecht"</span> <span class="ot">=</span> <span class="dv">0</span>, <span class="st">"Nicht gut"</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">"Gut"</span> <span class="ot">=</span> <span class="dv">2</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply the encoding</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>encoded_train<span class="sc">$</span>wetter <span class="ot">&lt;-</span> wetter_mapping[<span class="fu">as.character</span>(encoded_train<span class="sc">$</span>wetter)]</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="arbeitstag-1" class="level3">
+<h3 class="anchored" data-anchor-id="arbeitstag-1">Arbeitstag</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define mappings</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>arbeitstag_mapping <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Nein"</span> <span class="ot">=</span> <span class="dv">0</span>, <span class="st">"Ja"</span> <span class="ot">=</span> <span class="dv">1</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply the encoding</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>encoded_train<span class="sc">$</span>arbeitstag <span class="ot">&lt;-</span> arbeitstag_mapping[<span class="fu">as.character</span>(encoded_train<span class="sc">$</span>arbeitstag)]</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="temperatur-1" class="level3">
+<h3 class="anchored" data-anchor-id="temperatur-1">Temperatur</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: maybe standardize?</span></span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="windgeschwindigkeit-1" class="level3">
+<h3 class="anchored" data-anchor-id="windgeschwindigkeit-1">Windgeschwindigkeit</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co">: maybe standardize?</span></span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="luftfeuchtigkeit-1" class="level3">
+<h3 class="anchored" data-anchor-id="luftfeuchtigkeit-1">Luftfeuchtigkeit</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>encoded_train<span class="sc">$</span>luftfeuchtigkeit <span class="ot">&lt;-</span> train<span class="sc">$</span>luftfeuchtigkeit <span class="sc">/</span> <span class="dv">100</span></span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="preprocessing-results" class="level3">
+<h3 class="anchored" data-anchor-id="preprocessing-results">Preprocessing Results</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(encoded_train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  min     Q1 median      Q3   max     mean       sd   n missing
- 1.49 8.9575  11.91 15.6925 34.41 12.86882 5.358726 500       0</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_dhistogram</span>(<span class="sc">~</span> windgeschwindigkeit, <span class="at">data=</span>train) <span class="sc">|&gt;</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_dens</span>(<span class="at">linewidth =</span> <span class="dv">2</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<section id="vermietungen-in-abhängigkeit-zur-temperatur-1" class="level2">
-<h2 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-temperatur-1">Vermietungen in Abhängigkeit zur Temperatur</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(vermietungen <span class="sc">~</span> windgeschwindigkeit, <span class="at">data=</span>train) <span class="sc">|&gt;</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>()</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`geom_smooth()` using method = 'loess'</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
+<pre><code>                    vars   n    mean      sd  median trimmed     mad   min
+jahreszeitFrühling     1 500    0.25    0.43    0.00    0.18    0.00  0.00
+jahreszeitHerbst       2 500    0.25    0.43    0.00    0.19    0.00  0.00
+jahreszeitSommer       3 500    0.25    0.43    0.00    0.18    0.00  0.00
+jahreszeitWinter       4 500    0.26    0.44    0.00    0.20    0.00  0.00
+einfuehrungsphase      5 500    0.49    0.50    0.00    0.48    0.00  0.00
+wetter                 6 500    1.59    0.56    2.00    1.65    0.00  0.00
+arbeitstag             7 500    0.68    0.47    1.00    0.72    0.00  0.00
+temperatur             8 500   15.03    8.78   15.21   15.12   11.58 -3.59
+windgeschwindigkeit    9 500   12.87    5.36   11.91   12.45    4.85  1.49
+luftfeuchtigkeit      10 500    0.62    0.15    0.62    0.62    0.17  0.04
+vermietungen          11 500 4416.61 1989.57 4514.50 4417.46 2213.52 23.00
+                        max   range  skew kurtosis    se
+jahreszeitFrühling     1.00    1.00  1.16    -0.65  0.02
+jahreszeitHerbst       1.00    1.00  1.15    -0.68  0.02
+jahreszeitSommer       1.00    1.00  1.18    -0.62  0.02
+jahreszeitWinter       1.00    1.00  1.11    -0.76  0.02
+einfuehrungsphase      1.00    1.00  0.05    -2.00  0.02
+wetter                 2.00    2.00 -0.94    -0.15  0.02
+arbeitstag             1.00    1.00 -0.75    -1.44  0.02
+temperatur            33.83   37.42 -0.05    -1.18  0.39
+windgeschwindigkeit   34.41   32.92  0.73     0.45  0.24
+luftfeuchtigkeit       1.04    1.00 -0.14    -0.04  0.01
+vermietungen        8715.00 8692.00 -0.02    -0.86 88.98</code></pre>
 </div>
 </div>
 </section>
-</section>
-<section id="luftfeuchtigkeit" class="level1">
-<h1>Luftfeuchtigkeit</h1>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fav_stats</span>(train<span class="sc">$</span>luftfeuchtigkeit)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  min     Q1 median     Q3    max     mean       sd   n missing
- 3.88 50.935 62.345 74.015 103.61 62.38542 15.46771 500       0</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_dhistogram</span>(<span class="sc">~</span> luftfeuchtigkeit, <span class="at">data=</span>train) <span class="sc">|&gt;</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_dens</span>(<span class="at">linewidth =</span> <span class="dv">2</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<section id="vermietungen-in-abhängigkeit-zur-luftfeuchtigkeit" class="level2">
-<h2 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-luftfeuchtigkeit">Vermietungen in Abhängigkeit zur Luftfeuchtigkeit</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(vermietungen <span class="sc">~</span> luftfeuchtigkeit, <span class="at">data=</span>train) <span class="sc">|&gt;</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>()</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`geom_smooth()` using method = 'loess'</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
 </section>
 </section>
 <section id="methodenbeschreibung" class="level1">
 <h1>Methodenbeschreibung</h1>
-<p>Bei Gruppenarbeiten mit weniger als drei Teilnehmer*innen entfällt dieser Abschnitt. Bei Gruppenarbeiten mit drei oder mehr Teilnehmer*innen: gehen Sie hier auf die verwendete Methode zur Modellierung, Variablen, und Modellauswahl ein. Zitieren Sie hier auch die methodische Literatur. Der Abschnitt sollte einen Umfang von 2–4 Seiten haben.</p>
-<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+<!-- Umfang von 2-4 Seiten -->
+<p>https://www.datacamp.com/tutorial/neural-network-models-r</p>
+<p>Gehen Sie hier auf die verwendete Methode zur Modellierung, Variablen, und Modellauswahl ein. Zitieren Sie hier auch die methodische Literatur.</p>
 </section>
 <section id="anwendung-ergebnis-und-vorhersage" class="level1">
 <h1>Anwendung, Ergebnis und Vorhersage</h1>
+<!-- Umfang von 2-4 Seiten -->
 <p>Wenden Sie hier Ihr Modell an und Interpretieren Sie Ihr Ergebnis. Bei Einzelarbeiten sollte der reine Text (ohne Code, Abbildungen etc.) einen Umfang von ca. 1–2 Seiten haben, bei Gruppenarbeiten einen von ca. 2–4 Seiten.</p>
 <p>Modell schätzen:</p>
-<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
 <p>Modell zur Vorhersage anwenden:</p>
 <p>Kontrolle und Export:</p>
 </section>
 <section id="zusammenfassung" class="level1">
 <h1>6. Zusammenfassung</h1>
+<!-- Umfang von 0,5-1 Seiten -->
 <p>Fassen Sie kurz die zentralen Ergebnisse zusammen (0,5–1 Seite). Gehen Sie auch auf die Grenzen Ihrer Analyse ein.</p>
-<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
 <p><em>Hinweis:</em> Laden Sie das aus der qmd-Datei gerenderte pdf-Dokument als Prüfungsleistung im OC hoch (keine gedruckte Abgabe erforderlich). Als Zusatzmaterial laden Sie die qmd-Datei und die csv-Datei mit den Daten Ihrer Prognose (<code>Prognose_IhrName.csv</code>) hoch.</p>
 </section>
 <section id="literatur" class="level1">

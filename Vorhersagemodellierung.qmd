@@ -22,79 +22,92 @@ editor_options:
 #| include: false
 library(mosaic)
 library(here)
+library(tidyverse)
+library(psych)
 ```
 
 <!-- Sollten Umlaute falsch angezeigt werden: "File -> Reopen with Encoding -> UTF8" -->
 
 # Einleitung
 
-Ungefährer Umfang: 0,5--1,5 Seiten. 
-
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+<!-- Umfang von 0,5-1,5 Seiten -->
 
 
 # Explorative Datenanalyse und Datenvorverarbeitung
 
+<!-- Umfang von 2-4 Seiten -->
+
 Daten einlesen:
 
 ```{r}
-# load data
+# Load data
 anwendung <- here("data", "raw", "anwendung.csv") |> read.csv2()
 train <- here("data", "raw", "train.csv") |> read.csv2()
 
-# show the head of the data
-head(train)
+# Show the structure of the data
+str(anwendung)
+str(train)
 ```
 
-# Einfuehrungsphase
+## Einfuehrungsphase
+
+Handelt es sich um die Einführungsphase, d.h., ist das Angebot neu?
 
 ```{r}
 gf_bar(~ einfuehrungsphase, data=train)
 ```
 
-## Vermietungen in Abhängigkeit zur Einfuehrungsphase
+### Vermietungen in Abhängigkeit zur Einfuehrungsphase
 
 ```{r}
 gf_boxplot(vermietungen ~ einfuehrungsphase, data=train)
 ```
 
-# Jahreszeit
+## Jahreszeit
+
+Jahreszeit. Kann man nicht viel mehr dazu sagen.
 
 ```{r}
 gf_bar(~ jahreszeit, data=train)
 ```
 
-## Vermietungen in Abhängigkeit zur Jahreszeit
+### Vermietungen in Abhängigkeit zur Jahreszeit
 
 ```{r}
 gf_boxplot(vermietungen ~ jahreszeit, data=train)
 ```
 
-# Wetter
+## Wetter
+
+Die Wetterbeschreibung.
 
 ```{r}
 gf_bar(~ wetter, data=train)
 ```
 
-## Vermietungen in Abhängigkeit zum Wetter
+### Vermietungen in Abhängigkeit zum Wetter
 
 ```{r}
 gf_boxplot(vermietungen ~ wetter, data=train)
 ```
 
-# Arbeitstag
+## Arbeitstag
+
+Handelt es sich um einen Werktag oder um Wochenende bzw. Feier- oder Ferientag?
 
 ```{r}
 gf_bar(~ arbeitstag, data=train)
 ```
 
-## Vermietungen in Abhängigkeit zum Arbeitstag
+### Vermietungen in Abhängigkeit zum Arbeitstag
 
 ```{r}
 gf_boxplot(vermietungen ~ arbeitstag, data=train)
 ```
 
-# Temperatur
+## Temperatur
+
+Temperatur in °C.
 
 ```{r}
 fav_stats(train$temperatur)
@@ -102,14 +115,16 @@ gf_dhistogram(~ temperatur, data=train) |>
   gf_dens(linewidth = 2)
 ```
 
-## Vermietungen in Abhängigkeit zur Temperatur
+### Vermietungen in Abhängigkeit zur Temperatur
 
 ```{r}
 gf_point(vermietungen ~ temperatur, data=train) |>
   gf_smooth()
 ```
 
-# Windgeschwindigkeit
+## Windgeschwindigkeit
+
+Windgeschwindigkeit in km/h.
 
 ```{r}
 fav_stats(train$windgeschwindigkeit)
@@ -117,14 +132,16 @@ gf_dhistogram(~ windgeschwindigkeit, data=train) |>
   gf_dens(linewidth = 2)
 ```
 
-## Vermietungen in Abhängigkeit zur Temperatur
+### Vermietungen in Abhängigkeit zur Temperatur
 
 ```{r}
 gf_point(vermietungen ~ windgeschwindigkeit, data=train) |>
   gf_smooth()
 ```
 
-# Luftfeuchtigkeit
+## Luftfeuchtigkeit
+
+Luftfeuchtigkeit in %.
 
 ```{r}
 fav_stats(train$luftfeuchtigkeit)
@@ -132,24 +149,102 @@ gf_dhistogram(~ luftfeuchtigkeit, data=train) |>
   gf_dens(linewidth = 2)
 ```
 
-## Vermietungen in Abhängigkeit zur Luftfeuchtigkeit
+### Vermietungen in Abhängigkeit zur Luftfeuchtigkeit
 
 ```{r}
 gf_point(vermietungen ~ luftfeuchtigkeit, data=train) |>
   gf_smooth()
 ```
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+## Preprocessing der Daten
+
+https://www.geeksforgeeks.org/data-preprocessing-in-r/
+```{r}
+# Create a copy of the original data frames
+encoded_anwendung <- anwendung
+encoded_train <- train
+
+head(train)
+```
+
+### Einfuehrungsphase
+
+```{r}
+# Define mappings
+einfuehrungsphase_mapping <- c("Nein" = 0, "Ja" = 1) 
+
+# Apply the encoding
+encoded_train$einfuehrungsphase <- einfuehrungsphase_mapping[as.character(encoded_train$einfuehrungsphase)]
+```
+
+### Jahreszeit
+
+```{r}
+# Create a new data frame with the one-hot encoded variables 
+encoded_jahreszeit <- as.data.frame(model.matrix(~ jahreszeit - 1, encoded_train)) 
+head(encoded_jahreszeit)
+
+# Add the new columns to the encoded data frame and remove the old column
+encoded_train <- cbind(encoded_jahreszeit, encoded_train)
+encoded_train$jahreszeit <- NULL
+```
+
+### Wetter
+
+```{r}
+# Define mapping
+wetter_mapping <- c("Schlecht" = 0, "Nicht gut" = 1, "Gut" = 2)
+
+# Apply the encoding
+encoded_train$wetter <- wetter_mapping[as.character(encoded_train$wetter)]
+```
+
+### Arbeitstag
+
+```{r}
+# Define mappings
+arbeitstag_mapping <- c("Nein" = 0, "Ja" = 1)
+
+# Apply the encoding
+encoded_train$arbeitstag <- arbeitstag_mapping[as.character(encoded_train$arbeitstag)]
+```
+
+### Temperatur
+
+```{r}
+# TODO: maybe standardize?
+```
+
+### Windgeschwindigkeit
+
+```{r}
+# TODO: maybe standardize?
+```
+
+### Luftfeuchtigkeit
+
+```{r}
+encoded_train$luftfeuchtigkeit <- train$luftfeuchtigkeit / 100
+```
+
+### Preprocessing Results
+
+```{r}
+describe(encoded_train)
+```
 
 
 # Methodenbeschreibung
 
-Bei Gruppenarbeiten mit weniger als drei Teilnehmer\*innen entfällt dieser Abschnitt. Bei Gruppenarbeiten mit drei oder mehr Teilnehmer\*innen: gehen Sie hier auf die verwendete Methode zur Modellierung, Variablen, und Modellauswahl ein. Zitieren Sie hier auch die methodische Literatur. Der Abschnitt sollte einen Umfang von 2--4 Seiten haben.
+<!-- Umfang von 2-4 Seiten -->
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+https://www.datacamp.com/tutorial/neural-network-models-r
 
+Gehen Sie hier auf die verwendete Methode zur Modellierung, Variablen, und Modellauswahl ein. Zitieren Sie hier auch die methodische Literatur.
 
 # Anwendung, Ergebnis und Vorhersage
+
+<!-- Umfang von 2-4 Seiten -->
 
 Wenden Sie hier Ihr Modell an und Interpretieren Sie Ihr Ergebnis. Bei Einzelarbeiten sollte der reine Text (ohne Code, Abbildungen etc.) einen Umfang von ca. 1--2 Seiten haben, bei Gruppenarbeiten einen von ca. 2--4 Seiten.
 
@@ -158,8 +253,6 @@ Modell schätzen:
 ```{r}
 
 ```
-
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 
 Modell zur Vorhersage anwenden:
 
@@ -176,10 +269,9 @@ Kontrolle und Export:
 
 # 6. Zusammenfassung
 
+<!-- Umfang von 0,5-1 Seiten -->
+
 Fassen Sie kurz die zentralen Ergebnisse zusammen (0,5--1 Seite). Gehen Sie auch auf die Grenzen Ihrer Analyse ein.
-
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-
 
 *Hinweis:* Laden Sie das aus der qmd-Datei gerenderte pdf-Dokument als Prüfungsleistung im OC hoch (keine gedruckte Abgabe erforderlich). Als Zusatzmaterial laden Sie die qmd-Datei und die csv-Datei mit den Daten Ihrer Prognose (`Prognose_IhrName.csv`) hoch.
 
