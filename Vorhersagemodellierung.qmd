@@ -38,18 +38,105 @@ Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
 Daten einlesen:
 
 ```{r}
-train <- here("data", "raw", "tipstrain.csv") |> read.csv2()
-anwendung <- here("data", "raw", "tipsanwendung.csv") |> read.csv2()
+# load data
+anwendung <- here("data", "raw", "anwendung.csv") |> read.csv2()
+train <- here("data", "raw", "train.csv") |> read.csv2()
+
+# show the head of the data
+head(train)
 ```
 
-*Hinweis:* `here` speichert das Arbeitsverzeichnis beim Starten des Projekts ab. Falls die Daten in einem Unterverzeichnis liegen, ergänzen Sie dieses einfach vor dem Dateinamen: `here("data", "tipstrain.csv")`.
-
-Führen Sie hier eine Explorative Datenanalyse der von Ihnen verwendeten Variablen der Trainingsdaten durch. Auch eine evtl. Datenvorverarbeitung erfolgt in diesem Abschnitt.
-
-Bei Einzelarbeiten sollte der reine Text (ohne Code, Abbildungen etc.) einen Umfang von ca. 1--2 Seiten haben, bei Gruppenarbeiten einen von ca. 2--4 Seiten.
+# Einfuehrungsphase
 
 ```{r}
-gf_histogram( ~ total_bill, data = train)
+gf_bar(~ einfuehrungsphase, data=train)
+```
+
+## Vermietungen in Abhängigkeit zur Einfuehrungsphase
+
+```{r}
+gf_boxplot(vermietungen ~ einfuehrungsphase, data=train)
+```
+
+# Jahreszeit
+
+```{r}
+gf_bar(~ jahreszeit, data=train)
+```
+
+## Vermietungen in Abhängigkeit zur Jahreszeit
+
+```{r}
+gf_boxplot(vermietungen ~ jahreszeit, data=train)
+```
+
+# Wetter
+
+```{r}
+gf_bar(~ wetter, data=train)
+```
+
+## Vermietungen in Abhängigkeit zum Wetter
+
+```{r}
+gf_boxplot(vermietungen ~ wetter, data=train)
+```
+
+# Arbeitstag
+
+```{r}
+gf_bar(~ arbeitstag, data=train)
+```
+
+## Vermietungen in Abhängigkeit zum Arbeitstag
+
+```{r}
+gf_boxplot(vermietungen ~ arbeitstag, data=train)
+```
+
+# Temperatur
+
+```{r}
+fav_stats(train$temperatur)
+gf_dhistogram(~ temperatur, data=train) |>
+  gf_dens(linewidth = 2)
+```
+
+## Vermietungen in Abhängigkeit zur Temperatur
+
+```{r}
+gf_point(vermietungen ~ temperatur, data=train) |>
+  gf_smooth()
+```
+
+# Windgeschwindigkeit
+
+```{r}
+fav_stats(train$windgeschwindigkeit)
+gf_dhistogram(~ windgeschwindigkeit, data=train) |>
+  gf_dens(linewidth = 2)
+```
+
+## Vermietungen in Abhängigkeit zur Temperatur
+
+```{r}
+gf_point(vermietungen ~ windgeschwindigkeit, data=train) |>
+  gf_smooth()
+```
+
+# Luftfeuchtigkeit
+
+```{r}
+fav_stats(train$luftfeuchtigkeit)
+gf_dhistogram(~ luftfeuchtigkeit, data=train) |>
+  gf_dens(linewidth = 2)
+```
+
+## Vermietungen in Abhängigkeit zur Luftfeuchtigkeit
+
+```{r}
+gf_point(vermietungen ~ luftfeuchtigkeit, data=train) |>
+  gf_smooth()
 ```
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
@@ -69,8 +156,7 @@ Wenden Sie hier Ihr Modell an und Interpretieren Sie Ihr Ergebnis. Bei Einzelarb
 Modell schätzen:
 
 ```{r}
-lm.model <- lm(total_bill ~ size, data = train)
-summary(lm.model)
+
 ```
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
@@ -78,14 +164,13 @@ Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
 Modell zur Vorhersage anwenden:
 
 ```{r}
-lm.predict <- predict(lm.model, newdata = anwendung)
+
 ```
 
 Kontrolle und Export:
 
 ```{r}
-inspect(lm.predict)
-write.csv2(lm.predict, file = "Prognose_IhrName.csv")
+
 ```
 
 
