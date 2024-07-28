@@ -24,7 +24,11 @@ library(mosaic)
 library(here)
 library(tidyverse)
 library(psych)
-library(keras)
+library(keras3)
+library(tensorflow)
+
+# Run once for setup
+# install_tensorflow()
 ```
 
 <!-- Sollten Umlaute falsch angezeigt werden: "File -> Reopen with Encoding -> UTF8" -->
@@ -42,12 +46,12 @@ Daten einlesen:
 
 ```{r}
 # Load data
-anwendung <- here("data", "raw", "anwendung.csv") |> read.csv2()
-train <- here("data", "raw", "train.csv") |> read.csv2()
+raw.application <- here("data", "raw", "anwendung.csv") |> read.csv2()
+raw.dataset <- here("data", "raw", "train.csv") |> read.csv2()
 
 # Show the structure of the data
-str(anwendung)
-str(train)
+str(raw.application)
+str(raw.dataset)
 ```
 
 ## Einfuehrungsphase
@@ -55,13 +59,13 @@ str(train)
 Handelt es sich um die Einführungsphase, d.h., ist das Angebot neu?
 
 ```{r}
-gf_bar(~ einfuehrungsphase, data=train)
+gf_bar(~ einfuehrungsphase, data=raw.dataset)
 ```
 
 ### Vermietungen in Abhängigkeit zur Einfuehrungsphase
 
 ```{r}
-gf_boxplot(vermietungen ~ einfuehrungsphase, data=train)
+gf_boxplot(vermietungen ~ einfuehrungsphase, data=raw.dataset)
 ```
 
 ## Jahreszeit
@@ -69,13 +73,13 @@ gf_boxplot(vermietungen ~ einfuehrungsphase, data=train)
 Jahreszeit. Kann man nicht viel mehr dazu sagen.
 
 ```{r}
-gf_bar(~ jahreszeit, data=train)
+gf_bar(~ jahreszeit, data=raw.dataset)
 ```
 
 ### Vermietungen in Abhängigkeit zur Jahreszeit
 
 ```{r}
-gf_boxplot(vermietungen ~ jahreszeit, data=train)
+gf_boxplot(vermietungen ~ jahreszeit, data=raw.dataset)
 ```
 
 ## Wetter
@@ -83,13 +87,13 @@ gf_boxplot(vermietungen ~ jahreszeit, data=train)
 Die Wetterbeschreibung.
 
 ```{r}
-gf_bar(~ wetter, data=train)
+gf_bar(~ wetter, data=raw.dataset)
 ```
 
 ### Vermietungen in Abhängigkeit zum Wetter
 
 ```{r}
-gf_boxplot(vermietungen ~ wetter, data=train)
+gf_boxplot(vermietungen ~ wetter, data=raw.dataset)
 ```
 
 ## Arbeitstag
@@ -97,13 +101,13 @@ gf_boxplot(vermietungen ~ wetter, data=train)
 Handelt es sich um einen Werktag oder um Wochenende bzw. Feier- oder Ferientag?
 
 ```{r}
-gf_bar(~ arbeitstag, data=train)
+gf_bar(~ arbeitstag, data=raw.dataset)
 ```
 
 ### Vermietungen in Abhängigkeit zum Arbeitstag
 
 ```{r}
-gf_boxplot(vermietungen ~ arbeitstag, data=train)
+gf_boxplot(vermietungen ~ arbeitstag, data=raw.dataset)
 ```
 
 ## Temperatur
@@ -111,15 +115,15 @@ gf_boxplot(vermietungen ~ arbeitstag, data=train)
 Temperatur in °C.
 
 ```{r}
-fav_stats(train$temperatur)
-gf_dhistogram(~ temperatur, data=train) |>
+fav_stats(raw.dataset$temperatur)
+gf_dhistogram(~ temperatur, data=raw.dataset) |>
   gf_dens(linewidth = 2)
 ```
 
 ### Vermietungen in Abhängigkeit zur Temperatur
 
 ```{r}
-gf_point(vermietungen ~ temperatur, data=train) |>
+gf_point(vermietungen ~ temperatur, data=raw.dataset) |>
   gf_smooth()
 ```
 
@@ -128,15 +132,15 @@ gf_point(vermietungen ~ temperatur, data=train) |>
 Windgeschwindigkeit in km/h.
 
 ```{r}
-fav_stats(train$windgeschwindigkeit)
-gf_dhistogram(~ windgeschwindigkeit, data=train) |>
+fav_stats(raw.dataset$windgeschwindigkeit)
+gf_dhistogram(~ windgeschwindigkeit, data=raw.dataset) |>
   gf_dens(linewidth = 2)
 ```
 
 ### Vermietungen in Abhängigkeit zur Temperatur
 
 ```{r}
-gf_point(vermietungen ~ windgeschwindigkeit, data=train) |>
+gf_point(vermietungen ~ windgeschwindigkeit, data=raw.dataset) |>
   gf_smooth()
 ```
 
@@ -145,15 +149,15 @@ gf_point(vermietungen ~ windgeschwindigkeit, data=train) |>
 Luftfeuchtigkeit in %.
 
 ```{r}
-fav_stats(train$luftfeuchtigkeit)
-gf_dhistogram(~ luftfeuchtigkeit, data=train) |>
+fav_stats(raw.dataset$luftfeuchtigkeit)
+gf_dhistogram(~ luftfeuchtigkeit, data=raw.dataset) |>
   gf_dens(linewidth = 2)
 ```
 
 ### Vermietungen in Abhängigkeit zur Luftfeuchtigkeit
 
 ```{r}
-gf_point(vermietungen ~ luftfeuchtigkeit, data=train) |>
+gf_point(vermietungen ~ luftfeuchtigkeit, data=raw.dataset) |>
   gf_smooth()
 ```
 
@@ -162,79 +166,41 @@ gf_point(vermietungen ~ luftfeuchtigkeit, data=train) |>
 Quelle: https://www.geeksforgeeks.org/data-preprocessing-in-r/
 
 ```{r}
-# Create a copy of the original data frames
-encoded_anwendung <- anwendung
-encoded_train <- train
+preprocess <- function(dataset) {
+  dataset.copy <- dataset
 
-head(train)
-```
+  # Encode einfuehrungsphase and arbeitstag
+  yn_mapping <- c("Nein" = 0, "Ja" = 1)
+  dataset.copy$einfuehrungsphase <- yn_mapping[as.character(dataset$einfuehrungsphase)]
+  dataset.copy$arbeitstag <- yn_mapping[as.character(dataset$arbeitstag)]
 
-### Einfuehrungsphase
-
-```{r}
-# Define mappings
-einfuehrungsphase_mapping <- c("Nein" = 0, "Ja" = 1) 
-
-# Apply the encoding
-encoded_train$einfuehrungsphase <- einfuehrungsphase_mapping[as.character(encoded_train$einfuehrungsphase)]
-```
-
-### Jahreszeit
-
-```{r}
-# Create a new data frame with the one-hot encoded variables 
-encoded_jahreszeit <- as.data.frame(model.matrix(~ jahreszeit - 1, encoded_train)) 
-head(encoded_jahreszeit)
-
-# Add the new columns to the encoded data frame and remove the old column
-encoded_train <- cbind(encoded_jahreszeit, encoded_train)
-encoded_train$jahreszeit <- NULL
-```
-
-### Wetter
-
-```{r}
-# Define mapping
-wetter_mapping <- c("Schlecht" = 0, "Nicht gut" = 1, "Gut" = 2)
-
-# Apply the encoding
-encoded_train$wetter <- wetter_mapping[as.character(encoded_train$wetter)]
-```
-
-### Arbeitstag
-
-```{r}
-# Define mappings
-arbeitstag_mapping <- c("Nein" = 0, "Ja" = 1)
-
-# Apply the encoding
-encoded_train$arbeitstag <- arbeitstag_mapping[as.character(encoded_train$arbeitstag)]
-```
-
-### Temperatur
-
-```{r}
-# TODO: maybe standardize?
-```
-
-### Windgeschwindigkeit
-
-```{r}
-# TODO: maybe standardize?
-```
-
-### Luftfeuchtigkeit
-
-```{r}
-encoded_train$luftfeuchtigkeit <- train$luftfeuchtigkeit / 100
+  # Encode wetter
+  wetter_mapping <- c("Schlecht" = 0, "Nicht gut" = 1, "Gut" = 2)
+  dataset.copy$wetter <- wetter_mapping[as.character(dataset$wetter)]
+  
+  # Encode jahreszeit
+  encoded_jahreszeit <- as.data.frame(model.matrix(~ jahreszeit - 1, dataset))
+  
+  # Add the new columns to the encoded data frame and remove the old column
+  dataset.copy <- dataset.copy |>
+    select(-jahreszeit)
+  dataset.copy <- cbind(encoded_jahreszeit, dataset.copy)
+  
+  return(dataset.copy)
+}
 ```
 
 ### Preprocessing Results
 
 ```{r}
-describe(encoded_train)
-```
+application <- preprocess(raw.application)
+dataset <- preprocess(raw.dataset)
 
+head(raw.dataset)
+head(dataset)
+
+describe(dataset)
+```
 
 # Methodenbeschreibung
 
@@ -251,27 +217,53 @@ Gehen Sie hier auf die verwendete Methode zur Modellierung, Variablen, und Model
 Wenden Sie hier Ihr Modell an und Interpretieren Sie Ihr Ergebnis. Bei Einzelarbeiten sollte der reine Text (ohne Code, Abbildungen etc.) einen Umfang von ca. 1--2 Seiten haben, bei Gruppenarbeiten einen von ca. 2--4 Seiten.
 
 Modell schätzen:
-
 ```{r}
-model <- keras_model_sequential()
+dataset_features <- dataset |> select(-vermietungen)
+dataset_labels <- dataset |> select(vermietungen)
 
-model |>
+set_random_seed(69, disable_gpu = FALSE)
+
+normalizer <- layer_normalization(axis = -1L)
+normalizer |> adapt(as.matrix(dataset_features))
+
+input <- layer_input(shape = c(10))
+
+output <- input |>
+  normalizer() |>
   layer_dense(units = 64, activation = 'relu') |>
   layer_dense(units = 64, activation = 'relu') |>
-  layer_dense(units = 10, activation = 'softmax')
+  layer_dense(units = 1)
 
+model <- keras_model(input, output)
+
+model |> compile(
+  optimizer = 'adam',
+  loss = 'mse',
+  metrics = list('mae')
+)
+
+model |> fit(
+  as.matrix(dataset_features),
+  as.matrix(dataset_labels),
+  epochs = 100,
+  batch_size = 32,
+  validation_split = 0.2
+)
 ```
 
 Modell zur Vorhersage anwenden:
 
 ```{r}
+predictions <- model(as.matrix(application))
 
+pred.application <- raw.application
+pred.application$vermietungen <-as.integer(predictions)
 ```
 
 Kontrolle und Export:
 
 ```{r}
-
+write.csv2(pred.application, file = "Prognose_IhrName.csv")
 ```
 
 
