@@ -24,6 +24,7 @@ library(mosaic)
 library(here)
 library(tidyverse)
 library(psych)
+library(keras)
 ```
 
 <!-- Sollten Umlaute falsch angezeigt werden: "File -> Reopen with Encoding -> UTF8" -->
@@ -158,7 +159,8 @@ gf_point(vermietungen ~ luftfeuchtigkeit, data=train) |>
 
 ## Preprocessing der Daten
 
-https://www.geeksforgeeks.org/data-preprocessing-in-r/
+Quelle: https://www.geeksforgeeks.org/data-preprocessing-in-r/
+
 ```{r}
 # Create a copy of the original data frames
 encoded_anwendung <- anwendung
@@ -251,6 +253,12 @@ Wenden Sie hier Ihr Modell an und Interpretieren Sie Ihr Ergebnis. Bei Einzelarb
 Modell schätzen:
 
 ```{r}
+model <- keras_model_sequential()
+
+model |>
+  layer_dense(units = 64, activation = 'relu') |>
+  layer_dense(units = 64, activation = 'relu') |>
+  layer_dense(units = 10, activation = 'softmax')
 
 ```
 
