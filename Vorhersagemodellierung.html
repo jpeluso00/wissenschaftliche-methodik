@@ -113,18 +113,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#preprocessing-der-daten" id="toc-preprocessing-der-daten" class="nav-link" data-scroll-target="#preprocessing-der-daten">Preprocessing der Daten</a>
   <ul class="collapse">
-  <li><a href="#einfuehrungsphase-1" id="toc-einfuehrungsphase-1" class="nav-link" data-scroll-target="#einfuehrungsphase-1">Einfuehrungsphase</a></li>
-  <li><a href="#jahreszeit-1" id="toc-jahreszeit-1" class="nav-link" data-scroll-target="#jahreszeit-1">Jahreszeit</a></li>
-  <li><a href="#wetter-1" id="toc-wetter-1" class="nav-link" data-scroll-target="#wetter-1">Wetter</a></li>
-  <li><a href="#arbeitstag-1" id="toc-arbeitstag-1" class="nav-link" data-scroll-target="#arbeitstag-1">Arbeitstag</a></li>
-  <li><a href="#temperatur-1" id="toc-temperatur-1" class="nav-link" data-scroll-target="#temperatur-1">Temperatur</a></li>
-  <li><a href="#windgeschwindigkeit-1" id="toc-windgeschwindigkeit-1" class="nav-link" data-scroll-target="#windgeschwindigkeit-1">Windgeschwindigkeit</a></li>
-  <li><a href="#luftfeuchtigkeit-1" id="toc-luftfeuchtigkeit-1" class="nav-link" data-scroll-target="#luftfeuchtigkeit-1">Luftfeuchtigkeit</a></li>
-  <li><a href="#preprocessing-results" id="toc-preprocessing-results" class="nav-link" data-scroll-target="#preprocessing-results">Preprocessing Results</a></li>
+  <li><a href="#preprocessing-ergebnisse" id="toc-preprocessing-ergebnisse" class="nav-link" data-scroll-target="#preprocessing-ergebnisse">Preprocessing Ergebnisse</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#methodenbeschreibung" id="toc-methodenbeschreibung" class="nav-link" data-scroll-target="#methodenbeschreibung">Methodenbeschreibung</a></li>
-  <li><a href="#anwendung-ergebnis-und-vorhersage" id="toc-anwendung-ergebnis-und-vorhersage" class="nav-link" data-scroll-target="#anwendung-ergebnis-und-vorhersage">Anwendung, Ergebnis und Vorhersage</a></li>
+  <li><a href="#anwendung-ergebnis-und-vorhersage" id="toc-anwendung-ergebnis-und-vorhersage" class="nav-link" data-scroll-target="#anwendung-ergebnis-und-vorhersage">Anwendung, Ergebnis und Vorhersage</a>
+  <ul class="collapse">
+  <li><a href="#modell-mit-den-daten-trainieren" id="toc-modell-mit-den-daten-trainieren" class="nav-link" data-scroll-target="#modell-mit-den-daten-trainieren">Modell mit den Daten trainieren</a></li>
+  <li><a href="#modell-zur-vorhersage-anwenden" id="toc-modell-zur-vorhersage-anwenden" class="nav-link" data-scroll-target="#modell-zur-vorhersage-anwenden">Modell zur Vorhersage anwenden</a></li>
+  </ul></li>
   <li><a href="#zusammenfassung" id="toc-zusammenfassung" class="nav-link" data-scroll-target="#zusammenfassung">6. Zusammenfassung</a></li>
   <li><a href="#literatur" id="toc-literatur" class="nav-link" data-scroll-target="#literatur">Literatur</a></li>
   </ul>
@@ -175,11 +172,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Daten einlesen:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>anwendung <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"anwendung.csv"</span>) <span class="sc">|&gt;</span> <span class="fu">read.csv2</span>()</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"train.csv"</span>) <span class="sc">|&gt;</span> <span class="fu">read.csv2</span>()</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>raw.application <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"anwendung.csv"</span>) <span class="sc">|&gt;</span> <span class="fu">read.csv2</span>()</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>raw.dataset <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"train.csv"</span>) <span class="sc">|&gt;</span> <span class="fu">read.csv2</span>()</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the structure of the data</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(anwendung)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(raw.application)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>'data.frame':   200 obs. of  7 variables:
  $ einfuehrungsphase  : chr  "Nein" "Ja" "Nein" "Ja" ...
@@ -190,7 +187,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  $ windgeschwindigkeit: num  15.57 13.55 6.43 12.56 9.64 ...
  $ luftfeuchtigkeit   : num  46.1 55.6 60.3 83.2 52.6 ...</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>'data.frame':   500 obs. of  8 variables:
  $ einfuehrungsphase  : chr  "Nein" "Nein" "Nein" "Nein" ...
@@ -207,7 +204,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="einfuehrungsphase">Einfuehrungsphase</h2>
 <p>Handelt es sich um die Einführungsphase, d.h., ist das Angebot neu?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> einfuehrungsphase, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> einfuehrungsphase, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -219,7 +216,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="vermietungen-in-abhängigkeit-zur-einfuehrungsphase" class="level3">
 <h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-einfuehrungsphase">Vermietungen in Abhängigkeit zur Einfuehrungsphase</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> einfuehrungsphase, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> einfuehrungsphase, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -234,7 +231,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="jahreszeit">Jahreszeit</h2>
 <p>Jahreszeit. Kann man nicht viel mehr dazu sagen.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> jahreszeit, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> jahreszeit, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -246,7 +243,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="vermietungen-in-abhängigkeit-zur-jahreszeit" class="level3">
 <h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-jahreszeit">Vermietungen in Abhängigkeit zur Jahreszeit</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> jahreszeit, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> jahreszeit, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -261,7 +258,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="wetter">Wetter</h2>
 <p>Die Wetterbeschreibung.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> wetter, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> wetter, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -273,7 +270,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="vermietungen-in-abhängigkeit-zum-wetter" class="level3">
 <h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zum-wetter">Vermietungen in Abhängigkeit zum Wetter</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> wetter, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> wetter, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -288,7 +285,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="arbeitstag">Arbeitstag</h2>
 <p>Handelt es sich um einen Werktag oder um Wochenende bzw. Feier- oder Ferientag?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> arbeitstag, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> arbeitstag, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -300,7 +297,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="vermietungen-in-abhängigkeit-zum-arbeitstag" class="level3">
 <h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zum-arbeitstag">Vermietungen in Abhängigkeit zum Arbeitstag</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> arbeitstag, <span class="at">data=</span>train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> arbeitstag, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -315,12 +312,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="temperatur">Temperatur</h2>
 <p>Temperatur in °C.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fav_stats</span>(train<span class="sc">$</span>temperatur)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fav_stats</span>(raw.dataset<span class="sc">$</span>temperatur)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   min     Q1 median    Q3   max     mean       sd   n missing
  -3.59 7.4825  15.21 23.02 33.83 15.03484 8.778967 500       0</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_dhistogram</span>(<span class="sc">~</span> temperatur, <span class="at">data=</span>train) <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_dhistogram</span>(<span class="sc">~</span> temperatur, <span class="at">data=</span>raw.dataset) <span class="sc">|&gt;</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_dens</span>(<span class="at">linewidth =</span> <span class="dv">2</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
@@ -333,7 +330,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="vermietungen-in-abhängigkeit-zur-temperatur" class="level3">
 <h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-temperatur">Vermietungen in Abhängigkeit zur Temperatur</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(vermietungen <span class="sc">~</span> temperatur, <span class="at">data=</span>train) <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(vermietungen <span class="sc">~</span> temperatur, <span class="at">data=</span>raw.dataset) <span class="sc">|&gt;</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>()</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using method = 'loess'</code></pre>
@@ -352,12 +349,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="windgeschwindigkeit">Windgeschwindigkeit</h2>
 <p>Windgeschwindigkeit in km/h.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fav_stats</span>(train<span class="sc">$</span>windgeschwindigkeit)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fav_stats</span>(raw.dataset<span class="sc">$</span>windgeschwindigkeit)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  min     Q1 median      Q3   max     mean       sd   n missing
  1.49 8.9575  11.91 15.6925 34.41 12.86882 5.358726 500       0</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_dhistogram</span>(<span class="sc">~</span> windgeschwindigkeit, <span class="at">data=</span>train) <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_dhistogram</span>(<span class="sc">~</span> windgeschwindigkeit, <span class="at">data=</span>raw.dataset) <span class="sc">|&gt;</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_dens</span>(<span class="at">linewidth =</span> <span class="dv">2</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
@@ -370,7 +367,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="vermietungen-in-abhängigkeit-zur-temperatur-1" class="level3">
 <h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-temperatur-1">Vermietungen in Abhängigkeit zur Temperatur</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(vermietungen <span class="sc">~</span> windgeschwindigkeit, <span class="at">data=</span>train) <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(vermietungen <span class="sc">~</span> windgeschwindigkeit, <span class="at">data=</span>raw.dataset) <span class="sc">|&gt;</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>()</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using method = 'loess'</code></pre>
@@ -389,12 +386,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="luftfeuchtigkeit">Luftfeuchtigkeit</h2>
 <p>Luftfeuchtigkeit in %.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fav_stats</span>(train<span class="sc">$</span>luftfeuchtigkeit)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fav_stats</span>(raw.dataset<span class="sc">$</span>luftfeuchtigkeit)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  min     Q1 median     Q3    max     mean       sd   n missing
  3.88 50.935 62.345 74.015 103.61 62.38542 15.46771 500       0</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_dhistogram</span>(<span class="sc">~</span> luftfeuchtigkeit, <span class="at">data=</span>train) <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_dhistogram</span>(<span class="sc">~</span> luftfeuchtigkeit, <span class="at">data=</span>raw.dataset) <span class="sc">|&gt;</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_dens</span>(<span class="at">linewidth =</span> <span class="dv">2</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
@@ -407,7 +404,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="vermietungen-in-abhängigkeit-zur-luftfeuchtigkeit" class="level3">
 <h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-luftfeuchtigkeit">Vermietungen in Abhängigkeit zur Luftfeuchtigkeit</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(vermietungen <span class="sc">~</span> luftfeuchtigkeit, <span class="at">data=</span>train) <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(vermietungen <span class="sc">~</span> luftfeuchtigkeit, <span class="at">data=</span>raw.dataset) <span class="sc">|&gt;</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>()</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>`geom_smooth()` using method = 'loess'</code></pre>
@@ -426,11 +423,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="preprocessing-der-daten">Preprocessing der Daten</h2>
 <p>Quelle: https://www.geeksforgeeks.org/data-preprocessing-in-r/</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a copy of the original data frames</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>encoded_anwendung <span class="ot">&lt;-</span> anwendung</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>encoded_train <span class="ot">&lt;-</span> train</span>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>preprocess <span class="ot">&lt;-</span> <span class="cf">function</span>(dataset) {</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Make a copy of the data</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  dataset.copy <span class="ot">&lt;-</span> dataset</span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Encode einfuehrungsphase and arbeitstag (binary encoding)</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  yn_mapping <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Nein"</span> <span class="ot">=</span> <span class="dv">0</span>, <span class="st">"Ja"</span> <span class="ot">=</span> <span class="dv">1</span>)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  dataset.copy<span class="sc">$</span>einfuehrungsphase <span class="ot">&lt;-</span> yn_mapping[<span class="fu">as.character</span>(dataset<span class="sc">$</span>einfuehrungsphase)]</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  dataset.copy<span class="sc">$</span>arbeitstag <span class="ot">&lt;-</span> yn_mapping[<span class="fu">as.character</span>(dataset<span class="sc">$</span>arbeitstag)]</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Encode wetter (ordinal encoding)</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  wetter_mapping <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Schlecht"</span> <span class="ot">=</span> <span class="dv">0</span>, <span class="st">"Nicht gut"</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">"Gut"</span> <span class="ot">=</span> <span class="dv">2</span>)</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>  dataset.copy<span class="sc">$</span>wetter <span class="ot">&lt;-</span> wetter_mapping[<span class="fu">as.character</span>(dataset<span class="sc">$</span>wetter)]</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Encode jahreszeit (one-hot encoding)</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>  encoded_jahreszeit <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">model.matrix</span>(<span class="sc">~</span> jahreszeit <span class="sc">-</span> <span class="dv">1</span>, dataset))</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add the new columns to the encoded data frame and remove the old column</span></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>  dataset.copy <span class="ot">&lt;-</span> dataset.copy <span class="sc">|&gt;</span></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>jahreszeit)</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>  dataset.copy <span class="ot">&lt;-</span> <span class="fu">cbind</span>(encoded_jahreszeit, dataset.copy)</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(dataset.copy)</span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="preprocessing-ergebnisse" class="level3">
+<h3 class="anchored" data-anchor-id="preprocessing-ergebnisse">Preprocessing Ergebnisse</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preprocess the data</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>application <span class="ot">&lt;-</span> <span class="fu">preprocess</span>(raw.application)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>dataset <span class="ot">&lt;-</span> <span class="fu">preprocess</span>(raw.dataset)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Data before preprocessing</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  einfuehrungsphase jahreszeit    wetter arbeitstag temperatur
 1              Nein     Sommer Nicht gut         Ja      23.69
@@ -447,23 +472,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 5               11.90            82.32         3350
 6                8.38            68.01         4709</code></pre>
 </div>
-</div>
-<section id="einfuehrungsphase-1" class="level3">
-<h3 class="anchored" data-anchor-id="einfuehrungsphase-1">Einfuehrungsphase</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define mappings</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>einfuehrungsphase_mapping <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Nein"</span> <span class="ot">=</span> <span class="dv">0</span>, <span class="st">"Ja"</span> <span class="ot">=</span> <span class="dv">1</span>) </span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply the encoding</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>encoded_train<span class="sc">$</span>einfuehrungsphase <span class="ot">&lt;-</span> einfuehrungsphase_mapping[<span class="fu">as.character</span>(encoded_train<span class="sc">$</span>einfuehrungsphase)]</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="jahreszeit-1" class="level3">
-<h3 class="anchored" data-anchor-id="jahreszeit-1">Jahreszeit</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new data frame with the one-hot encoded variables </span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>encoded_jahreszeit <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">model.matrix</span>(<span class="sc">~</span> jahreszeit <span class="sc">-</span> <span class="dv">1</span>, encoded_train)) </span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(encoded_jahreszeit)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data after preprocessing</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  jahreszeitFrühling jahreszeitHerbst jahreszeitSommer jahreszeitWinter
 1                  0                0                1                0
@@ -471,55 +481,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 3                  0                0                0                1
 4                  1                0                0                0
 5                  0                1                0                0
-6                  0                0                1                0</code></pre>
+6                  0                0                1                0
+  einfuehrungsphase wetter arbeitstag temperatur windgeschwindigkeit
+1                 0      1          1      23.69               15.19
+2                 0      2          1      26.48               10.24
+3                 0      2          1       4.60               10.24
+4                 0      2          1      12.94               25.82
+5                 1      1          0      23.82               11.90
+6                 1      1          1      22.99                8.38
+  luftfeuchtigkeit vermietungen
+1            73.61         4127
+2            44.02         8173
+3            58.51         3783
+4            50.01         5557
+5            82.32         3350
+6            68.01         4709</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the new columns to the encoded data frame and remove the old column</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>encoded_train <span class="ot">&lt;-</span> <span class="fu">cbind</span>(encoded_jahreszeit, encoded_train)</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>encoded_train<span class="sc">$</span>jahreszeit <span class="ot">&lt;-</span> <span class="cn">NULL</span></span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="wetter-1" class="level3">
-<h3 class="anchored" data-anchor-id="wetter-1">Wetter</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define mapping</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>wetter_mapping <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Schlecht"</span> <span class="ot">=</span> <span class="dv">0</span>, <span class="st">"Nicht gut"</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">"Gut"</span> <span class="ot">=</span> <span class="dv">2</span>)</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply the encoding</span></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>encoded_train<span class="sc">$</span>wetter <span class="ot">&lt;-</span> wetter_mapping[<span class="fu">as.character</span>(encoded_train<span class="sc">$</span>wetter)]</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="arbeitstag-1" class="level3">
-<h3 class="anchored" data-anchor-id="arbeitstag-1">Arbeitstag</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define mappings</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>arbeitstag_mapping <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Nein"</span> <span class="ot">=</span> <span class="dv">0</span>, <span class="st">"Ja"</span> <span class="ot">=</span> <span class="dv">1</span>)</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply the encoding</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>encoded_train<span class="sc">$</span>arbeitstag <span class="ot">&lt;-</span> arbeitstag_mapping[<span class="fu">as.character</span>(encoded_train<span class="sc">$</span>arbeitstag)]</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="temperatur-1" class="level3">
-<h3 class="anchored" data-anchor-id="temperatur-1">Temperatur</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>encoded_train<span class="sc">$</span>temperatur <span class="ot">&lt;-</span> train<span class="sc">$</span>temperatur <span class="sc">/</span> <span class="dv">21</span></span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="windgeschwindigkeit-1" class="level3">
-<h3 class="anchored" data-anchor-id="windgeschwindigkeit-1">Windgeschwindigkeit</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>encoded_train<span class="sc">$</span>windgeschwindigkeit <span class="ot">&lt;-</span> train<span class="sc">$</span>windgeschwindigkeit <span class="sc">/</span> <span class="dv">15</span></span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="luftfeuchtigkeit-1" class="level3">
-<h3 class="anchored" data-anchor-id="luftfeuchtigkeit-1">Luftfeuchtigkeit</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>encoded_train<span class="sc">$</span>luftfeuchtigkeit <span class="ot">&lt;-</span> train<span class="sc">$</span>luftfeuchtigkeit <span class="sc">/</span> <span class="dv">100</span></span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="preprocessing-results" class="level3">
-<h3 class="anchored" data-anchor-id="preprocessing-results">Preprocessing Results</h3>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(encoded_train)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Describe the data</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                    vars   n    mean      sd  median trimmed     mad   min
 jahreszeitFrühling     1 500    0.25    0.43    0.00    0.18    0.00  0.00
@@ -529,9 +508,9 @@ jahreszeitWinter       4 500    0.26    0.44    0.00    0.20    0.00  0.00
 einfuehrungsphase      5 500    0.49    0.50    0.00    0.48    0.00  0.00
 wetter                 6 500    1.59    0.56    2.00    1.65    0.00  0.00
 arbeitstag             7 500    0.68    0.47    1.00    0.72    0.00  0.00
-temperatur             8 500    0.72    0.42    0.72    0.72    0.55 -0.17
-windgeschwindigkeit    9 500    0.86    0.36    0.79    0.83    0.32  0.10
-luftfeuchtigkeit      10 500    0.62    0.15    0.62    0.62    0.17  0.04
+temperatur             8 500   15.03    8.78   15.21   15.12   11.58 -3.59
+windgeschwindigkeit    9 500   12.87    5.36   11.91   12.45    4.85  1.49
+luftfeuchtigkeit      10 500   62.39   15.47   62.34   62.45   17.26  3.88
 vermietungen          11 500 4416.61 1989.57 4514.50 4417.46 2213.52 23.00
                         max   range  skew kurtosis    se
 jahreszeitFrühling     1.00    1.00  1.16    -0.65  0.02
@@ -541,11 +520,14 @@ jahreszeitWinter       1.00    1.00  1.11    -0.76  0.02
 einfuehrungsphase      1.00    1.00  0.05    -2.00  0.02
 wetter                 2.00    2.00 -0.94    -0.15  0.02
 arbeitstag             1.00    1.00 -0.75    -1.44  0.02
-temperatur             1.61    1.78 -0.05    -1.18  0.02
-windgeschwindigkeit    2.29    2.19  0.73     0.45  0.02
-luftfeuchtigkeit       1.04    1.00 -0.14    -0.04  0.01
+temperatur            33.83   37.42 -0.05    -1.18  0.39
+windgeschwindigkeit   34.41   32.92  0.73     0.45  0.24
+luftfeuchtigkeit     103.61   99.73 -0.14    -0.04  0.69
 vermietungen        8715.00 8692.00 -0.02    -0.86 88.98</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare the data for training</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>dataset_features <span class="ot">&lt;-</span> dataset <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>vermietungen)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>dataset_labels <span class="ot">&lt;-</span> dataset <span class="sc">|&gt;</span> <span class="fu">select</span>(vermietungen)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -560,348 +542,264 @@ vermietungen        8715.00 8692.00 -0.02    -0.86 88.98</code></pre>
 <h1>Anwendung, Ergebnis und Vorhersage</h1>
 <!-- Umfang von 2-4 Seiten -->
 <p>Wenden Sie hier Ihr Modell an und Interpretieren Sie Ihr Ergebnis. Bei Einzelarbeiten sollte der reine Text (ohne Code, Abbildungen etc.) einen Umfang von ca. 1–2 Seiten haben, bei Gruppenarbeiten einen von ca. 2–4 Seiten.</p>
-<p>Modell schätzen:</p>
+<section id="modell-mit-den-daten-trainieren" class="level2">
+<h2 class="anchored" data-anchor-id="modell-mit-den-daten-trainieren">Modell mit den Daten trainieren</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">69</span>)</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>sample <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>), <span class="fu">nrow</span>(encoded_train), <span class="at">replace=</span><span class="cn">TRUE</span>, <span class="at">prob=</span><span class="fu">c</span>(<span class="fl">0.8</span>,<span class="fl">0.2</span>))</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(encoded_train[sample, ][, <span class="sc">-</span><span class="dv">11</span>])</span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>labels <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(encoded_train[sample, ]<span class="sc">$</span>vermietungen)</span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>val_data <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(encoded_train[<span class="sc">!</span>sample, ][, <span class="sc">-</span><span class="dv">11</span>])</span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>val_labels <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(encoded_train[<span class="sc">!</span>sample, ]<span class="sc">$</span>vermietungen)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set_random_seed</span>(<span class="dv">69</span>, <span class="at">disable_gpu =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>input <span class="ot">&lt;-</span> <span class="fu">layer_input</span>(<span class="at">shape =</span> <span class="fu">c</span>(<span class="dv">10</span>))</span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>output <span class="ot">&lt;-</span> input <span class="sc">|&gt;</span></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">32</span>, <span class="at">activation =</span> <span class="st">'relu'</span>) <span class="sc">|&gt;</span></span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">8</span>, <span class="at">activation =</span> <span class="st">'relu'</span>) <span class="sc">|&gt;</span></span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">1</span>, <span class="at">activation =</span> <span class="st">'relu'</span>)</span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">keras_model</span>(input, output)</span>
-<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>model <span class="sc">|&gt;</span> <span class="fu">compile</span>(</span>
-<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">optimizer =</span> <span class="st">'adam'</span>,</span>
-<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">loss =</span> <span class="st">'mse'</span>,</span>
-<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">metrics =</span> <span class="fu">list</span>(<span class="st">'mae'</span>)</span>
-<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>model <span class="sc">|&gt;</span> <span class="fu">fit</span>(</span>
-<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a>  data,</span>
-<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a>  labels,</span>
-<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">epochs =</span> <span class="dv">150</span>,</span>
-<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch_size =</span> <span class="dv">32</span>,</span>
-<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">validation_data =</span> <span class="fu">list</span>(val_data, val_labels)</span>
-<span id="cb42-24"><a href="#cb42-24" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set a random seed for training</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set_random_seed</span>(<span class="dv">69</span>, <span class="at">disable_gpu =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Adapt a normalizer on the data as we didn't normalize it yet</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>normalizer <span class="ot">&lt;-</span> <span class="fu">layer_normalization</span>(<span class="at">axis =</span> <span class="sc">-</span><span class="dv">1</span>L)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>normalizer <span class="sc">|&gt;</span> <span class="fu">adapt</span>(<span class="fu">as.matrix</span>(dataset_features))</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the input layer</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>input <span class="ot">&lt;-</span> <span class="fu">layer_input</span>(<span class="at">shape =</span> <span class="fu">dim</span>(dataset_features)[<span class="dv">2</span>])</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the feed forward and output</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>output <span class="ot">&lt;-</span> input <span class="sc">|&gt;</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">normalizer</span>() <span class="sc">|&gt;</span></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">64</span>, <span class="at">activation =</span> <span class="st">'relu'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">64</span>, <span class="at">activation =</span> <span class="st">'relu'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">1</span>)</span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Build the model</span></span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">keras_model</span>(input, output)</span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign the optimizer and the metrics to use (mse and mae for regression)</span></span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>model <span class="sc">|&gt;</span> <span class="fu">compile</span>(</span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">optimizer =</span> <span class="st">'adam'</span>,</span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">loss =</span> <span class="st">'mse'</span>,</span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">metrics =</span> <span class="fu">list</span>(<span class="st">'mae'</span>)</span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Train the model with a 20% validation split</span></span>
+<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a>model <span class="sc">|&gt;</span> <span class="fu">fit</span>(</span>
+<span id="cb36-30"><a href="#cb36-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>(dataset_features),</span>
+<span id="cb36-31"><a href="#cb36-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>(dataset_labels),</span>
+<span id="cb36-32"><a href="#cb36-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">epochs =</span> <span class="dv">100</span>,</span>
+<span id="cb36-33"><a href="#cb36-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch_size =</span> <span class="dv">32</span>,</span>
+<span id="cb36-34"><a href="#cb36-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">validation_split =</span> <span class="fl">0.2</span></span>
+<span id="cb36-35"><a href="#cb36-35" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Epoch 1/150
-13/13 - 1s - 95ms/step - loss: 23521416.0000 - mae: 4427.4463 - val_loss: 23201998.0000 - val_mae: 4373.7822
-Epoch 2/150
-13/13 - 0s - 6ms/step - loss: 23521416.0000 - mae: 4427.4463 - val_loss: 23201998.0000 - val_mae: 4373.7822
-Epoch 3/150
-13/13 - 0s - 5ms/step - loss: 23521416.0000 - mae: 4427.4463 - val_loss: 23201998.0000 - val_mae: 4373.7822
-Epoch 4/150
-13/13 - 0s - 5ms/step - loss: 23521416.0000 - mae: 4427.4463 - val_loss: 23201998.0000 - val_mae: 4373.7822
-Epoch 5/150
-13/13 - 0s - 5ms/step - loss: 23521416.0000 - mae: 4427.4463 - val_loss: 23201998.0000 - val_mae: 4373.7822
-Epoch 6/150
-13/13 - 0s - 5ms/step - loss: 23521414.0000 - mae: 4427.4463 - val_loss: 23201998.0000 - val_mae: 4373.7822
-Epoch 7/150
-13/13 - 0s - 5ms/step - loss: 23521410.0000 - mae: 4427.4453 - val_loss: 23201946.0000 - val_mae: 4373.7778
-Epoch 8/150
-13/13 - 0s - 5ms/step - loss: 23521046.0000 - mae: 4427.4131 - val_loss: 23200106.0000 - val_mae: 4373.6089
-Epoch 9/150
-13/13 - 0s - 5ms/step - loss: 23517154.0000 - mae: 4427.0171 - val_loss: 23193862.0000 - val_mae: 4372.9253
-Epoch 10/150
-13/13 - 0s - 5ms/step - loss: 23510246.0000 - mae: 4426.2441 - val_loss: 23186678.0000 - val_mae: 4372.1069
-Epoch 11/150
-13/13 - 0s - 5ms/step - loss: 23502376.0000 - mae: 4425.3569 - val_loss: 23177396.0000 - val_mae: 4371.0596
-Epoch 12/150
-13/13 - 0s - 5ms/step - loss: 23491392.0000 - mae: 4424.1201 - val_loss: 23164710.0000 - val_mae: 4369.6284
-Epoch 13/150
-13/13 - 0s - 5ms/step - loss: 23476662.0000 - mae: 4422.4595 - val_loss: 23147768.0000 - val_mae: 4367.7202
-Epoch 14/150
-13/13 - 0s - 5ms/step - loss: 23457810.0000 - mae: 4420.3257 - val_loss: 23125922.0000 - val_mae: 4365.2495
-Epoch 15/150
-13/13 - 0s - 5ms/step - loss: 23433518.0000 - mae: 4417.5801 - val_loss: 23098476.0000 - val_mae: 4362.1406
-Epoch 16/150
-13/13 - 0s - 5ms/step - loss: 23403854.0000 - mae: 4414.2373 - val_loss: 23064604.0000 - val_mae: 4358.3052
-Epoch 17/150
-13/13 - 0s - 5ms/step - loss: 23364152.0000 - mae: 4409.8486 - val_loss: 23023376.0000 - val_mae: 4353.6387
-Epoch 18/150
-13/13 - 0s - 6ms/step - loss: 23321606.0000 - mae: 4404.9243 - val_loss: 22974560.0000 - val_mae: 4348.1040
-Epoch 19/150
-13/13 - 0s - 5ms/step - loss: 23265840.0000 - mae: 4398.6821 - val_loss: 22917376.0000 - val_mae: 4341.6104
-Epoch 20/150
-13/13 - 0s - 5ms/step - loss: 23203634.0000 - mae: 4391.6377 - val_loss: 22850552.0000 - val_mae: 4334.0083
-Epoch 21/150
-13/13 - 0s - 5ms/step - loss: 23130956.0000 - mae: 4383.5293 - val_loss: 22774546.0000 - val_mae: 4325.3408
-Epoch 22/150
-13/13 - 0s - 5ms/step - loss: 23051036.0000 - mae: 4374.3223 - val_loss: 22689156.0000 - val_mae: 4315.5806
-Epoch 23/150
-13/13 - 0s - 5ms/step - loss: 22966850.0000 - mae: 4364.7285 - val_loss: 22594600.0000 - val_mae: 4304.7451
-Epoch 24/150
-13/13 - 0s - 5ms/step - loss: 22872076.0000 - mae: 4354.1362 - val_loss: 22489128.0000 - val_mae: 4292.6323
-Epoch 25/150
-13/13 - 0s - 5ms/step - loss: 22751936.0000 - mae: 4340.0977 - val_loss: 22372466.0000 - val_mae: 4279.1968
-Epoch 26/150
-13/13 - 0s - 5ms/step - loss: 22614722.0000 - mae: 4324.9077 - val_loss: 22243832.0000 - val_mae: 4264.3345
-Epoch 27/150
-13/13 - 0s - 5ms/step - loss: 22493640.0000 - mae: 4310.6885 - val_loss: 22104100.0000 - val_mae: 4248.1445
-Epoch 28/150
-13/13 - 0s - 5ms/step - loss: 22346996.0000 - mae: 4293.8877 - val_loss: 21952380.0000 - val_mae: 4230.5098
-Epoch 29/150
-13/13 - 0s - 5ms/step - loss: 22186828.0000 - mae: 4276.1465 - val_loss: 21788460.0000 - val_mae: 4211.3521
-Epoch 30/150
-13/13 - 0s - 5ms/step - loss: 22001770.0000 - mae: 4254.7686 - val_loss: 21612174.0000 - val_mae: 4190.6592
-Epoch 31/150
-13/13 - 0s - 5ms/step - loss: 21852792.0000 - mae: 4234.7769 - val_loss: 21424042.0000 - val_mae: 4168.4473
-Epoch 32/150
-13/13 - 0s - 5ms/step - loss: 21643228.0000 - mae: 4211.6968 - val_loss: 21225418.0000 - val_mae: 4144.8696
-Epoch 33/150
-13/13 - 0s - 6ms/step - loss: 21440194.0000 - mae: 4186.9595 - val_loss: 21014148.0000 - val_mae: 4119.6543
-Epoch 34/150
-13/13 - 0s - 5ms/step - loss: 21206416.0000 - mae: 4160.9683 - val_loss: 20790752.0000 - val_mae: 4092.8257
-Epoch 35/150
-13/13 - 0s - 5ms/step - loss: 20950498.0000 - mae: 4131.4390 - val_loss: 20553684.0000 - val_mae: 4064.1572
-Epoch 36/150
-13/13 - 0s - 4ms/step - loss: 20752220.0000 - mae: 4105.6050 - val_loss: 20306574.0000 - val_mae: 4034.0588
-Epoch 37/150
-13/13 - 0s - 5ms/step - loss: 20485752.0000 - mae: 4073.0146 - val_loss: 20049096.0000 - val_mae: 4002.4651
-Epoch 38/150
-13/13 - 0s - 5ms/step - loss: 20213376.0000 - mae: 4039.1489 - val_loss: 19779890.0000 - val_mae: 3969.1689
-Epoch 39/150
-13/13 - 0s - 5ms/step - loss: 19954188.0000 - mae: 4005.8049 - val_loss: 19501194.0000 - val_mae: 3934.9597
-Epoch 40/150
-13/13 - 0s - 5ms/step - loss: 19625590.0000 - mae: 3969.2812 - val_loss: 19209910.0000 - val_mae: 3899.0386
-Epoch 41/150
-13/13 - 0s - 5ms/step - loss: 19310526.0000 - mae: 3929.0854 - val_loss: 18908262.0000 - val_mae: 3861.4885
-Epoch 42/150
-13/13 - 0s - 5ms/step - loss: 19093818.0000 - mae: 3898.3035 - val_loss: 18598406.0000 - val_mae: 3822.5256
-Epoch 43/150
-13/13 - 0s - 5ms/step - loss: 18773214.0000 - mae: 3859.7434 - val_loss: 18279518.0000 - val_mae: 3782.0112
-Epoch 44/150
-13/13 - 0s - 5ms/step - loss: 18356812.0000 - mae: 3808.1567 - val_loss: 17946638.0000 - val_mae: 3739.2490
-Epoch 45/150
-13/13 - 0s - 5ms/step - loss: 18074186.0000 - mae: 3768.1350 - val_loss: 17604490.0000 - val_mae: 3694.7661
-Epoch 46/150
-13/13 - 0s - 5ms/step - loss: 17697770.0000 - mae: 3716.4976 - val_loss: 17252658.0000 - val_mae: 3648.4446
-Epoch 47/150
-13/13 - 0s - 5ms/step - loss: 17351746.0000 - mae: 3673.2209 - val_loss: 16893324.0000 - val_mae: 3600.4915
-Epoch 48/150
-13/13 - 0s - 5ms/step - loss: 16986580.0000 - mae: 3623.9976 - val_loss: 16526658.0000 - val_mae: 3550.8730
-Epoch 49/150
-13/13 - 0s - 5ms/step - loss: 16660489.0000 - mae: 3582.3032 - val_loss: 16149840.0000 - val_mae: 3500.1667
-Epoch 50/150
-13/13 - 0s - 5ms/step - loss: 16253636.0000 - mae: 3524.2932 - val_loss: 15762969.0000 - val_mae: 3447.3318
-Epoch 51/150
-13/13 - 0s - 5ms/step - loss: 15871465.0000 - mae: 3469.7979 - val_loss: 15369431.0000 - val_mae: 3392.6960
-Epoch 52/150
-13/13 - 0s - 5ms/step - loss: 15451390.0000 - mae: 3417.3052 - val_loss: 14968699.0000 - val_mae: 3337.0798
-Epoch 53/150
-13/13 - 0s - 5ms/step - loss: 15056661.0000 - mae: 3364.6184 - val_loss: 14562616.0000 - val_mae: 3280.0303
-Epoch 54/150
-13/13 - 0s - 5ms/step - loss: 14587841.0000 - mae: 3287.6272 - val_loss: 14153648.0000 - val_mae: 3222.3103
-Epoch 55/150
-13/13 - 0s - 5ms/step - loss: 14219548.0000 - mae: 3244.7058 - val_loss: 13739151.0000 - val_mae: 3163.9246
-Epoch 56/150
-13/13 - 0s - 5ms/step - loss: 13762761.0000 - mae: 3170.0540 - val_loss: 13320837.0000 - val_mae: 3107.0266
-Epoch 57/150
-13/13 - 0s - 5ms/step - loss: 13316847.0000 - mae: 3106.5325 - val_loss: 12899461.0000 - val_mae: 3049.5581
-Epoch 58/150
-13/13 - 0s - 5ms/step - loss: 12817203.0000 - mae: 3038.7437 - val_loss: 12473159.0000 - val_mae: 2992.3184
-Epoch 59/150
-13/13 - 0s - 5ms/step - loss: 12461537.0000 - mae: 2987.2393 - val_loss: 12048125.0000 - val_mae: 2937.1873
-Epoch 60/150
-13/13 - 0s - 5ms/step - loss: 12203270.0000 - mae: 2947.1274 - val_loss: 11628341.0000 - val_mae: 2882.9270
-Epoch 61/150
-13/13 - 0s - 5ms/step - loss: 11778819.0000 - mae: 2885.5784 - val_loss: 11211030.0000 - val_mae: 2827.9988
-Epoch 62/150
-13/13 - 0s - 5ms/step - loss: 11390282.0000 - mae: 2816.8813 - val_loss: 10798916.0000 - val_mae: 2773.3391
-Epoch 63/150
-13/13 - 0s - 5ms/step - loss: 11002146.0000 - mae: 2764.4045 - val_loss: 10392153.0000 - val_mae: 2718.0056
-Epoch 64/150
-13/13 - 0s - 5ms/step - loss: 10444319.0000 - mae: 2683.0461 - val_loss: 9991154.0000 - val_mae: 2662.0024
-Epoch 65/150
-13/13 - 0s - 5ms/step - loss: 10089389.0000 - mae: 2630.3193 - val_loss: 9598094.0000 - val_mae: 2606.5405
-Epoch 66/150
-13/13 - 0s - 5ms/step - loss: 9669941.0000 - mae: 2568.2729 - val_loss: 9214741.0000 - val_mae: 2551.4619
-Epoch 67/150
-13/13 - 0s - 5ms/step - loss: 9324447.0000 - mae: 2508.5608 - val_loss: 8843121.0000 - val_mae: 2496.7842
-Epoch 68/150
-13/13 - 0s - 5ms/step - loss: 8858782.0000 - mae: 2441.6445 - val_loss: 8485436.0000 - val_mae: 2442.2529
-Epoch 69/150
-13/13 - 0s - 5ms/step - loss: 8512501.0000 - mae: 2380.9067 - val_loss: 8138333.0000 - val_mae: 2387.3528
-Epoch 70/150
-13/13 - 0s - 5ms/step - loss: 8205686.0000 - mae: 2357.9692 - val_loss: 7803897.5000 - val_mae: 2333.6375
-Epoch 71/150
-13/13 - 0s - 5ms/step - loss: 8052090.5000 - mae: 2321.2441 - val_loss: 7485128.0000 - val_mae: 2280.4609
-Epoch 72/150
-13/13 - 0s - 5ms/step - loss: 7558752.0000 - mae: 2236.9756 - val_loss: 7179626.0000 - val_mae: 2229.0037
-Epoch 73/150
-13/13 - 0s - 5ms/step - loss: 7395008.5000 - mae: 2192.7368 - val_loss: 6889847.0000 - val_mae: 2179.4993
-Epoch 74/150
-13/13 - 0s - 5ms/step - loss: 7024080.5000 - mae: 2154.4089 - val_loss: 6614746.0000 - val_mae: 2130.7256
-Epoch 75/150
-13/13 - 0s - 5ms/step - loss: 6603300.0000 - mae: 2084.6284 - val_loss: 6354704.5000 - val_mae: 2086.0803
-Epoch 76/150
-13/13 - 0s - 5ms/step - loss: 6711008.5000 - mae: 2100.9863 - val_loss: 6111610.5000 - val_mae: 2044.0560
-Epoch 77/150
-13/13 - 0s - 5ms/step - loss: 6199391.5000 - mae: 2009.5222 - val_loss: 5883646.0000 - val_mae: 2002.8010
-Epoch 78/150
-13/13 - 0s - 5ms/step - loss: 6171097.5000 - mae: 2003.9003 - val_loss: 5670004.5000 - val_mae: 1962.2722
-Epoch 79/150
-13/13 - 0s - 6ms/step - loss: 6146631.0000 - mae: 1991.8275 - val_loss: 5472763.5000 - val_mae: 1924.4258
-Epoch 80/150
-13/13 - 0s - 5ms/step - loss: 5709820.0000 - mae: 1902.1930 - val_loss: 5288066.0000 - val_mae: 1887.2415
-Epoch 81/150
-13/13 - 0s - 5ms/step - loss: 5645744.5000 - mae: 1913.4586 - val_loss: 5113627.5000 - val_mae: 1851.6992
-Epoch 82/150
-13/13 - 0s - 5ms/step - loss: 5301704.0000 - mae: 1836.4226 - val_loss: 4951773.0000 - val_mae: 1818.3589
-Epoch 83/150
-13/13 - 0s - 5ms/step - loss: 5364767.0000 - mae: 1869.5940 - val_loss: 4802932.5000 - val_mae: 1786.8593
-Epoch 84/150
-13/13 - 0s - 5ms/step - loss: 5398160.5000 - mae: 1872.7794 - val_loss: 4665884.5000 - val_mae: 1758.4614
-Epoch 85/150
-13/13 - 0s - 5ms/step - loss: 4871588.5000 - mae: 1764.6716 - val_loss: 4538443.5000 - val_mae: 1731.9329
-Epoch 86/150
-13/13 - 0s - 5ms/step - loss: 5025901.0000 - mae: 1787.9286 - val_loss: 4420825.5000 - val_mae: 1708.1816
-Epoch 87/150
-13/13 - 0s - 5ms/step - loss: 4599847.0000 - mae: 1726.0011 - val_loss: 4310618.5000 - val_mae: 1685.3262
-Epoch 88/150
-13/13 - 0s - 5ms/step - loss: 4592623.0000 - mae: 1709.5807 - val_loss: 4208978.5000 - val_mae: 1664.7493
-Epoch 89/150
-13/13 - 0s - 5ms/step - loss: 4395028.0000 - mae: 1667.5181 - val_loss: 4117747.7500 - val_mae: 1645.8300
-Epoch 90/150
-13/13 - 0s - 5ms/step - loss: 4558389.5000 - mae: 1704.4172 - val_loss: 4033400.7500 - val_mae: 1630.0143
-Epoch 91/150
-13/13 - 0s - 6ms/step - loss: 4458935.0000 - mae: 1708.6691 - val_loss: 3955520.2500 - val_mae: 1617.2719
-Epoch 92/150
-13/13 - 0s - 5ms/step - loss: 4257442.5000 - mae: 1666.0160 - val_loss: 3885474.7500 - val_mae: 1605.6932
-Epoch 93/150
-13/13 - 0s - 5ms/step - loss: 4198325.0000 - mae: 1653.2438 - val_loss: 3820072.7500 - val_mae: 1594.9844
-Epoch 94/150
-13/13 - 0s - 5ms/step - loss: 4240084.5000 - mae: 1676.1466 - val_loss: 3759213.5000 - val_mae: 1585.2189
-Epoch 95/150
-13/13 - 0s - 5ms/step - loss: 4225608.0000 - mae: 1679.4492 - val_loss: 3702752.0000 - val_mae: 1576.4996
-Epoch 96/150
-13/13 - 0s - 5ms/step - loss: 3989236.5000 - mae: 1612.6431 - val_loss: 3650785.5000 - val_mae: 1568.1998
-Epoch 97/150
-13/13 - 0s - 5ms/step - loss: 4014162.7500 - mae: 1632.9249 - val_loss: 3603835.5000 - val_mae: 1560.4220
-Epoch 98/150
-13/13 - 0s - 5ms/step - loss: 3995420.2500 - mae: 1624.9957 - val_loss: 3559598.2500 - val_mae: 1553.0704
-Epoch 99/150
-13/13 - 0s - 5ms/step - loss: 3987815.2500 - mae: 1625.8428 - val_loss: 3518334.5000 - val_mae: 1545.9194
-Epoch 100/150
-13/13 - 0s - 5ms/step - loss: 3965925.7500 - mae: 1609.6091 - val_loss: 3480112.7500 - val_mae: 1539.1812
-Epoch 101/150
-13/13 - 0s - 5ms/step - loss: 3909755.7500 - mae: 1634.0388 - val_loss: 3444911.7500 - val_mae: 1532.9646
-Epoch 102/150
-13/13 - 0s - 5ms/step - loss: 3874708.0000 - mae: 1604.1293 - val_loss: 3409743.0000 - val_mae: 1526.6978
-Epoch 103/150
-13/13 - 0s - 5ms/step - loss: 3909637.7500 - mae: 1632.8904 - val_loss: 3376766.7500 - val_mae: 1520.5817
-Epoch 104/150
-13/13 - 0s - 5ms/step - loss: 3838013.5000 - mae: 1590.1495 - val_loss: 3344817.5000 - val_mae: 1514.4661
-Epoch 105/150
-13/13 - 0s - 5ms/step - loss: 4153878.7500 - mae: 1662.8397 - val_loss: 3315163.5000 - val_mae: 1509.0962
-Epoch 106/150
-13/13 - 0s - 5ms/step - loss: 3671735.5000 - mae: 1570.1567 - val_loss: 3286749.5000 - val_mae: 1503.8999
-Epoch 107/150
-13/13 - 0s - 5ms/step - loss: 3956364.7500 - mae: 1618.5419 - val_loss: 3260705.5000 - val_mae: 1498.8784
-Epoch 108/150
-13/13 - 0s - 5ms/step - loss: 3728415.5000 - mae: 1563.8950 - val_loss: 3235557.7500 - val_mae: 1494.0068
-Epoch 109/150
-13/13 - 0s - 5ms/step - loss: 3961069.5000 - mae: 1613.1172 - val_loss: 3209965.5000 - val_mae: 1489.0018
-Epoch 110/150
-13/13 - 0s - 5ms/step - loss: 3857688.0000 - mae: 1611.2053 - val_loss: 3188131.5000 - val_mae: 1484.3219
-Epoch 111/150
-13/13 - 0s - 5ms/step - loss: 3689871.7500 - mae: 1586.5283 - val_loss: 3165508.0000 - val_mae: 1479.5781
-Epoch 112/150
-13/13 - 0s - 5ms/step - loss: 3762628.0000 - mae: 1571.1857 - val_loss: 3144380.2500 - val_mae: 1474.9541
-Epoch 113/150
-13/13 - 0s - 5ms/step - loss: 3645505.7500 - mae: 1582.1239 - val_loss: 3122924.2500 - val_mae: 1470.3623
-Epoch 114/150
-13/13 - 0s - 5ms/step - loss: 3621181.2500 - mae: 1562.3351 - val_loss: 3102616.7500 - val_mae: 1465.7952
-Epoch 115/150
-13/13 - 0s - 5ms/step - loss: 3738990.2500 - mae: 1580.2048 - val_loss: 3081874.5000 - val_mae: 1461.0966
-Epoch 116/150
-13/13 - 0s - 5ms/step - loss: 3630501.2500 - mae: 1587.3605 - val_loss: 3061956.0000 - val_mae: 1456.5491
-Epoch 117/150
-13/13 - 0s - 5ms/step - loss: 3478147.0000 - mae: 1541.7666 - val_loss: 3043140.0000 - val_mae: 1452.1718
-Epoch 118/150
-13/13 - 0s - 5ms/step - loss: 3757122.5000 - mae: 1592.8881 - val_loss: 3024716.7500 - val_mae: 1447.8055
-Epoch 119/150
-13/13 - 0s - 5ms/step - loss: 3738211.7500 - mae: 1592.2012 - val_loss: 3005913.2500 - val_mae: 1443.6642
-Epoch 120/150
-13/13 - 0s - 5ms/step - loss: 3736355.2500 - mae: 1576.4949 - val_loss: 2987634.0000 - val_mae: 1439.4600
-Epoch 121/150
-13/13 - 0s - 5ms/step - loss: 3623470.7500 - mae: 1572.7081 - val_loss: 2969475.5000 - val_mae: 1435.2626
-Epoch 122/150
-13/13 - 0s - 5ms/step - loss: 3689792.7500 - mae: 1567.0631 - val_loss: 2952388.5000 - val_mae: 1431.2169
-Epoch 123/150
-13/13 - 0s - 5ms/step - loss: 3666580.2500 - mae: 1577.9630 - val_loss: 2935663.2500 - val_mae: 1427.2507
-Epoch 124/150
-13/13 - 0s - 5ms/step - loss: 3483485.7500 - mae: 1532.8229 - val_loss: 2919107.7500 - val_mae: 1423.3438
-Epoch 125/150
-13/13 - 0s - 6ms/step - loss: 3460472.0000 - mae: 1529.0444 - val_loss: 2902837.5000 - val_mae: 1419.3931
-Epoch 126/150
-13/13 - 0s - 6ms/step - loss: 3477700.0000 - mae: 1539.9795 - val_loss: 2886616.0000 - val_mae: 1415.4078
-Epoch 127/150
-13/13 - 0s - 5ms/step - loss: 3659823.2500 - mae: 1584.6456 - val_loss: 2869968.5000 - val_mae: 1411.5341
-Epoch 128/150
-13/13 - 0s - 5ms/step - loss: 3407763.5000 - mae: 1493.7765 - val_loss: 2853464.5000 - val_mae: 1407.7964
-Epoch 129/150
-13/13 - 0s - 5ms/step - loss: 3537989.2500 - mae: 1554.1915 - val_loss: 2839088.5000 - val_mae: 1404.0812
-Epoch 130/150
-13/13 - 0s - 5ms/step - loss: 3322950.0000 - mae: 1512.9634 - val_loss: 2825392.5000 - val_mae: 1400.4908
-Epoch 131/150
-13/13 - 0s - 5ms/step - loss: 3576988.0000 - mae: 1566.0399 - val_loss: 2811186.5000 - val_mae: 1396.8248
-Epoch 132/150
-13/13 - 0s - 5ms/step - loss: 3372927.7500 - mae: 1532.1301 - val_loss: 2795431.2500 - val_mae: 1393.0369
-Epoch 133/150
-13/13 - 0s - 5ms/step - loss: 3416549.7500 - mae: 1514.3605 - val_loss: 2780931.7500 - val_mae: 1389.3403
-Epoch 134/150
-13/13 - 0s - 5ms/step - loss: 3195113.5000 - mae: 1474.8442 - val_loss: 2766174.7500 - val_mae: 1385.6465
-Epoch 135/150
-13/13 - 0s - 5ms/step - loss: 3202544.5000 - mae: 1468.1653 - val_loss: 2752006.7500 - val_mae: 1382.1748
-Epoch 136/150
-13/13 - 0s - 5ms/step - loss: 3272441.2500 - mae: 1478.8165 - val_loss: 2738080.0000 - val_mae: 1378.7404
-Epoch 137/150
-13/13 - 0s - 5ms/step - loss: 3261945.0000 - mae: 1476.7395 - val_loss: 2723355.2500 - val_mae: 1375.2178
-Epoch 138/150
-13/13 - 0s - 5ms/step - loss: 3242751.7500 - mae: 1468.2825 - val_loss: 2709071.0000 - val_mae: 1371.9142
-Epoch 139/150
-13/13 - 0s - 5ms/step - loss: 3326801.5000 - mae: 1495.2517 - val_loss: 2696066.2500 - val_mae: 1368.6354
-Epoch 140/150
-13/13 - 0s - 5ms/step - loss: 3198718.5000 - mae: 1477.8550 - val_loss: 2682923.0000 - val_mae: 1365.2078
-Epoch 141/150
-13/13 - 0s - 6ms/step - loss: 3298694.5000 - mae: 1481.7151 - val_loss: 2669042.7500 - val_mae: 1361.8333
-Epoch 142/150
-13/13 - 0s - 5ms/step - loss: 3369355.0000 - mae: 1503.7672 - val_loss: 2656028.7500 - val_mae: 1358.4688
-Epoch 143/150
-13/13 - 0s - 5ms/step - loss: 3229120.5000 - mae: 1501.2031 - val_loss: 2642881.7500 - val_mae: 1355.1095
-Epoch 144/150
-13/13 - 0s - 5ms/step - loss: 3290929.7500 - mae: 1486.4896 - val_loss: 2630450.5000 - val_mae: 1351.6488
-Epoch 145/150
-13/13 - 0s - 5ms/step - loss: 3428790.2500 - mae: 1520.9879 - val_loss: 2617580.7500 - val_mae: 1348.2610
-Epoch 146/150
-13/13 - 0s - 5ms/step - loss: 3148845.2500 - mae: 1447.7018 - val_loss: 2604207.5000 - val_mae: 1344.8977
-Epoch 147/150
-13/13 - 0s - 5ms/step - loss: 3402233.5000 - mae: 1484.1638 - val_loss: 2591338.0000 - val_mae: 1341.4932
-Epoch 148/150
-13/13 - 0s - 5ms/step - loss: 3047440.2500 - mae: 1450.4432 - val_loss: 2579330.0000 - val_mae: 1338.2670
-Epoch 149/150
-13/13 - 0s - 5ms/step - loss: 3433673.7500 - mae: 1518.9712 - val_loss: 2566648.7500 - val_mae: 1335.0314
-Epoch 150/150
-13/13 - 0s - 5ms/step - loss: 3313559.5000 - mae: 1492.7084 - val_loss: 2553634.2500 - val_mae: 1331.6523</code></pre>
+<pre><code>Epoch 1/100
+13/13 - 2s - 129ms/step - loss: 23453364.0000 - mae: 4419.4043 - val_loss: 23459352.0000 - val_mae: 4404.2739
+Epoch 2/100
+13/13 - 0s - 6ms/step - loss: 23445460.0000 - mae: 4418.4937 - val_loss: 23450522.0000 - val_mae: 4403.2583
+Epoch 3/100
+13/13 - 0s - 6ms/step - loss: 23435318.0000 - mae: 4417.3560 - val_loss: 23438182.0000 - val_mae: 4401.8755
+Epoch 4/100
+13/13 - 0s - 6ms/step - loss: 23420462.0000 - mae: 4415.7324 - val_loss: 23419956.0000 - val_mae: 4399.8765
+Epoch 5/100
+13/13 - 0s - 7ms/step - loss: 23398344.0000 - mae: 4413.3662 - val_loss: 23393380.0000 - val_mae: 4397.0161
+Epoch 6/100
+13/13 - 0s - 6ms/step - loss: 23366328.0000 - mae: 4410.0000 - val_loss: 23355970.0000 - val_mae: 4393.0610
+Epoch 7/100
+13/13 - 0s - 6ms/step - loss: 23321634.0000 - mae: 4405.3755 - val_loss: 23304830.0000 - val_mae: 4387.7417
+Epoch 8/100
+13/13 - 0s - 6ms/step - loss: 23260936.0000 - mae: 4399.1831 - val_loss: 23236660.0000 - val_mae: 4380.7563
+Epoch 9/100
+13/13 - 0s - 6ms/step - loss: 23180600.0000 - mae: 4391.1011 - val_loss: 23148002.0000 - val_mae: 4371.7847
+Epoch 10/100
+13/13 - 0s - 7ms/step - loss: 23076866.0000 - mae: 4380.7861 - val_loss: 23035468.0000 - val_mae: 4360.5151
+Epoch 11/100
+13/13 - 0s - 8ms/step - loss: 22945982.0000 - mae: 4367.8652 - val_loss: 22895572.0000 - val_mae: 4346.6167
+Epoch 12/100
+13/13 - 0s - 7ms/step - loss: 22784044.0000 - mae: 4351.9639 - val_loss: 22724790.0000 - val_mae: 4329.7441
+Epoch 13/100
+13/13 - 0s - 6ms/step - loss: 22586920.0000 - mae: 4332.6738 - val_loss: 22519084.0000 - val_mae: 4309.5068
+Epoch 14/100
+13/13 - 0s - 6ms/step - loss: 22350062.0000 - mae: 4309.5371 - val_loss: 22274988.0000 - val_mae: 4285.5386
+Epoch 15/100
+13/13 - 0s - 6ms/step - loss: 22070308.0000 - mae: 4282.1934 - val_loss: 21989498.0000 - val_mae: 4257.5005
+Epoch 16/100
+13/13 - 0s - 6ms/step - loss: 21744354.0000 - mae: 4250.2456 - val_loss: 21659398.0000 - val_mae: 4225.0083
+Epoch 17/100
+13/13 - 0s - 6ms/step - loss: 21368536.0000 - mae: 4213.2378 - val_loss: 21281966.0000 - val_mae: 4187.6738
+Epoch 18/100
+13/13 - 0s - 6ms/step - loss: 20941096.0000 - mae: 4170.8599 - val_loss: 20856130.0000 - val_mae: 4145.2451
+Epoch 19/100
+13/13 - 0s - 6ms/step - loss: 20460840.0000 - mae: 4122.8086 - val_loss: 20381154.0000 - val_mae: 4097.4824
+Epoch 20/100
+13/13 - 0s - 6ms/step - loss: 19927238.0000 - mae: 4068.7935 - val_loss: 19857068.0000 - val_mae: 4044.1494
+Epoch 21/100
+13/13 - 0s - 6ms/step - loss: 19340762.0000 - mae: 4008.5891 - val_loss: 19284990.0000 - val_mae: 3985.0713
+Epoch 22/100
+13/13 - 0s - 6ms/step - loss: 18702540.0000 - mae: 3941.9810 - val_loss: 18665182.0000 - val_mae: 3919.9868
+Epoch 23/100
+13/13 - 0s - 6ms/step - loss: 18013182.0000 - mae: 3868.6399 - val_loss: 17998542.0000 - val_mae: 3848.5796
+Epoch 24/100
+13/13 - 0s - 6ms/step - loss: 17275576.0000 - mae: 3788.3926 - val_loss: 17289832.0000 - val_mae: 3770.8948
+Epoch 25/100
+13/13 - 0s - 6ms/step - loss: 16494753.0000 - mae: 3701.2310 - val_loss: 16543290.0000 - val_mae: 3686.8660
+Epoch 26/100
+13/13 - 0s - 6ms/step - loss: 15675100.0000 - mae: 3607.0405 - val_loss: 15762392.0000 - val_mae: 3596.3047
+Epoch 27/100
+13/13 - 0s - 6ms/step - loss: 14822040.0000 - mae: 3505.7749 - val_loss: 14954113.0000 - val_mae: 3499.4082
+Epoch 28/100
+13/13 - 0s - 6ms/step - loss: 13944581.0000 - mae: 3397.7493 - val_loss: 14126765.0000 - val_mae: 3396.4641
+Epoch 29/100
+13/13 - 0s - 6ms/step - loss: 13052197.0000 - mae: 3283.4104 - val_loss: 13289004.0000 - val_mae: 3287.8835
+Epoch 30/100
+13/13 - 0s - 6ms/step - loss: 12154893.0000 - mae: 3163.4360 - val_loss: 12449970.0000 - val_mae: 3174.1675
+Epoch 31/100
+13/13 - 0s - 6ms/step - loss: 11262794.0000 - mae: 3038.2039 - val_loss: 11618294.0000 - val_mae: 3055.8650
+Epoch 32/100
+13/13 - 0s - 7ms/step - loss: 10385929.0000 - mae: 2908.8718 - val_loss: 10802924.0000 - val_mae: 2933.6348
+Epoch 33/100
+13/13 - 0s - 6ms/step - loss: 9534132.0000 - mae: 2777.3391 - val_loss: 10012192.0000 - val_mae: 2808.2351
+Epoch 34/100
+13/13 - 0s - 6ms/step - loss: 8716128.0000 - mae: 2643.0198 - val_loss: 9253214.0000 - val_mae: 2680.4502
+Epoch 35/100
+13/13 - 0s - 6ms/step - loss: 7939888.5000 - mae: 2509.5535 - val_loss: 8532223.0000 - val_mae: 2553.0881
+Epoch 36/100
+13/13 - 0s - 6ms/step - loss: 7212138.0000 - mae: 2377.0840 - val_loss: 7854381.5000 - val_mae: 2428.4727
+Epoch 37/100
+13/13 - 0s - 7ms/step - loss: 6537746.0000 - mae: 2246.6045 - val_loss: 7223133.5000 - val_mae: 2313.6812
+Epoch 38/100
+13/13 - 0s - 5ms/step - loss: 5920002.5000 - mae: 2119.5242 - val_loss: 6640451.0000 - val_mae: 2216.4143
+Epoch 39/100
+13/13 - 0s - 6ms/step - loss: 5360220.0000 - mae: 1999.6412 - val_loss: 6106987.0000 - val_mae: 2122.6521
+Epoch 40/100
+13/13 - 0s - 6ms/step - loss: 4857974.5000 - mae: 1888.8483 - val_loss: 5621934.5000 - val_mae: 2030.4725
+Epoch 41/100
+13/13 - 0s - 6ms/step - loss: 4411303.0000 - mae: 1786.5082 - val_loss: 5183150.5000 - val_mae: 1944.8501
+Epoch 42/100
+13/13 - 0s - 6ms/step - loss: 4017079.0000 - mae: 1691.9788 - val_loss: 4787723.0000 - val_mae: 1867.0066
+Epoch 43/100
+13/13 - 0s - 6ms/step - loss: 3671170.2500 - mae: 1606.7844 - val_loss: 4432032.5000 - val_mae: 1798.6317
+Epoch 44/100
+13/13 - 0s - 6ms/step - loss: 3368771.2500 - mae: 1530.9783 - val_loss: 4112398.0000 - val_mae: 1734.1886
+Epoch 45/100
+13/13 - 0s - 6ms/step - loss: 3105107.2500 - mae: 1463.6295 - val_loss: 3825159.0000 - val_mae: 1671.4926
+Epoch 46/100
+13/13 - 0s - 6ms/step - loss: 2875801.2500 - mae: 1402.4235 - val_loss: 3567146.2500 - val_mae: 1610.3054
+Epoch 47/100
+13/13 - 0s - 6ms/step - loss: 2676463.5000 - mae: 1347.6887 - val_loss: 3335137.2500 - val_mae: 1553.8961
+Epoch 48/100
+13/13 - 0s - 6ms/step - loss: 2502951.2500 - mae: 1298.7727 - val_loss: 3126521.2500 - val_mae: 1499.7198
+Epoch 49/100
+13/13 - 0s - 6ms/step - loss: 2351692.7500 - mae: 1253.5096 - val_loss: 2938898.2500 - val_mae: 1448.7524
+Epoch 50/100
+13/13 - 0s - 6ms/step - loss: 2219499.0000 - mae: 1211.7557 - val_loss: 2770169.2500 - val_mae: 1401.3571
+Epoch 51/100
+13/13 - 0s - 6ms/step - loss: 2103714.0000 - mae: 1174.2345 - val_loss: 2618363.5000 - val_mae: 1357.0156
+Epoch 52/100
+13/13 - 0s - 6ms/step - loss: 2001914.3750 - mae: 1140.3704 - val_loss: 2481701.5000 - val_mae: 1314.5073
+Epoch 53/100
+13/13 - 0s - 7ms/step - loss: 1912080.5000 - mae: 1110.4391 - val_loss: 2358544.5000 - val_mae: 1275.8784
+Epoch 54/100
+13/13 - 0s - 7ms/step - loss: 1832533.5000 - mae: 1082.6941 - val_loss: 2247589.2500 - val_mae: 1241.6288
+Epoch 55/100
+13/13 - 0s - 6ms/step - loss: 1761874.8750 - mae: 1056.8074 - val_loss: 2147790.0000 - val_mae: 1209.2789
+Epoch 56/100
+13/13 - 0s - 6ms/step - loss: 1698910.1250 - mae: 1032.6069 - val_loss: 2057958.1250 - val_mae: 1179.4548
+Epoch 57/100
+13/13 - 0s - 6ms/step - loss: 1642630.5000 - mae: 1009.8440 - val_loss: 1977211.6250 - val_mae: 1151.5052
+Epoch 58/100
+13/13 - 0s - 6ms/step - loss: 1592199.8750 - mae: 988.9543 - val_loss: 1904736.5000 - val_mae: 1125.1880
+Epoch 59/100
+13/13 - 0s - 6ms/step - loss: 1546912.7500 - mae: 970.6085 - val_loss: 1839622.8750 - val_mae: 1100.7399
+Epoch 60/100
+13/13 - 0s - 6ms/step - loss: 1506118.1250 - mae: 954.1943 - val_loss: 1781379.5000 - val_mae: 1078.8448
+Epoch 61/100
+13/13 - 0s - 6ms/step - loss: 1469172.6250 - mae: 938.9091 - val_loss: 1729363.3750 - val_mae: 1059.7742
+Epoch 62/100
+13/13 - 0s - 6ms/step - loss: 1435682.1250 - mae: 925.0106 - val_loss: 1682887.3750 - val_mae: 1042.7590
+Epoch 63/100
+13/13 - 0s - 6ms/step - loss: 1405233.2500 - mae: 912.4389 - val_loss: 1641384.6250 - val_mae: 1027.2466
+Epoch 64/100
+13/13 - 0s - 6ms/step - loss: 1377399.5000 - mae: 901.2125 - val_loss: 1604100.7500 - val_mae: 1013.7216
+Epoch 65/100
+13/13 - 0s - 6ms/step - loss: 1351881.5000 - mae: 890.9214 - val_loss: 1570592.0000 - val_mae: 1000.9952
+Epoch 66/100
+13/13 - 0s - 6ms/step - loss: 1328467.2500 - mae: 881.4211 - val_loss: 1540520.3750 - val_mae: 989.3416
+Epoch 67/100
+13/13 - 0s - 6ms/step - loss: 1306896.7500 - mae: 872.4863 - val_loss: 1513488.6250 - val_mae: 978.7190
+Epoch 68/100
+13/13 - 0s - 6ms/step - loss: 1286963.5000 - mae: 864.2336 - val_loss: 1489183.0000 - val_mae: 968.8758
+Epoch 69/100
+13/13 - 0s - 6ms/step - loss: 1268479.3750 - mae: 856.8719 - val_loss: 1467213.0000 - val_mae: 959.9459
+Epoch 70/100
+13/13 - 0s - 6ms/step - loss: 1251276.6250 - mae: 850.4412 - val_loss: 1447445.5000 - val_mae: 951.6387
+Epoch 71/100
+13/13 - 0s - 6ms/step - loss: 1235204.7500 - mae: 844.4512 - val_loss: 1429611.3750 - val_mae: 943.7428
+Epoch 72/100
+13/13 - 0s - 6ms/step - loss: 1220107.5000 - mae: 838.8774 - val_loss: 1413460.1250 - val_mae: 936.6609
+Epoch 73/100
+13/13 - 0s - 6ms/step - loss: 1205942.5000 - mae: 833.7654 - val_loss: 1398828.1250 - val_mae: 930.5354
+Epoch 74/100
+13/13 - 0s - 6ms/step - loss: 1192621.8750 - mae: 829.0731 - val_loss: 1385523.5000 - val_mae: 924.8485
+Epoch 75/100
+13/13 - 0s - 7ms/step - loss: 1180065.0000 - mae: 824.6389 - val_loss: 1373438.8750 - val_mae: 919.4106
+Epoch 76/100
+13/13 - 0s - 8ms/step - loss: 1168212.3750 - mae: 820.3560 - val_loss: 1362340.5000 - val_mae: 914.1730
+Epoch 77/100
+13/13 - 0s - 6ms/step - loss: 1156973.8750 - mae: 816.4092 - val_loss: 1352044.6250 - val_mae: 909.2913
+Epoch 78/100
+13/13 - 0s - 7ms/step - loss: 1146283.7500 - mae: 812.7480 - val_loss: 1342475.0000 - val_mae: 904.8424
+Epoch 79/100
+13/13 - 0s - 6ms/step - loss: 1136103.0000 - mae: 809.4342 - val_loss: 1333614.1250 - val_mae: 900.8005
+Epoch 80/100
+13/13 - 0s - 6ms/step - loss: 1126406.5000 - mae: 806.4604 - val_loss: 1325331.0000 - val_mae: 896.8586
+Epoch 81/100
+13/13 - 0s - 5ms/step - loss: 1117153.8750 - mae: 803.6102 - val_loss: 1317644.0000 - val_mae: 893.0317
+Epoch 82/100
+13/13 - 0s - 6ms/step - loss: 1108276.3750 - mae: 800.8986 - val_loss: 1310504.0000 - val_mae: 889.3292
+Epoch 83/100
+13/13 - 0s - 6ms/step - loss: 1099773.1250 - mae: 798.2778 - val_loss: 1303716.1250 - val_mae: 885.9971
+Epoch 84/100
+13/13 - 0s - 6ms/step - loss: 1091669.2500 - mae: 795.7859 - val_loss: 1297327.8750 - val_mae: 882.9097
+Epoch 85/100
+13/13 - 0s - 6ms/step - loss: 1083885.0000 - mae: 793.3229 - val_loss: 1291278.0000 - val_mae: 879.8953
+Epoch 86/100
+13/13 - 0s - 6ms/step - loss: 1076387.8750 - mae: 790.9221 - val_loss: 1285496.6250 - val_mae: 876.9219
+Epoch 87/100
+13/13 - 0s - 6ms/step - loss: 1069147.0000 - mae: 788.5603 - val_loss: 1279958.5000 - val_mae: 873.9886
+Epoch 88/100
+13/13 - 0s - 6ms/step - loss: 1062189.5000 - mae: 786.3340 - val_loss: 1274676.1250 - val_mae: 871.1099
+Epoch 89/100
+13/13 - 0s - 7ms/step - loss: 1055507.8750 - mae: 784.1563 - val_loss: 1269580.2500 - val_mae: 868.6401
+Epoch 90/100
+13/13 - 0s - 6ms/step - loss: 1049070.8750 - mae: 782.0117 - val_loss: 1264651.8750 - val_mae: 866.3904
+Epoch 91/100
+13/13 - 0s - 8ms/step - loss: 1042855.6250 - mae: 779.9467 - val_loss: 1259846.1250 - val_mae: 864.1254
+Epoch 92/100
+13/13 - 0s - 6ms/step - loss: 1036842.9375 - mae: 777.9294 - val_loss: 1255152.6250 - val_mae: 861.8518
+Epoch 93/100
+13/13 - 0s - 6ms/step - loss: 1031040.0625 - mae: 775.9500 - val_loss: 1250596.0000 - val_mae: 859.5991
+Epoch 94/100
+13/13 - 0s - 7ms/step - loss: 1025461.3750 - mae: 774.0432 - val_loss: 1246181.6250 - val_mae: 857.3586
+Epoch 95/100
+13/13 - 0s - 6ms/step - loss: 1020048.2500 - mae: 772.1932 - val_loss: 1241844.8750 - val_mae: 855.1259
+Epoch 96/100
+13/13 - 0s - 6ms/step - loss: 1014781.6875 - mae: 770.3592 - val_loss: 1237605.0000 - val_mae: 852.9018
+Epoch 97/100
+13/13 - 0s - 6ms/step - loss: 1009683.9375 - mae: 768.5903 - val_loss: 1233412.1250 - val_mae: 850.8259
+Epoch 98/100
+13/13 - 0s - 6ms/step - loss: 1004715.1250 - mae: 766.8328 - val_loss: 1229193.0000 - val_mae: 848.8265
+Epoch 99/100
+13/13 - 0s - 6ms/step - loss: 999872.3125 - mae: 765.1027 - val_loss: 1225089.0000 - val_mae: 846.8731
+Epoch 100/100
+13/13 - 0s - 7ms/step - loss: 995172.9375 - mae: 763.4096 - val_loss: 1221090.2500 - val_mae: 844.9235</code></pre>
 </div>
 </div>
-<p>Modell zur Vorhersage anwenden:</p>
+</section>
+<section id="modell-zur-vorhersage-anwenden" class="level2">
+<h2 class="anchored" data-anchor-id="modell-zur-vorhersage-anwenden">Modell zur Vorhersage anwenden</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict with the model</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">model</span>(<span class="fu">as.matrix</span>(application))</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add predictions to the application</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>pred.application <span class="ot">&lt;-</span> raw.application</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>pred.application<span class="sc">$</span>vermietungen <span class="ot">&lt;-</span><span class="fu">as.integer</span>(predictions)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>Kontrolle und Export:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Save results</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv2</span>(pred.application, <span class="at">file =</span> <span class="st">"Prognose_IhrName.csv"</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
 </section>
 <section id="zusammenfassung" class="level1">
 <h1>6. Zusammenfassung</h1>

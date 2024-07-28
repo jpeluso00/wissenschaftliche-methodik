@@ -167,39 +167,49 @@ Quelle: https://www.geeksforgeeks.org/data-preprocessing-in-r/
 
 ```{r}
 preprocess <- function(dataset) {
+  # Make a copy of the data
   dataset.copy <- dataset
 
-  # Encode einfuehrungsphase and arbeitstag
+  # Encode einfuehrungsphase and arbeitstag (binary encoding)
   yn_mapping <- c("Nein" = 0, "Ja" = 1)
   dataset.copy$einfuehrungsphase <- yn_mapping[as.character(dataset$einfuehrungsphase)]
   dataset.copy$arbeitstag <- yn_mapping[as.character(dataset$arbeitstag)]
 
-  # Encode wetter
+  # Encode wetter (ordinal encoding)
   wetter_mapping <- c("Schlecht" = 0, "Nicht gut" = 1, "Gut" = 2)
   dataset.copy$wetter <- wetter_mapping[as.character(dataset$wetter)]
-  
-  # Encode jahreszeit
+
+  # Encode jahreszeit (one-hot encoding)
   encoded_jahreszeit <- as.data.frame(model.matrix(~ jahreszeit - 1, dataset))
-  
+
   # Add the new columns to the encoded data frame and remove the old column
   dataset.copy <- dataset.copy |>
     select(-jahreszeit)
   dataset.copy <- cbind(encoded_jahreszeit, dataset.copy)
-  
+
   return(dataset.copy)
 }
 ```
 
-### Preprocessing Results
+### Preprocessing Ergebnisse
 
 ```{r}
+# Preprocess the data
 application <- preprocess(raw.application)
 dataset <- preprocess(raw.dataset)
 
+# Data before preprocessing
 head(raw.dataset)
+
+# Data after preprocessing
 head(dataset)
 
+# Describe the data
 describe(dataset)
+
+# Prepare the data for training
+dataset_features <- dataset |> select(-vermietungen)
+dataset_labels <- dataset |> select(vermietungen)
 ```
 
 # Methodenbeschreibung
@@ -216,32 +226,37 @@ Gehen Sie hier auf die verwendete Methode zur Modellierung, Variablen, und Model
 
 Wenden Sie hier Ihr Modell an und Interpretieren Sie Ihr Ergebnis. Bei Einzelarbeiten sollte der reine Text (ohne Code, Abbildungen etc.) einen Umfang von ca. 1--2 Seiten haben, bei Gruppenarbeiten einen von ca. 2--4 Seiten.
 
-Modell schätzen:
-```{r}
-dataset_features <- dataset |> select(-vermietungen)
-dataset_labels <- dataset |> select(vermietungen)
+## Modell mit den Daten trainieren
 
+```{r}
+# Set a random seed for training
 set_random_seed(69, disable_gpu = FALSE)
 
+# Adapt a normalizer on the data as we didn't normalize it yet
 normalizer <- layer_normalization(axis = -1L)
 normalizer |> adapt(as.matrix(dataset_features))
 
-input <- layer_input(shape = c(10))
+# Define the input layer
+input <- layer_input(shape = dim(dataset_features)[2])
 
+# Define the feed forward and output
 output <- input |>
   normalizer() |>
   layer_dense(units = 64, activation = 'relu') |>
   layer_dense(units = 64, activation = 'relu') |>
   layer_dense(units = 1)
 
+# Build the model
 model <- keras_model(input, output)
 
+# Assign the optimizer and the metrics to use (mse and mae for regression)
 model |> compile(
   optimizer = 'adam',
   loss = 'mse',
   metrics = list('mae')
 )
 
+# Train the model with a 20% validation split
 model |> fit(
   as.matrix(dataset_features),
   as.matrix(dataset_labels),
@@ -251,11 +266,13 @@ model |> fit(
 )
 ```
 
-Modell zur Vorhersage anwenden:
+## Modell zur Vorhersage anwenden
 
 ```{r}
+# Predict with the model
 predictions <- model(as.matrix(application))
 
+# Add predictions to the application
 pred.application <- raw.application
 pred.application$vermietungen <-as.integer(predictions)
 ```
@@ -263,6 +280,7 @@ pred.application$vermietungen <-as.integer(predictions)
 Kontrolle und Export:
 
 ```{r}
+# Save results
 write.csv2(pred.application, file = "Prognose_IhrName.csv")
 ```
 
