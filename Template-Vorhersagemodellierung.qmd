@@ -2,7 +2,7 @@
 title: "Fahrradvermietungen"
 subtitle: "Prognosemodell"
 lang: de
-author: "Ihre Namen"
+author: "Marcel Albers, Koen Loogman, Jacques Peluso und Steffen Seegler"
 date: "`r Sys.Date()`"
 format: 
   html:
@@ -13,6 +13,8 @@ format:
     number-sections: false
     colorlinks: true 
     papersize: a4
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r}
@@ -36,8 +38,8 @@ Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
 Daten einlesen:
 
 ```{r}
-train <- here("tipstrain.csv") |> read.csv2()
-anwendung <- here("tipsanwendung.csv") |> read.csv2()
+train <- here("data", "raw", "tipstrain.csv") |> read.csv2()
+anwendung <- here("data", "raw", "tipsanwendung.csv") |> read.csv2()
 ```
 
 *Hinweis:* `here` speichert das Arbeitsverzeichnis beim Starten des Projekts ab. Falls die Daten in einem Unterverzeichnis liegen, ergänzen Sie dieses einfach vor dem Dateinamen: `here("data", "tipstrain.csv")`.
