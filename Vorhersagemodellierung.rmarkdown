@@ -32,6 +32,7 @@ library(Metrics)
 # install_tensorflow()
 ```
 
+
 <!-- Sollten Umlaute falsch angezeigt werden: "File -> Reopen with Encoding -> UTF8" -->
 
 # Einleitung
@@ -45,6 +46,7 @@ library(Metrics)
 
 Daten einlesen:
 
+
 ```{r}
 # Load data
 raw.application <- here("data", "raw", "anwendung.csv") |> read.csv2()
@@ -55,65 +57,83 @@ str(raw.application)
 str(raw.dataset)
 ```
 
+
 ## Einfuehrungsphase
 
 Handelt es sich um die Einführungsphase, d.h., ist das Angebot neu?
+
 
 ```{r}
 gf_bar(~ einfuehrungsphase, data=raw.dataset)
 ```
 
+
 ### Vermietungen in Abhängigkeit zur Einfuehrungsphase
+
 
 ```{r}
 gf_boxplot(vermietungen ~ einfuehrungsphase, data=raw.dataset)
 ```
 
+
 ## Jahreszeit
 
 Jahreszeit. Kann man nicht viel mehr dazu sagen.
+
 
 ```{r}
 gf_bar(~ jahreszeit, data=raw.dataset)
 ```
 
+
 ### Vermietungen in Abhängigkeit zur Jahreszeit
+
 
 ```{r}
 gf_boxplot(vermietungen ~ jahreszeit, data=raw.dataset)
 ```
 
+
 ## Wetter
 
 Die Wetterbeschreibung.
+
 
 ```{r}
 gf_bar(~ wetter, data=raw.dataset)
 ```
 
+
 ### Vermietungen in Abhängigkeit zum Wetter
+
 
 ```{r}
 gf_boxplot(vermietungen ~ wetter, data=raw.dataset)
 ```
 
+
 ## Arbeitstag
 
 Handelt es sich um einen Werktag oder um Wochenende bzw. Feier- oder Ferientag?
+
 
 ```{r}
 gf_bar(~ arbeitstag, data=raw.dataset)
 ```
 
+
 ### Vermietungen in Abhängigkeit zum Arbeitstag
+
 
 ```{r}
 gf_boxplot(vermietungen ~ arbeitstag, data=raw.dataset)
 ```
 
+
 ## Temperatur
 
 Temperatur in °C.
+
 
 ```{r}
 fav_stats(raw.dataset$temperatur)
@@ -121,16 +141,20 @@ gf_dhistogram(~ temperatur, data=raw.dataset) |>
   gf_dens(linewidth = 2)
 ```
 
+
 ### Vermietungen in Abhängigkeit zur Temperatur
+
 
 ```{r}
 gf_point(vermietungen ~ temperatur, data=raw.dataset) |>
   gf_smooth()
 ```
 
+
 ## Windgeschwindigkeit
 
 Windgeschwindigkeit in km/h.
+
 
 ```{r}
 fav_stats(raw.dataset$windgeschwindigkeit)
@@ -138,16 +162,20 @@ gf_dhistogram(~ windgeschwindigkeit, data=raw.dataset) |>
   gf_dens(linewidth = 2)
 ```
 
+
 ### Vermietungen in Abhängigkeit zur Temperatur
+
 
 ```{r}
 gf_point(vermietungen ~ windgeschwindigkeit, data=raw.dataset) |>
   gf_smooth()
 ```
 
+
 ## Luftfeuchtigkeit
 
 Luftfeuchtigkeit in %.
+
 
 ```{r}
 fav_stats(raw.dataset$luftfeuchtigkeit)
@@ -155,16 +183,20 @@ gf_dhistogram(~ luftfeuchtigkeit, data=raw.dataset) |>
   gf_dens(linewidth = 2)
 ```
 
+
 ### Vermietungen in Abhängigkeit zur Luftfeuchtigkeit
+
 
 ```{r}
 gf_point(vermietungen ~ luftfeuchtigkeit, data=raw.dataset) |>
   gf_smooth()
 ```
 
+
 ## Vermietungen
 
 Anzahl Vermitungen.
+
 
 ```{r}
 fav_stats(raw.dataset$vermietungen)
@@ -173,9 +205,11 @@ gf_dhistogram(~ vermietungen, data=raw.dataset) |>
 ```
 
 
+
 ## Preprocessing der Daten
 
 Quelle: https://www.geeksforgeeks.org/data-preprocessing-in-r/
+
 
 ```{r}
 preprocess <- function(dataset) {
@@ -203,7 +237,9 @@ preprocess <- function(dataset) {
 }
 ```
 
+
 ### Preprocessing Ergebnisse
+
 
 ```{r}
 # Make this example reproducible
@@ -241,6 +277,7 @@ val.dataset_features = dataset_features[!dataset.split, ]
 val.dataset_labels = dataset_labels[!dataset.split, ]
 ```
 
+
 # Methodenbeschreibung
 
 <!-- Umfang von 2-4 Seiten -->
@@ -258,6 +295,7 @@ Wenden Sie hier Ihr Modell an und Interpretieren Sie Ihr Ergebnis. Bei Einzelarb
 ## Modell mit den Daten trainieren
 
 ### Base Modell
+
 ```{r}
 # Train a simple lm on all the data
 lm.model <- lm(vermietungen ~ ., data = train.raw.dataset)
@@ -320,7 +358,9 @@ nn.model |>
   )
 ```
 
+
 ## Modell zur Vorhersage anwenden
+
 
 ```{r}
 # Predict with the model
@@ -331,12 +371,15 @@ pred.application <- raw.application
 pred.application$vermietungen <-as.integer(predictions)
 ```
 
+
 Kontrolle und Export:
+
 
 ```{r}
 # Save results
 write.csv2(pred.application, file = "Prognose_IhrName.csv")
 ```
+
 
 
 # 6. Zusammenfassung
@@ -357,3 +400,4 @@ Hier stehen die im Text verwendeten Quellen:
 Im Text werden die Quellen nach der Harvard-Intext-Zitation in Klammern angegeben (siehe Leitfaden). 
 
 **ChatGPT & Co:** Beachten Sie die Hinweise dazu im Leitfaden zur formalen Gestaltung von Seminar- und Abschlussarbeiten, Stand 24/01.
+
