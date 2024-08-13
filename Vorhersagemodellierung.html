@@ -111,6 +111,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#vermietungen-in-abhängigkeit-zur-luftfeuchtigkeit" id="toc-vermietungen-in-abhängigkeit-zur-luftfeuchtigkeit" class="nav-link" data-scroll-target="#vermietungen-in-abhängigkeit-zur-luftfeuchtigkeit">Vermietungen in Abhängigkeit zur Luftfeuchtigkeit</a></li>
   </ul></li>
+  <li><a href="#vermietungen" id="toc-vermietungen" class="nav-link" data-scroll-target="#vermietungen">Vermietungen</a></li>
   <li><a href="#preprocessing-der-daten" id="toc-preprocessing-der-daten" class="nav-link" data-scroll-target="#preprocessing-der-daten">Preprocessing der Daten</a>
   <ul class="collapse">
   <li><a href="#preprocessing-ergebnisse" id="toc-preprocessing-ergebnisse" class="nav-link" data-scroll-target="#preprocessing-ergebnisse">Preprocessing Ergebnisse</a></li>
@@ -119,7 +120,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#methodenbeschreibung" id="toc-methodenbeschreibung" class="nav-link" data-scroll-target="#methodenbeschreibung">Methodenbeschreibung</a></li>
   <li><a href="#anwendung-ergebnis-und-vorhersage" id="toc-anwendung-ergebnis-und-vorhersage" class="nav-link" data-scroll-target="#anwendung-ergebnis-und-vorhersage">Anwendung, Ergebnis und Vorhersage</a>
   <ul class="collapse">
-  <li><a href="#modell-mit-den-daten-trainieren" id="toc-modell-mit-den-daten-trainieren" class="nav-link" data-scroll-target="#modell-mit-den-daten-trainieren">Modell mit den Daten trainieren</a></li>
+  <li><a href="#modell-mit-den-daten-trainieren" id="toc-modell-mit-den-daten-trainieren" class="nav-link" data-scroll-target="#modell-mit-den-daten-trainieren">Modell mit den Daten trainieren</a>
+  <ul class="collapse">
+  <li><a href="#base-line-modell" id="toc-base-line-modell" class="nav-link" data-scroll-target="#base-line-modell">Base-Line Modell</a></li>
+  <li><a href="#unser-modell" id="toc-unser-modell" class="nav-link" data-scroll-target="#unser-modell">Unser Modell</a></li>
+  </ul></li>
   <li><a href="#modell-zur-vorhersage-anwenden" id="toc-modell-zur-vorhersage-anwenden" class="nav-link" data-scroll-target="#modell-zur-vorhersage-anwenden">Modell zur Vorhersage anwenden</a></li>
   </ul></li>
   <li><a href="#zusammenfassung" id="toc-zusammenfassung" class="nav-link" data-scroll-target="#zusammenfassung">6. Zusammenfassung</a></li>
@@ -149,7 +154,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Veröffentlichungsdatum</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">28. Juli 2024</p>
+      <p class="date">31. Juli 2024</p>
     </div>
   </div>
   
@@ -419,43 +424,66 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 </section>
+<section id="vermietungen" class="level2">
+<h2 class="anchored" data-anchor-id="vermietungen">Vermietungen</h2>
+<p>Anzahl Vermitungen.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fav_stats</span>(raw.dataset<span class="sc">$</span>vermietungen)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> min      Q1 median      Q3  max     mean       sd   n missing
+  23 2825.25 4514.5 5871.75 8715 4416.606 1989.573 500       0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_dhistogram</span>(<span class="sc">~</span> vermietungen, <span class="at">data=</span>raw.dataset) <span class="sc">|&gt;</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_dens</span>(<span class="at">linewidth =</span> <span class="dv">2</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 <section id="preprocessing-der-daten" class="level2">
 <h2 class="anchored" data-anchor-id="preprocessing-der-daten">Preprocessing der Daten</h2>
 <p>Quelle: https://www.geeksforgeeks.org/data-preprocessing-in-r/</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>preprocess <span class="ot">&lt;-</span> <span class="cf">function</span>(dataset) {</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Make a copy of the data</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  dataset.copy <span class="ot">&lt;-</span> dataset</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Encode einfuehrungsphase and arbeitstag (binary encoding)</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  yn_mapping <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Nein"</span> <span class="ot">=</span> <span class="dv">0</span>, <span class="st">"Ja"</span> <span class="ot">=</span> <span class="dv">1</span>)</span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  dataset.copy<span class="sc">$</span>einfuehrungsphase <span class="ot">&lt;-</span> yn_mapping[<span class="fu">as.character</span>(dataset<span class="sc">$</span>einfuehrungsphase)]</span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  dataset.copy<span class="sc">$</span>arbeitstag <span class="ot">&lt;-</span> yn_mapping[<span class="fu">as.character</span>(dataset<span class="sc">$</span>arbeitstag)]</span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Encode wetter (ordinal encoding)</span></span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  wetter_mapping <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Schlecht"</span> <span class="ot">=</span> <span class="dv">0</span>, <span class="st">"Nicht gut"</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">"Gut"</span> <span class="ot">=</span> <span class="dv">2</span>)</span>
-<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>  dataset.copy<span class="sc">$</span>wetter <span class="ot">&lt;-</span> wetter_mapping[<span class="fu">as.character</span>(dataset<span class="sc">$</span>wetter)]</span>
-<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Encode jahreszeit (one-hot encoding)</span></span>
-<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>  encoded_jahreszeit <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">model.matrix</span>(<span class="sc">~</span> jahreszeit <span class="sc">-</span> <span class="dv">1</span>, dataset))</span>
-<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add the new columns to the encoded data frame and remove the old column</span></span>
-<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>  dataset.copy <span class="ot">&lt;-</span> dataset.copy <span class="sc">|&gt;</span></span>
-<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>jahreszeit)</span>
-<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>  dataset.copy <span class="ot">&lt;-</span> <span class="fu">cbind</span>(encoded_jahreszeit, dataset.copy)</span>
-<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(dataset.copy)</span>
-<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>preprocess <span class="ot">&lt;-</span> <span class="cf">function</span>(dataset) {</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Make a copy of the data</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  dataset.copy <span class="ot">&lt;-</span> dataset</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Encode einfuehrungsphase and arbeitstag (binary encoding)</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  yn_mapping <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Nein"</span> <span class="ot">=</span> <span class="dv">0</span>, <span class="st">"Ja"</span> <span class="ot">=</span> <span class="dv">1</span>)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  dataset.copy<span class="sc">$</span>einfuehrungsphase <span class="ot">&lt;-</span> yn_mapping[<span class="fu">as.character</span>(dataset<span class="sc">$</span>einfuehrungsphase)]</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  dataset.copy<span class="sc">$</span>arbeitstag <span class="ot">&lt;-</span> yn_mapping[<span class="fu">as.character</span>(dataset<span class="sc">$</span>arbeitstag)]</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Encode wetter (ordinal encoding)</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  wetter_mapping <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Schlecht"</span> <span class="ot">=</span> <span class="dv">0</span>, <span class="st">"Nicht gut"</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">"Gut"</span> <span class="ot">=</span> <span class="dv">2</span>)</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>  dataset.copy<span class="sc">$</span>wetter <span class="ot">&lt;-</span> wetter_mapping[<span class="fu">as.character</span>(dataset<span class="sc">$</span>wetter)]</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Encode jahreszeit (one-hot encoding)</span></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>  encoded_jahreszeit <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">model.matrix</span>(<span class="sc">~</span> jahreszeit <span class="sc">-</span> <span class="dv">1</span>, dataset))</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add the new columns to the encoded data frame and remove the old column</span></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>  dataset.copy <span class="ot">&lt;-</span> dataset.copy <span class="sc">|&gt;</span></span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>jahreszeit)</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>  dataset.copy <span class="ot">&lt;-</span> <span class="fu">cbind</span>(encoded_jahreszeit, dataset.copy)</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(dataset.copy)</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="preprocessing-ergebnisse" class="level3">
 <h3 class="anchored" data-anchor-id="preprocessing-ergebnisse">Preprocessing Ergebnisse</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preprocess the data</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>application <span class="ot">&lt;-</span> <span class="fu">preprocess</span>(raw.application)</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>dataset <span class="ot">&lt;-</span> <span class="fu">preprocess</span>(raw.dataset)</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Data before preprocessing</span></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make this example reproducible</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">69</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Preprocess the data</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>application <span class="ot">&lt;-</span> <span class="fu">preprocess</span>(raw.application)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>dataset <span class="ot">&lt;-</span> <span class="fu">preprocess</span>(raw.dataset)</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Data before preprocessing</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  einfuehrungsphase jahreszeit    wetter arbeitstag temperatur
 1              Nein     Sommer Nicht gut         Ja      23.69
@@ -472,8 +500,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 5               11.90            82.32         3350
 6                8.38            68.01         4709</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data after preprocessing</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data after preprocessing</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  jahreszeitFrühling jahreszeitHerbst jahreszeitSommer jahreszeitWinter
 1                  0                0                1                0
@@ -497,37 +525,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 5            82.32         3350
 6            68.01         4709</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Describe the data</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                    vars   n    mean      sd  median trimmed     mad   min
-jahreszeitFrühling     1 500    0.25    0.43    0.00    0.18    0.00  0.00
-jahreszeitHerbst       2 500    0.25    0.43    0.00    0.19    0.00  0.00
-jahreszeitSommer       3 500    0.25    0.43    0.00    0.18    0.00  0.00
-jahreszeitWinter       4 500    0.26    0.44    0.00    0.20    0.00  0.00
-einfuehrungsphase      5 500    0.49    0.50    0.00    0.48    0.00  0.00
-wetter                 6 500    1.59    0.56    2.00    1.65    0.00  0.00
-arbeitstag             7 500    0.68    0.47    1.00    0.72    0.00  0.00
-temperatur             8 500   15.03    8.78   15.21   15.12   11.58 -3.59
-windgeschwindigkeit    9 500   12.87    5.36   11.91   12.45    4.85  1.49
-luftfeuchtigkeit      10 500   62.39   15.47   62.34   62.45   17.26  3.88
-vermietungen          11 500 4416.61 1989.57 4514.50 4417.46 2213.52 23.00
-                        max   range  skew kurtosis    se
-jahreszeitFrühling     1.00    1.00  1.16    -0.65  0.02
-jahreszeitHerbst       1.00    1.00  1.15    -0.68  0.02
-jahreszeitSommer       1.00    1.00  1.18    -0.62  0.02
-jahreszeitWinter       1.00    1.00  1.11    -0.76  0.02
-einfuehrungsphase      1.00    1.00  0.05    -2.00  0.02
-wetter                 2.00    2.00 -0.94    -0.15  0.02
-arbeitstag             1.00    1.00 -0.75    -1.44  0.02
-temperatur            33.83   37.42 -0.05    -1.18  0.39
-windgeschwindigkeit   34.41   32.92  0.73     0.45  0.24
-luftfeuchtigkeit     103.61   99.73 -0.14    -0.04  0.69
-vermietungen        8715.00 8692.00 -0.02    -0.86 88.98</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare the data for training</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>dataset_features <span class="ot">&lt;-</span> dataset <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>vermietungen)</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>dataset_labels <span class="ot">&lt;-</span> dataset <span class="sc">|&gt;</span> <span class="fu">select</span>(vermietungen)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare the data for training</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>dataset_features <span class="ot">&lt;-</span> dataset <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="sc">-</span>vermietungen)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>dataset_labels <span class="ot">&lt;-</span> dataset <span class="sc">|&gt;</span> <span class="fu">select</span>(vermietungen)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Use 80% of dataset for training and 20% for testing</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>dataset.split <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>), <span class="fu">nrow</span>(dataset), <span class="at">replace=</span><span class="cn">TRUE</span>, <span class="at">prob=</span><span class="fu">c</span>(<span class="fl">0.8</span>, <span class="fl">0.2</span>))</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>train.raw.dataset <span class="ot">=</span> raw.dataset[dataset.split, ]</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>val.raw.dataset <span class="ot">=</span> raw.dataset[<span class="sc">!</span>dataset.split, ]</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>train.dataset <span class="ot">=</span> dataset[dataset.split, ]</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>val.dataset <span class="ot">=</span> dataset[<span class="sc">!</span>dataset.split, ]</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>train.dataset_features <span class="ot">=</span> dataset_features[dataset.split, ]</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>train.dataset_labels <span class="ot">=</span> dataset_labels[dataset.split, ]</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>val.dataset_features <span class="ot">=</span> dataset_features[<span class="sc">!</span>dataset.split, ]</span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>val.dataset_labels <span class="ot">=</span> dataset_labels[<span class="sc">!</span>dataset.split, ]</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -544,260 +558,145 @@ vermietungen        8715.00 8692.00 -0.02    -0.86 88.98</code></pre>
 <p>Wenden Sie hier Ihr Modell an und Interpretieren Sie Ihr Ergebnis. Bei Einzelarbeiten sollte der reine Text (ohne Code, Abbildungen etc.) einen Umfang von ca. 1–2 Seiten haben, bei Gruppenarbeiten einen von ca. 2–4 Seiten.</p>
 <section id="modell-mit-den-daten-trainieren" class="level2">
 <h2 class="anchored" data-anchor-id="modell-mit-den-daten-trainieren">Modell mit den Daten trainieren</h2>
+<section id="base-line-modell" class="level3">
+<h3 class="anchored" data-anchor-id="base-line-modell">Base-Line Modell</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set a random seed for training</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set_random_seed</span>(<span class="dv">69</span>, <span class="at">disable_gpu =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Adapt a normalizer on the data as we didn't normalize it yet</span></span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>normalizer <span class="ot">&lt;-</span> <span class="fu">layer_normalization</span>(<span class="at">axis =</span> <span class="sc">-</span><span class="dv">1</span>L)</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>normalizer <span class="sc">|&gt;</span> <span class="fu">adapt</span>(<span class="fu">as.matrix</span>(dataset_features))</span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the input layer</span></span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>input <span class="ot">&lt;-</span> <span class="fu">layer_input</span>(<span class="at">shape =</span> <span class="fu">dim</span>(dataset_features)[<span class="dv">2</span>])</span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the feed forward and output</span></span>
-<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>output <span class="ot">&lt;-</span> input <span class="sc">|&gt;</span></span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">normalizer</span>() <span class="sc">|&gt;</span></span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">64</span>, <span class="at">activation =</span> <span class="st">'relu'</span>) <span class="sc">|&gt;</span></span>
-<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">64</span>, <span class="at">activation =</span> <span class="st">'relu'</span>) <span class="sc">|&gt;</span></span>
-<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">1</span>)</span>
-<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Build the model</span></span>
-<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">keras_model</span>(input, output)</span>
-<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign the optimizer and the metrics to use (mse and mae for regression)</span></span>
-<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>model <span class="sc">|&gt;</span> <span class="fu">compile</span>(</span>
-<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">optimizer =</span> <span class="st">'adam'</span>,</span>
-<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">loss =</span> <span class="st">'mse'</span>,</span>
-<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">metrics =</span> <span class="fu">list</span>(<span class="st">'mae'</span>)</span>
-<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Train the model with a 20% validation split</span></span>
-<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a>model <span class="sc">|&gt;</span> <span class="fu">fit</span>(</span>
-<span id="cb36-30"><a href="#cb36-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>(dataset_features),</span>
-<span id="cb36-31"><a href="#cb36-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>(dataset_labels),</span>
-<span id="cb36-32"><a href="#cb36-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">epochs =</span> <span class="dv">100</span>,</span>
-<span id="cb36-33"><a href="#cb36-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">batch_size =</span> <span class="dv">32</span>,</span>
-<span id="cb36-34"><a href="#cb36-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">validation_split =</span> <span class="fl">0.2</span></span>
-<span id="cb36-35"><a href="#cb36-35" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Train a simple lm on all the data</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>lm.model <span class="ot">&lt;-</span> <span class="fu">lm</span>(vermietungen <span class="sc">~</span> ., <span class="at">data =</span> train.raw.dataset)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm.model)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Epoch 1/100
-13/13 - 2s - 129ms/step - loss: 23453364.0000 - mae: 4419.4043 - val_loss: 23459352.0000 - val_mae: 4404.2739
-Epoch 2/100
-13/13 - 0s - 6ms/step - loss: 23445460.0000 - mae: 4418.4937 - val_loss: 23450522.0000 - val_mae: 4403.2583
-Epoch 3/100
-13/13 - 0s - 6ms/step - loss: 23435318.0000 - mae: 4417.3560 - val_loss: 23438182.0000 - val_mae: 4401.8755
-Epoch 4/100
-13/13 - 0s - 6ms/step - loss: 23420462.0000 - mae: 4415.7324 - val_loss: 23419956.0000 - val_mae: 4399.8765
-Epoch 5/100
-13/13 - 0s - 7ms/step - loss: 23398344.0000 - mae: 4413.3662 - val_loss: 23393380.0000 - val_mae: 4397.0161
-Epoch 6/100
-13/13 - 0s - 6ms/step - loss: 23366328.0000 - mae: 4410.0000 - val_loss: 23355970.0000 - val_mae: 4393.0610
-Epoch 7/100
-13/13 - 0s - 6ms/step - loss: 23321634.0000 - mae: 4405.3755 - val_loss: 23304830.0000 - val_mae: 4387.7417
-Epoch 8/100
-13/13 - 0s - 6ms/step - loss: 23260936.0000 - mae: 4399.1831 - val_loss: 23236660.0000 - val_mae: 4380.7563
-Epoch 9/100
-13/13 - 0s - 6ms/step - loss: 23180600.0000 - mae: 4391.1011 - val_loss: 23148002.0000 - val_mae: 4371.7847
-Epoch 10/100
-13/13 - 0s - 7ms/step - loss: 23076866.0000 - mae: 4380.7861 - val_loss: 23035468.0000 - val_mae: 4360.5151
-Epoch 11/100
-13/13 - 0s - 8ms/step - loss: 22945982.0000 - mae: 4367.8652 - val_loss: 22895572.0000 - val_mae: 4346.6167
-Epoch 12/100
-13/13 - 0s - 7ms/step - loss: 22784044.0000 - mae: 4351.9639 - val_loss: 22724790.0000 - val_mae: 4329.7441
-Epoch 13/100
-13/13 - 0s - 6ms/step - loss: 22586920.0000 - mae: 4332.6738 - val_loss: 22519084.0000 - val_mae: 4309.5068
-Epoch 14/100
-13/13 - 0s - 6ms/step - loss: 22350062.0000 - mae: 4309.5371 - val_loss: 22274988.0000 - val_mae: 4285.5386
-Epoch 15/100
-13/13 - 0s - 6ms/step - loss: 22070308.0000 - mae: 4282.1934 - val_loss: 21989498.0000 - val_mae: 4257.5005
-Epoch 16/100
-13/13 - 0s - 6ms/step - loss: 21744354.0000 - mae: 4250.2456 - val_loss: 21659398.0000 - val_mae: 4225.0083
-Epoch 17/100
-13/13 - 0s - 6ms/step - loss: 21368536.0000 - mae: 4213.2378 - val_loss: 21281966.0000 - val_mae: 4187.6738
-Epoch 18/100
-13/13 - 0s - 6ms/step - loss: 20941096.0000 - mae: 4170.8599 - val_loss: 20856130.0000 - val_mae: 4145.2451
-Epoch 19/100
-13/13 - 0s - 6ms/step - loss: 20460840.0000 - mae: 4122.8086 - val_loss: 20381154.0000 - val_mae: 4097.4824
-Epoch 20/100
-13/13 - 0s - 6ms/step - loss: 19927238.0000 - mae: 4068.7935 - val_loss: 19857068.0000 - val_mae: 4044.1494
-Epoch 21/100
-13/13 - 0s - 6ms/step - loss: 19340762.0000 - mae: 4008.5891 - val_loss: 19284990.0000 - val_mae: 3985.0713
-Epoch 22/100
-13/13 - 0s - 6ms/step - loss: 18702540.0000 - mae: 3941.9810 - val_loss: 18665182.0000 - val_mae: 3919.9868
-Epoch 23/100
-13/13 - 0s - 6ms/step - loss: 18013182.0000 - mae: 3868.6399 - val_loss: 17998542.0000 - val_mae: 3848.5796
-Epoch 24/100
-13/13 - 0s - 6ms/step - loss: 17275576.0000 - mae: 3788.3926 - val_loss: 17289832.0000 - val_mae: 3770.8948
-Epoch 25/100
-13/13 - 0s - 6ms/step - loss: 16494753.0000 - mae: 3701.2310 - val_loss: 16543290.0000 - val_mae: 3686.8660
-Epoch 26/100
-13/13 - 0s - 6ms/step - loss: 15675100.0000 - mae: 3607.0405 - val_loss: 15762392.0000 - val_mae: 3596.3047
-Epoch 27/100
-13/13 - 0s - 6ms/step - loss: 14822040.0000 - mae: 3505.7749 - val_loss: 14954113.0000 - val_mae: 3499.4082
-Epoch 28/100
-13/13 - 0s - 6ms/step - loss: 13944581.0000 - mae: 3397.7493 - val_loss: 14126765.0000 - val_mae: 3396.4641
-Epoch 29/100
-13/13 - 0s - 6ms/step - loss: 13052197.0000 - mae: 3283.4104 - val_loss: 13289004.0000 - val_mae: 3287.8835
-Epoch 30/100
-13/13 - 0s - 6ms/step - loss: 12154893.0000 - mae: 3163.4360 - val_loss: 12449970.0000 - val_mae: 3174.1675
-Epoch 31/100
-13/13 - 0s - 6ms/step - loss: 11262794.0000 - mae: 3038.2039 - val_loss: 11618294.0000 - val_mae: 3055.8650
-Epoch 32/100
-13/13 - 0s - 7ms/step - loss: 10385929.0000 - mae: 2908.8718 - val_loss: 10802924.0000 - val_mae: 2933.6348
-Epoch 33/100
-13/13 - 0s - 6ms/step - loss: 9534132.0000 - mae: 2777.3391 - val_loss: 10012192.0000 - val_mae: 2808.2351
-Epoch 34/100
-13/13 - 0s - 6ms/step - loss: 8716128.0000 - mae: 2643.0198 - val_loss: 9253214.0000 - val_mae: 2680.4502
-Epoch 35/100
-13/13 - 0s - 6ms/step - loss: 7939888.5000 - mae: 2509.5535 - val_loss: 8532223.0000 - val_mae: 2553.0881
-Epoch 36/100
-13/13 - 0s - 6ms/step - loss: 7212138.0000 - mae: 2377.0840 - val_loss: 7854381.5000 - val_mae: 2428.4727
-Epoch 37/100
-13/13 - 0s - 7ms/step - loss: 6537746.0000 - mae: 2246.6045 - val_loss: 7223133.5000 - val_mae: 2313.6812
-Epoch 38/100
-13/13 - 0s - 5ms/step - loss: 5920002.5000 - mae: 2119.5242 - val_loss: 6640451.0000 - val_mae: 2216.4143
-Epoch 39/100
-13/13 - 0s - 6ms/step - loss: 5360220.0000 - mae: 1999.6412 - val_loss: 6106987.0000 - val_mae: 2122.6521
-Epoch 40/100
-13/13 - 0s - 6ms/step - loss: 4857974.5000 - mae: 1888.8483 - val_loss: 5621934.5000 - val_mae: 2030.4725
-Epoch 41/100
-13/13 - 0s - 6ms/step - loss: 4411303.0000 - mae: 1786.5082 - val_loss: 5183150.5000 - val_mae: 1944.8501
-Epoch 42/100
-13/13 - 0s - 6ms/step - loss: 4017079.0000 - mae: 1691.9788 - val_loss: 4787723.0000 - val_mae: 1867.0066
-Epoch 43/100
-13/13 - 0s - 6ms/step - loss: 3671170.2500 - mae: 1606.7844 - val_loss: 4432032.5000 - val_mae: 1798.6317
-Epoch 44/100
-13/13 - 0s - 6ms/step - loss: 3368771.2500 - mae: 1530.9783 - val_loss: 4112398.0000 - val_mae: 1734.1886
-Epoch 45/100
-13/13 - 0s - 6ms/step - loss: 3105107.2500 - mae: 1463.6295 - val_loss: 3825159.0000 - val_mae: 1671.4926
-Epoch 46/100
-13/13 - 0s - 6ms/step - loss: 2875801.2500 - mae: 1402.4235 - val_loss: 3567146.2500 - val_mae: 1610.3054
-Epoch 47/100
-13/13 - 0s - 6ms/step - loss: 2676463.5000 - mae: 1347.6887 - val_loss: 3335137.2500 - val_mae: 1553.8961
-Epoch 48/100
-13/13 - 0s - 6ms/step - loss: 2502951.2500 - mae: 1298.7727 - val_loss: 3126521.2500 - val_mae: 1499.7198
-Epoch 49/100
-13/13 - 0s - 6ms/step - loss: 2351692.7500 - mae: 1253.5096 - val_loss: 2938898.2500 - val_mae: 1448.7524
-Epoch 50/100
-13/13 - 0s - 6ms/step - loss: 2219499.0000 - mae: 1211.7557 - val_loss: 2770169.2500 - val_mae: 1401.3571
-Epoch 51/100
-13/13 - 0s - 6ms/step - loss: 2103714.0000 - mae: 1174.2345 - val_loss: 2618363.5000 - val_mae: 1357.0156
-Epoch 52/100
-13/13 - 0s - 6ms/step - loss: 2001914.3750 - mae: 1140.3704 - val_loss: 2481701.5000 - val_mae: 1314.5073
-Epoch 53/100
-13/13 - 0s - 7ms/step - loss: 1912080.5000 - mae: 1110.4391 - val_loss: 2358544.5000 - val_mae: 1275.8784
-Epoch 54/100
-13/13 - 0s - 7ms/step - loss: 1832533.5000 - mae: 1082.6941 - val_loss: 2247589.2500 - val_mae: 1241.6288
-Epoch 55/100
-13/13 - 0s - 6ms/step - loss: 1761874.8750 - mae: 1056.8074 - val_loss: 2147790.0000 - val_mae: 1209.2789
-Epoch 56/100
-13/13 - 0s - 6ms/step - loss: 1698910.1250 - mae: 1032.6069 - val_loss: 2057958.1250 - val_mae: 1179.4548
-Epoch 57/100
-13/13 - 0s - 6ms/step - loss: 1642630.5000 - mae: 1009.8440 - val_loss: 1977211.6250 - val_mae: 1151.5052
-Epoch 58/100
-13/13 - 0s - 6ms/step - loss: 1592199.8750 - mae: 988.9543 - val_loss: 1904736.5000 - val_mae: 1125.1880
-Epoch 59/100
-13/13 - 0s - 6ms/step - loss: 1546912.7500 - mae: 970.6085 - val_loss: 1839622.8750 - val_mae: 1100.7399
-Epoch 60/100
-13/13 - 0s - 6ms/step - loss: 1506118.1250 - mae: 954.1943 - val_loss: 1781379.5000 - val_mae: 1078.8448
-Epoch 61/100
-13/13 - 0s - 6ms/step - loss: 1469172.6250 - mae: 938.9091 - val_loss: 1729363.3750 - val_mae: 1059.7742
-Epoch 62/100
-13/13 - 0s - 6ms/step - loss: 1435682.1250 - mae: 925.0106 - val_loss: 1682887.3750 - val_mae: 1042.7590
-Epoch 63/100
-13/13 - 0s - 6ms/step - loss: 1405233.2500 - mae: 912.4389 - val_loss: 1641384.6250 - val_mae: 1027.2466
-Epoch 64/100
-13/13 - 0s - 6ms/step - loss: 1377399.5000 - mae: 901.2125 - val_loss: 1604100.7500 - val_mae: 1013.7216
-Epoch 65/100
-13/13 - 0s - 6ms/step - loss: 1351881.5000 - mae: 890.9214 - val_loss: 1570592.0000 - val_mae: 1000.9952
-Epoch 66/100
-13/13 - 0s - 6ms/step - loss: 1328467.2500 - mae: 881.4211 - val_loss: 1540520.3750 - val_mae: 989.3416
-Epoch 67/100
-13/13 - 0s - 6ms/step - loss: 1306896.7500 - mae: 872.4863 - val_loss: 1513488.6250 - val_mae: 978.7190
-Epoch 68/100
-13/13 - 0s - 6ms/step - loss: 1286963.5000 - mae: 864.2336 - val_loss: 1489183.0000 - val_mae: 968.8758
-Epoch 69/100
-13/13 - 0s - 6ms/step - loss: 1268479.3750 - mae: 856.8719 - val_loss: 1467213.0000 - val_mae: 959.9459
-Epoch 70/100
-13/13 - 0s - 6ms/step - loss: 1251276.6250 - mae: 850.4412 - val_loss: 1447445.5000 - val_mae: 951.6387
-Epoch 71/100
-13/13 - 0s - 6ms/step - loss: 1235204.7500 - mae: 844.4512 - val_loss: 1429611.3750 - val_mae: 943.7428
-Epoch 72/100
-13/13 - 0s - 6ms/step - loss: 1220107.5000 - mae: 838.8774 - val_loss: 1413460.1250 - val_mae: 936.6609
-Epoch 73/100
-13/13 - 0s - 6ms/step - loss: 1205942.5000 - mae: 833.7654 - val_loss: 1398828.1250 - val_mae: 930.5354
-Epoch 74/100
-13/13 - 0s - 6ms/step - loss: 1192621.8750 - mae: 829.0731 - val_loss: 1385523.5000 - val_mae: 924.8485
-Epoch 75/100
-13/13 - 0s - 7ms/step - loss: 1180065.0000 - mae: 824.6389 - val_loss: 1373438.8750 - val_mae: 919.4106
-Epoch 76/100
-13/13 - 0s - 8ms/step - loss: 1168212.3750 - mae: 820.3560 - val_loss: 1362340.5000 - val_mae: 914.1730
-Epoch 77/100
-13/13 - 0s - 6ms/step - loss: 1156973.8750 - mae: 816.4092 - val_loss: 1352044.6250 - val_mae: 909.2913
-Epoch 78/100
-13/13 - 0s - 7ms/step - loss: 1146283.7500 - mae: 812.7480 - val_loss: 1342475.0000 - val_mae: 904.8424
-Epoch 79/100
-13/13 - 0s - 6ms/step - loss: 1136103.0000 - mae: 809.4342 - val_loss: 1333614.1250 - val_mae: 900.8005
-Epoch 80/100
-13/13 - 0s - 6ms/step - loss: 1126406.5000 - mae: 806.4604 - val_loss: 1325331.0000 - val_mae: 896.8586
-Epoch 81/100
-13/13 - 0s - 5ms/step - loss: 1117153.8750 - mae: 803.6102 - val_loss: 1317644.0000 - val_mae: 893.0317
-Epoch 82/100
-13/13 - 0s - 6ms/step - loss: 1108276.3750 - mae: 800.8986 - val_loss: 1310504.0000 - val_mae: 889.3292
-Epoch 83/100
-13/13 - 0s - 6ms/step - loss: 1099773.1250 - mae: 798.2778 - val_loss: 1303716.1250 - val_mae: 885.9971
-Epoch 84/100
-13/13 - 0s - 6ms/step - loss: 1091669.2500 - mae: 795.7859 - val_loss: 1297327.8750 - val_mae: 882.9097
-Epoch 85/100
-13/13 - 0s - 6ms/step - loss: 1083885.0000 - mae: 793.3229 - val_loss: 1291278.0000 - val_mae: 879.8953
-Epoch 86/100
-13/13 - 0s - 6ms/step - loss: 1076387.8750 - mae: 790.9221 - val_loss: 1285496.6250 - val_mae: 876.9219
-Epoch 87/100
-13/13 - 0s - 6ms/step - loss: 1069147.0000 - mae: 788.5603 - val_loss: 1279958.5000 - val_mae: 873.9886
-Epoch 88/100
-13/13 - 0s - 6ms/step - loss: 1062189.5000 - mae: 786.3340 - val_loss: 1274676.1250 - val_mae: 871.1099
-Epoch 89/100
-13/13 - 0s - 7ms/step - loss: 1055507.8750 - mae: 784.1563 - val_loss: 1269580.2500 - val_mae: 868.6401
-Epoch 90/100
-13/13 - 0s - 6ms/step - loss: 1049070.8750 - mae: 782.0117 - val_loss: 1264651.8750 - val_mae: 866.3904
-Epoch 91/100
-13/13 - 0s - 8ms/step - loss: 1042855.6250 - mae: 779.9467 - val_loss: 1259846.1250 - val_mae: 864.1254
-Epoch 92/100
-13/13 - 0s - 6ms/step - loss: 1036842.9375 - mae: 777.9294 - val_loss: 1255152.6250 - val_mae: 861.8518
-Epoch 93/100
-13/13 - 0s - 6ms/step - loss: 1031040.0625 - mae: 775.9500 - val_loss: 1250596.0000 - val_mae: 859.5991
-Epoch 94/100
-13/13 - 0s - 7ms/step - loss: 1025461.3750 - mae: 774.0432 - val_loss: 1246181.6250 - val_mae: 857.3586
-Epoch 95/100
-13/13 - 0s - 6ms/step - loss: 1020048.2500 - mae: 772.1932 - val_loss: 1241844.8750 - val_mae: 855.1259
-Epoch 96/100
-13/13 - 0s - 6ms/step - loss: 1014781.6875 - mae: 770.3592 - val_loss: 1237605.0000 - val_mae: 852.9018
-Epoch 97/100
-13/13 - 0s - 6ms/step - loss: 1009683.9375 - mae: 768.5903 - val_loss: 1233412.1250 - val_mae: 850.8259
-Epoch 98/100
-13/13 - 0s - 6ms/step - loss: 1004715.1250 - mae: 766.8328 - val_loss: 1229193.0000 - val_mae: 848.8265
-Epoch 99/100
-13/13 - 0s - 6ms/step - loss: 999872.3125 - mae: 765.1027 - val_loss: 1225089.0000 - val_mae: 846.8731
-Epoch 100/100
-13/13 - 0s - 7ms/step - loss: 995172.9375 - mae: 763.4096 - val_loss: 1221090.2500 - val_mae: 844.9235</code></pre>
+<pre><code>
+Call:
+lm(formula = vermietungen ~ ., data = train.raw.dataset)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3641.3  -502.3    -3.4   534.7  2384.8 
+
+Coefficients:
+                       Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)            3106.640    312.515   9.941  &lt; 2e-16 ***
+einfuehrungsphaseNein  2057.883     92.182  22.324  &lt; 2e-16 ***
+jahreszeitHerbst        562.431    134.756   4.174 3.70e-05 ***
+jahreszeitSommer       -297.132    167.550  -1.773  0.07695 .  
+jahreszeitWinter       -765.179    157.161  -4.869 1.64e-06 ***
+wetterNicht gut        -390.531    121.227  -3.221  0.00138 ** 
+wetterSchlecht        -2115.621    273.056  -7.748 8.25e-14 ***
+arbeitstagNein          -53.274     97.447  -0.547  0.58490    
+temperatur              120.920      9.650  12.530  &lt; 2e-16 ***
+windgeschwindigkeit     -43.602      9.292  -4.692 3.75e-06 ***
+luftfeuchtigkeit        -10.445      4.154  -2.515  0.01232 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 903.3 on 388 degrees of freedom
+Multiple R-squared:  0.7975,    Adjusted R-squared:  0.7923 
+F-statistic: 152.8 on 10 and 388 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the MAE to compare models</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mae</span>(val.raw.dataset<span class="sc">$</span>vermietungen, <span class="fu">predict</span>(lm.model, <span class="at">newdata =</span> val.raw.dataset))</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 636.2102</code></pre>
 </div>
 </div>
+</section>
+<section id="unser-modell" class="level3">
+<h3 class="anchored" data-anchor-id="unser-modell">Unser Modell</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set a random seed for training</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set_random_seed</span>(<span class="dv">69</span>, <span class="at">disable_gpu =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>checkpoint_path <span class="ot">&lt;-</span> <span class="st">"training_nn/cp.ckpt.weights.h5"</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>checkpoint_dir <span class="ot">&lt;-</span> fs<span class="sc">::</span><span class="fu">path_dir</span>(checkpoint_path)</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Adapt a normalizer on the data as we didn't normalize it yet</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>normalizer <span class="ot">&lt;-</span> <span class="fu">layer_normalization</span>(<span class="at">axis =</span> <span class="sc">-</span><span class="dv">1</span>L)</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>normalizer <span class="sc">|&gt;</span> <span class="fu">adapt</span>(<span class="fu">as.matrix</span>(dataset_features))</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the input layer</span></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>input <span class="ot">&lt;-</span> <span class="fu">layer_input</span>(<span class="at">shape =</span> <span class="fu">dim</span>(dataset_features)[<span class="dv">2</span>])</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the feed forward and output</span></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>output <span class="ot">&lt;-</span> input <span class="sc">|&gt;</span></span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">normalizer</span>() <span class="sc">|&gt;</span></span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dropout</span>(<span class="at">rate =</span> <span class="fl">0.05</span>) <span class="sc">|&gt;</span></span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">32</span>, <span class="at">activation =</span> <span class="st">'relu'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">32</span>, <span class="at">activation =</span> <span class="st">'relu'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">layer_dense</span>(<span class="at">units =</span> <span class="dv">1</span>)</span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Build the model</span></span>
+<span id="cb41-23"><a href="#cb41-23" aria-hidden="true" tabindex="-1"></a>nn.model <span class="ot">&lt;-</span> <span class="fu">keras_model</span>(input, output)</span>
+<span id="cb41-24"><a href="#cb41-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-25"><a href="#cb41-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign the optimizer and the metrics to use (mse and mae for regression)</span></span>
+<span id="cb41-26"><a href="#cb41-26" aria-hidden="true" tabindex="-1"></a>nn.model <span class="sc">|&gt;</span> <span class="fu">compile</span>(</span>
+<span id="cb41-27"><a href="#cb41-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">optimizer =</span> <span class="st">'adam'</span>,</span>
+<span id="cb41-28"><a href="#cb41-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">loss =</span> <span class="st">'mse'</span>,</span>
+<span id="cb41-29"><a href="#cb41-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">metrics =</span> <span class="fu">list</span>(<span class="st">'mae'</span>)</span>
+<span id="cb41-30"><a href="#cb41-30" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb41-31"><a href="#cb41-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-32"><a href="#cb41-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a callback that saves the model's weights</span></span>
+<span id="cb41-33"><a href="#cb41-33" aria-hidden="true" tabindex="-1"></a>cp_callback <span class="ot">&lt;-</span> <span class="fu">callback_model_checkpoint</span>(</span>
+<span id="cb41-34"><a href="#cb41-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">filepath =</span> checkpoint_path,</span>
+<span id="cb41-35"><a href="#cb41-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">save_weights_only =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb41-36"><a href="#cb41-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">save_best_only =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb41-37"><a href="#cb41-37" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb41-38"><a href="#cb41-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-39"><a href="#cb41-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Train the model with a 20% validation split</span></span>
+<span id="cb41-40"><a href="#cb41-40" aria-hidden="true" tabindex="-1"></a>nn.model <span class="sc">|&gt;</span></span>
+<span id="cb41-41"><a href="#cb41-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(</span>
+<span id="cb41-42"><a href="#cb41-42" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.matrix</span>(train.dataset_features),</span>
+<span id="cb41-43"><a href="#cb41-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.matrix</span>(train.dataset_labels),</span>
+<span id="cb41-44"><a href="#cb41-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">epochs =</span> <span class="dv">5000</span>,</span>
+<span id="cb41-45"><a href="#cb41-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">batch_size =</span> <span class="dv">64</span>,</span>
+<span id="cb41-46"><a href="#cb41-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">verbose =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb41-47"><a href="#cb41-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">validation_data =</span> <span class="fu">list</span>(<span class="fu">as.matrix</span>(val.dataset_features), <span class="fu">as.matrix</span>(val.dataset_labels)),</span>
+<span id="cb41-48"><a href="#cb41-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">callbacks =</span> <span class="fu">list</span>(cp_callback),</span>
+<span id="cb41-49"><a href="#cb41-49" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb41-50"><a href="#cb41-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>()</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Vorhersagemodellierung_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loads the weights</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load_model_weights</span>(nn.model, checkpoint_path)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate model</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>nn.model <span class="sc">|&gt;</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">evaluate</span>(</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.matrix</span>(val.dataset_features),</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.matrix</span>(val.dataset_labels),</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">batch_size =</span> <span class="dv">64</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2/2 - 0s - 16ms/step - loss: 586509.1250 - mae: 548.5580</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$loss
+[1] 586509.1
+
+$mae
+[1] 548.558</code></pre>
+</div>
+</div>
+</section>
 </section>
 <section id="modell-zur-vorhersage-anwenden" class="level2">
 <h2 class="anchored" data-anchor-id="modell-zur-vorhersage-anwenden">Modell zur Vorhersage anwenden</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict with the model</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">model</span>(<span class="fu">as.matrix</span>(application))</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add predictions to the application</span></span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>pred.application <span class="ot">&lt;-</span> raw.application</span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>pred.application<span class="sc">$</span>vermietungen <span class="ot">&lt;-</span><span class="fu">as.integer</span>(predictions)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict with the model</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">nn.model</span>(<span class="fu">as.matrix</span>(application))</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Add predictions to the application</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>pred.application <span class="ot">&lt;-</span> raw.application</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>pred.application<span class="sc">$</span>vermietungen <span class="ot">&lt;-</span><span class="fu">as.integer</span>(predictions)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Kontrolle und Export:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Save results</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv2</span>(pred.application, <span class="at">file =</span> <span class="st">"Prognose_IhrName.csv"</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Save results</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv2</span>(pred.application, <span class="at">file =</span> <span class="st">"Prognose_IhrName.csv"</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
