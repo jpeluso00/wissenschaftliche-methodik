@@ -27,9 +27,11 @@ library(psych)
 library(keras3)
 library(tensorflow)
 library(Metrics)
+library(reticulate)
 
 # Run once for setup
-#install_tensorflow()
+use_virtualenv(virtualenv = "./venv")
+install_tensorflow(envname = "./venv")
 #tf$config$list_physical_devices("GPU")
 ```
 

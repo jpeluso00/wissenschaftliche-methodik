@@ -80,9 +80,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Inhaltsverzeichnis</h2>
    
   <ul>
-  <li><a href="#einleitung" id="toc-einleitung" class="nav-link active" data-scroll-target="#einleitung">Einleitung</a></li>
+  <li><a href="#einleitung" id="toc-einleitung" class="nav-link active" data-scroll-target="#einleitung">Einleitung</a>
+  <ul class="collapse">
+  <li><a href="#aufgabenstellung" id="toc-aufgabenstellung" class="nav-link" data-scroll-target="#aufgabenstellung">Aufgabenstellung</a></li>
+  <li><a href="#zielsetzung" id="toc-zielsetzung" class="nav-link" data-scroll-target="#zielsetzung">Zielsetzung</a></li>
+  <li><a href="#aufbau-der-arbeit" id="toc-aufbau-der-arbeit" class="nav-link" data-scroll-target="#aufbau-der-arbeit">Aufbau der Arbeit</a></li>
+  </ul></li>
   <li><a href="#explorative-datenanalyse-und-datenvorverarbeitung" id="toc-explorative-datenanalyse-und-datenvorverarbeitung" class="nav-link" data-scroll-target="#explorative-datenanalyse-und-datenvorverarbeitung">Explorative Datenanalyse und Datenvorverarbeitung</a>
   <ul class="collapse">
+  <li><a href="#variablenübersicht" id="toc-variablenübersicht" class="nav-link" data-scroll-target="#variablenübersicht">Variablenübersicht:</a></li>
+  <li><a href="#häufigkeitsverteilung-der-vermietungen" id="toc-häufigkeitsverteilung-der-vermietungen" class="nav-link" data-scroll-target="#häufigkeitsverteilung-der-vermietungen">Häufigkeitsverteilung der Vermietungen</a></li>
   <li><a href="#einfuehrungsphase" id="toc-einfuehrungsphase" class="nav-link" data-scroll-target="#einfuehrungsphase">Einfuehrungsphase</a>
   <ul class="collapse">
   <li><a href="#vermietungen-in-abhängigkeit-zur-einfuehrungsphase" id="toc-vermietungen-in-abhängigkeit-zur-einfuehrungsphase" class="nav-link" data-scroll-target="#vermietungen-in-abhängigkeit-zur-einfuehrungsphase">Vermietungen in Abhängigkeit zur Einfuehrungsphase</a></li>
@@ -105,19 +112,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#windgeschwindigkeit" id="toc-windgeschwindigkeit" class="nav-link" data-scroll-target="#windgeschwindigkeit">Windgeschwindigkeit</a>
   <ul class="collapse">
-  <li><a href="#vermietungen-in-abhängigkeit-zur-temperatur-1" id="toc-vermietungen-in-abhängigkeit-zur-temperatur-1" class="nav-link" data-scroll-target="#vermietungen-in-abhängigkeit-zur-temperatur-1">Vermietungen in Abhängigkeit zur Temperatur</a></li>
+  <li><a href="#vermietungen-in-abhängigkeit-zur-windgeschwindigkeit" id="toc-vermietungen-in-abhängigkeit-zur-windgeschwindigkeit" class="nav-link" data-scroll-target="#vermietungen-in-abhängigkeit-zur-windgeschwindigkeit">Vermietungen in Abhängigkeit zur Windgeschwindigkeit</a></li>
   </ul></li>
   <li><a href="#luftfeuchtigkeit" id="toc-luftfeuchtigkeit" class="nav-link" data-scroll-target="#luftfeuchtigkeit">Luftfeuchtigkeit</a>
   <ul class="collapse">
   <li><a href="#vermietungen-in-abhängigkeit-zur-luftfeuchtigkeit" id="toc-vermietungen-in-abhängigkeit-zur-luftfeuchtigkeit" class="nav-link" data-scroll-target="#vermietungen-in-abhängigkeit-zur-luftfeuchtigkeit">Vermietungen in Abhängigkeit zur Luftfeuchtigkeit</a></li>
   </ul></li>
-  <li><a href="#vermietungen" id="toc-vermietungen" class="nav-link" data-scroll-target="#vermietungen">Vermietungen</a></li>
   <li><a href="#preprocessing-der-daten" id="toc-preprocessing-der-daten" class="nav-link" data-scroll-target="#preprocessing-der-daten">Preprocessing der Daten</a>
   <ul class="collapse">
   <li><a href="#preprocessing-ergebnisse" id="toc-preprocessing-ergebnisse" class="nav-link" data-scroll-target="#preprocessing-ergebnisse">Preprocessing Ergebnisse</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#methodenbeschreibung" id="toc-methodenbeschreibung" class="nav-link" data-scroll-target="#methodenbeschreibung">Methodenbeschreibung</a></li>
+  <li><a href="#methodenbeschreibung" id="toc-methodenbeschreibung" class="nav-link" data-scroll-target="#methodenbeschreibung">Methodenbeschreibung</a>
+  <ul class="collapse">
+  <li><a href="#modellauswahl" id="toc-modellauswahl" class="nav-link" data-scroll-target="#modellauswahl">Modellauswahl</a></li>
+  <li><a href="#modellierung" id="toc-modellierung" class="nav-link" data-scroll-target="#modellierung">Modellierung</a></li>
+  <li><a href="#variablen" id="toc-variablen" class="nav-link" data-scroll-target="#variablen">Variablen</a></li>
+  </ul></li>
   <li><a href="#anwendung-ergebnis-und-vorhersage" id="toc-anwendung-ergebnis-und-vorhersage" class="nav-link" data-scroll-target="#anwendung-ergebnis-und-vorhersage">Anwendung, Ergebnis und Vorhersage</a>
   <ul class="collapse">
   <li><a href="#modell-mit-den-daten-trainieren" id="toc-modell-mit-den-daten-trainieren" class="nav-link" data-scroll-target="#modell-mit-den-daten-trainieren">Modell mit den Daten trainieren</a>
@@ -154,7 +165,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Veröffentlichungsdatum</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">31. Juli 2024</p>
+      <p class="date">21. August 2024</p>
     </div>
   </div>
   
@@ -169,12 +180,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- Sollten Umlaute falsch angezeigt werden: "File -> Reopen with Encoding -> UTF8" -->
 <section id="einleitung" class="level1">
 <h1>Einleitung</h1>
-<!-- Umfang von 0,5-1,5 Seiten -->
+<section id="aufgabenstellung" class="level2">
+<h2 class="anchored" data-anchor-id="aufgabenstellung">Aufgabenstellung</h2>
+<p>Für die Vermietung von Fahrrädern sind verschiedene Aspekte ausschlaggebend. In dem Fall des vorliegenden Szenarios sind dies die potentiell erklärenden Variablen Einführungsphase, Jahreszeit, Wetter, Arbeitstag, Temperatur, Windgeschwindigkeit und Luftfeuchtigkeit. Die Ausprägung dieser wurden von früheren Vermietungen in einem Trainingsdatensatz festgehalten. Um künftige Fahrradvermietungen vorhersagen zu können, müssen die Zusammenhänge zwischen den genannten Variablen ermittelt und in einem Modell festgehalten werden. Ein zweiter Datensatz, der Anwendungsdatensatz, dient als Grundlage für den Performancetest.</p>
 </section>
-<section id="explorative-datenanalyse-und-datenvorverarbeitung" class="level1">
-<h1>Explorative Datenanalyse und Datenvorverarbeitung</h1>
-<!-- Umfang von 2-4 Seiten -->
-<p>Daten einlesen:</p>
+<section id="zielsetzung" class="level2">
+<h2 class="anchored" data-anchor-id="zielsetzung">Zielsetzung</h2>
+<p>Ziel der Arbeit ist es, ein Modell zu entwickeln, welches die Zielvariable ^y0 für die gegeben Anwendungsdaten x0 voraussagt. Die Zielvariable beschreibt hierbei die Anzahl an täglichen Fahrradvermietungen. Basis der Modellierung bilden die Trainingsdaten x,y. Die Bewertung von diesem Wert findet mithilfe des mittleren absoluten Fehlers - MAE (mean absolute error) statt. Der MAETest ist möglichst klein zu halten. Wie häufig wird eine Fahrradvermietung täglich stattfinden?</p>
+</section>
+<section id="aufbau-der-arbeit" class="level2">
+<h2 class="anchored" data-anchor-id="aufbau-der-arbeit">Aufbau der Arbeit</h2>
+<p>Das nachfolgende Kapitel <em>Explorative Datenanalyse und Datenverarbeitung</em> befasst sich mit der detaillierten Beschreibung des vorliegenden Datensatzes und der Analyse von diesem. Hierbei werden die Zusammenhänge von verschiedenen Konstellationen der Attribute betrachtet. Des Weiteren findet eine Datenaufbereitung statt, die für die spätere Verarbeitung der Daten in den Modellen notwendig ist. Im darauf folgenden Kapitel, der <em>Methodenbeschreibung</em>, wird die Auswahl der Modelle und die Funktionsweise dieser erläutert. Nach dem Training des Modells, wird dieses angewendet, die Ergebnisse aufgeführt, betrachtet und eine Vorhersage getroffen. Die <em>Zusammenfassung</em> der Arbeit stellt die Ergebnisse dar und führt diese als abschließendes Kapitel zusammen.</p>
+<!-- Umfang von 0,5-1,5 Seiten -->
+<p>#Einlesen der relevanten Datensätze, wobei die entsprechenden CSV-Dateien aus dem festgelegten Verzeichnis data/raw geladen werden.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>raw.application <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"raw"</span>, <span class="st">"anwendung.csv"</span>) <span class="sc">|&gt;</span> <span class="fu">read.csv2</span>()</span>
@@ -205,11 +223,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  $ vermietungen       : int  4127 8173 3783 5557 3350 4709 4609 5117 1851 2494 ...</code></pre>
 </div>
 </div>
-<section id="einfuehrungsphase" class="level2">
-<h2 class="anchored" data-anchor-id="einfuehrungsphase">Einfuehrungsphase</h2>
-<p>Handelt es sich um die Einführungsphase, d.h., ist das Angebot neu?</p>
+</section>
+</section>
+<section id="explorative-datenanalyse-und-datenvorverarbeitung" class="level1">
+<h1>Explorative Datenanalyse und Datenvorverarbeitung</h1>
+<!-- Umfang von 2-4 Seiten -->
+<p>Der vorliegende Datensatz ist in zwei Teildatenmengen ohne fehlende Werte aufgeteilt. Diese umfassen meteorologische und temporale Informationen, die in einem strukturierten Format bereitgestellt wurden. Die Gesamtdatenmenge bildet sich aus aus den Anwendungsdaten, bestehend aus 200 Beobachtungen und 7 Variablen und den Trainingsdaten, bestehend aus 500 Beobachtungen und 8 Variablen. Die ersten 7 Variablen der Datensätze sind formal deckungsgleich. Die zusätzliche Variable des Trainingsdatensatzes enthält die Zielvariable, die durch die Modellierung angenähert wird.</p>
+<section id="variablenübersicht" class="level2">
+<h2 class="anchored" data-anchor-id="variablenübersicht">Variablenübersicht:</h2>
+<ul>
+<li><p><em>Einführungsphase</em>: Nominalskalierte, kategorische Variable mit den Ausprägungen “Ja” und “Nein”.</p></li>
+<li><p><em>Jahreszeit</em>: Ordinalskalierte, kategorische Variable mit vier Ausprägungen Frühling, Sommer, Herbst und Winter.</p></li>
+<li><p><em>Wetter</em>: Ordinalskalierte, kategorische Variable mit den Hauptausprägungen “Gut” und “Nicht gut”, sowie “Schlecht”.</p></li>
+<li><p><em>Arbeitstag</em>: Nominalskalierte, kategorische Variable mit den Ausprägungen “Ja” und “Nein”.</p></li>
+<li><p><em>Temperatur</em>: Intervallskallierte, stetig, metrische Variable, die die Temperatur in Grad Celsius angibt.</p></li>
+<li><p><em>Windgeschwindigkeit</em>: Verhältnisskalierte, stetig, metrische Variable, die die Windgeschwindigkeit in km/h misst.</p></li>
+<li><p><em>Luftfeuchtigkeit</em>: Verhältnisskalierte, stetig, metrische Variable, die die relative Luftfeuchtigkeit in Prozent angibt.</p></li>
+<li><p><em>Vermietungen</em>: Verhältnisskalierte, diskret, metrische Variable und gibt die Anzahl der Vermietungen als Ganzzahl an.</p></li>
+</ul>
+</section>
+<section id="häufigkeitsverteilung-der-vermietungen" class="level2">
+<h2 class="anchored" data-anchor-id="häufigkeitsverteilung-der-vermietungen">Häufigkeitsverteilung der Vermietungen</h2>
+<p>Die Analyse der Häufigkeitsverteilung der Vermietungen zeigt eine Verteilung mit einem Hauptpeak und zwei kleineren Peaks, die links und rechts von diesem liegen. Diese Verteilung weist eine unimodale Struktur auf, wobei die kleineren Peaks auf Variationen innerhalb der Daten hinweisen. Dieses Muster kann durch die unterschiedlichen Einflüsse der Variablen im Datensatz verursacht werden, welche die Vermietungszahlen beeinflussen. Diese werden in dem folgenden Absatz näher betrachtet.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> einfuehrungsphase, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fav_stats</span>(raw.dataset<span class="sc">$</span>vermietungen)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> min      Q1 median      Q3  max     mean       sd   n missing
+  23 2825.25 4514.5 5871.75 8715 4416.606 1989.573 500       0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_dhistogram</span>(<span class="sc">~</span> vermietungen, <span class="at">data=</span>raw.dataset) <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_dens</span>(<span class="at">linewidth =</span> <span class="dv">2</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -218,10 +261,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<section id="vermietungen-in-abhängigkeit-zur-einfuehrungsphase" class="level3">
-<h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-einfuehrungsphase">Vermietungen in Abhängigkeit zur Einfuehrungsphase</h3>
+<p>Der erste zu untersuchende Einflussfaktor ist die kategoriale Variable “Einführungsphase” und deren Verteilung. Beide Kategorien “Ja” und “Nein” haben eine ähnliche Anzahl von Einträgen (Ja=244, Nein=256). Insgesamt zeigt die Verteilung, dass es keinen signifikanten Unterschied in der Anzahl der Einträge zwischen den beiden Kategorien gibt.</p>
+</section>
+<section id="einfuehrungsphase" class="level2">
+<h2 class="anchored" data-anchor-id="einfuehrungsphase">Einfuehrungsphase</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> einfuehrungsphase, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> einfuehrungsphase, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -230,13 +275,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-</section>
-</section>
-<section id="jahreszeit" class="level2">
-<h2 class="anchored" data-anchor-id="jahreszeit">Jahreszeit</h2>
-<p>Jahreszeit. Kann man nicht viel mehr dazu sagen.</p>
+<section id="vermietungen-in-abhängigkeit-zur-einfuehrungsphase" class="level3">
+<h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-einfuehrungsphase">Vermietungen in Abhängigkeit zur Einfuehrungsphase</h3>
+<p>Der Boxplot veranschaulicht die Verteilung der Vermietungen im Kontext der Einführungsphase (Ja/Nein) und zeigt mehrere wesentliche Aspekte auf. Der Median der Vermietungen ist in der Gruppe ohne Einführungsphase („Nein“) höher als in der Gruppe mit Einführungsphase („Ja“). Dies weist auf eine größere zentrale Tendenz der Vermietungen hin, wenn keine Einführungsphase vorliegt. Zudem ist der Interquartilsabstand (IQR) in der Gruppe ohne Einführungsphase ebenfalls größer, was auf eine erhöhte Streuung der Daten in dieser Gruppe hindeutet. Beide Gruppen zeigen keine auffälligen Ausreißer, da alle Datenpunkte innerhalb der Whisker liegen. Insgesamt sind die Vermietungen in der Gruppe ohne Einführungsphase höher, was durch die Position der Box und der Whisker im Boxplot deutlich wird.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> jahreszeit, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> einfuehrungsphase, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -245,10 +288,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<section id="vermietungen-in-abhängigkeit-zur-jahreszeit" class="level3">
-<h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-jahreszeit">Vermietungen in Abhängigkeit zur Jahreszeit</h3>
+</section>
+</section>
+<section id="jahreszeit" class="level2">
+<h2 class="anchored" data-anchor-id="jahreszeit">Jahreszeit</h2>
+<p>Die Häufigkeit der Vorkommen über die verschiedenen Jahreszeiten ist hinweg weitgehend gleichmäßig verteilt. Dies bedeutet, dass es keine signifikanten Unterschiede oder ausgeprägte Schwankungen in der Anzahl der Vorkommen zu verschiedenen Zeiten des Jahres gibt.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> jahreszeit, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> jahreszeit, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -257,13 +303,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-</section>
-</section>
-<section id="wetter" class="level2">
-<h2 class="anchored" data-anchor-id="wetter">Wetter</h2>
-<p>Die Wetterbeschreibung.</p>
+<section id="vermietungen-in-abhängigkeit-zur-jahreszeit" class="level3">
+<h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-jahreszeit">Vermietungen in Abhängigkeit zur Jahreszeit</h3>
+<p>Im Frühling und Herbst sind die Verteilungen der Vermietungen ähnlich, wobei beide Jahreszeiten relativ große Interquartilsabstände aufweisen. Dies deutet auf eine breite Streuung der Daten in diesen Perioden hin. Die Medianwerte sind in beiden Fällen hoch, sodass die Vermietungsaktivität in diesen Jahreszeiten stark vertreten ist. Im Sommer bleibt die Verteilung ähnlich, aber es gibt einen Anstieg im Medianwert, was darauf hinweist, dass die Vermietungen in dieser Jahreszeit tendenziell etwas höher sind. Der Winter hingegen zeigt eine deutliche Verringerung der Vermietungszahlen, wie durch den niedrigeren Median und den geringeren Interquartilsabstand ersichtlich ist. Die geringere Variabilität im Winter deutet darauf hin, dass die Vermietungsaktivitäten in dieser Jahreszeit relativ konstant, aber auf einem niedrigen Niveau sind.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> wetter, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> jahreszeit, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -272,10 +316,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<section id="vermietungen-in-abhängigkeit-zum-wetter" class="level3">
-<h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zum-wetter">Vermietungen in Abhängigkeit zum Wetter</h3>
+</section>
+</section>
+<section id="wetter" class="level2">
+<h2 class="anchored" data-anchor-id="wetter">Wetter</h2>
+<p>Das Balkendiagramm illustriert die Häufigkeit der Wetterkategorien “Gut”, “Nicht gut” und “Schlecht”. Die Kategorie “Gut” weist die höchste Anzahl von Beobachtungen auf. Die Kategorie “Nicht gut” liegt in der Mitte, mit etwa der Hälfte der Zählungen von “Gut”, was zeigt, dass solche Wetterbedingungen weniger häufig sind, aber dennoch häufiger als “Schlecht” vorkommen. Die Kategorie “Schlecht” verzeichnet die geringste Anzahl von Beobachtungen und tritt somit am seltensten auf.</p>
+<p>Das Balkendiagramm zeigt eine deutliche Dominanz guten Wetters, während schlechtes Wetter selten ist. “Nicht gut” liegt in einer mittleren Häufigkeitsposition, was die Variabilität der Wetterbedingungen verdeutlicht, jedoch mit einer klaren Präferenz für gutes Wetter.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> wetter, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> wetter, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -284,13 +332,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-</section>
-</section>
-<section id="arbeitstag" class="level2">
-<h2 class="anchored" data-anchor-id="arbeitstag">Arbeitstag</h2>
-<p>Handelt es sich um einen Werktag oder um Wochenende bzw. Feier- oder Ferientag?</p>
+<section id="vermietungen-in-abhängigkeit-zum-wetter" class="level3">
+<h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zum-wetter">Vermietungen in Abhängigkeit zum Wetter</h3>
+<p>Die Boxplots zeigen, dass die Vermietungszahlen bei gutem Wetter am höchsten sind, mit einem Median knapp unter 5000 und einer breiten Streuung. Bei “Nicht gut” liegt der Median etwas niedriger, aber ähnlich, mit geringerer Streuung. Die Vermietungszahlen sind bei schlechtem Wetter deutlich niedriger, mit einem Median unter 2500 und einer kleineren Streuung. Gutes Wetter führt demnach zu den höchsten und variabelsten Vermietungszahlen, während schlechtes Wetter mit deutlich geringerer Nachfrage verbunden ist.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> arbeitstag, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> wetter, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -299,10 +345,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<section id="vermietungen-in-abhängigkeit-zum-arbeitstag" class="level3">
-<h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zum-arbeitstag">Vermietungen in Abhängigkeit zum Arbeitstag</h3>
+</section>
+</section>
+<section id="arbeitstag" class="level2">
+<h2 class="anchored" data-anchor-id="arbeitstag">Arbeitstag</h2>
+<p>Das Diagramm zeigt, dass die meisten Beobachtungen (&gt;300) an Arbeitstagen gesammelt wurden, was darauf hindeutet, dass diese Tage in der zugrunde liegenden Datensatz häufiger beobachtet wurden als Nicht-Arbeitstage. Vermietungen werden demnach häufiger an Arbeitstagen als an Nicht-Arbeitstagen wie Wochenenden, Feiertagen oder in den Ferien durchgeführt.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> arbeitstag, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_bar</span>(<span class="sc">~</span> arbeitstag, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -311,19 +360,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-</section>
-</section>
-<section id="temperatur" class="level2">
-<h2 class="anchored" data-anchor-id="temperatur">Temperatur</h2>
-<p>Temperatur in °C.</p>
+<section id="vermietungen-in-abhängigkeit-zum-arbeitstag" class="level3">
+<h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zum-arbeitstag">Vermietungen in Abhängigkeit zum Arbeitstag</h3>
+<p>Der Median der Vermietungen ist an Arbeitstagen etwas niedriger als an Nicht-Arbeitstagen. Der Interquartilsabstand (IQR) ist in beiden Fällen ähnlich, was darauf hindeutet, dass die Streuung der mittleren 50% der Daten an beiden Tagen vergleichbar ist. Die Whisker erstrecken sich ebenfalls in ähnlicher Weise, was auf eine vergleichbare Spannweite der Daten hinweist. Die Verteilungen sind relativ symmetrisch, da die Mediane etwa in der Mitte der Boxen liegen. Zudem gibt es keine offensichtlichen Ausreißer, da keine Punkte außerhalb der Whisker zu sehen sind. Schlussfolgernd lässt sich dazu sagen, dass die Vermietungen an Arbeitstagen und Nicht-Arbeitstagen ähnliche Verteilungen aufweisen, wobei die Medianwerte an Nicht-Arbeitstagen geringfügig höher sind.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fav_stats</span>(raw.dataset<span class="sc">$</span>temperatur)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   min     Q1 median    Q3   max     mean       sd   n missing
- -3.59 7.4825  15.21 23.02 33.83 15.03484 8.778967 500       0</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_dhistogram</span>(<span class="sc">~</span> temperatur, <span class="at">data=</span>raw.dataset) <span class="sc">|&gt;</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_dens</span>(<span class="at">linewidth =</span> <span class="dv">2</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_boxplot</span>(vermietungen <span class="sc">~</span> arbeitstag, <span class="at">data=</span>raw.dataset)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -332,14 +373,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<section id="vermietungen-in-abhängigkeit-zur-temperatur" class="level3">
-<h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-temperatur">Vermietungen in Abhängigkeit zur Temperatur</h3>
+</section>
+</section>
+<section id="temperatur" class="level2">
+<h2 class="anchored" data-anchor-id="temperatur">Temperatur</h2>
+<p>Die Temperatur zeigt eine bimodale Verteilung der Daten, mit zwei Häufigkeitsspitzen bei etwa 8°C und 24°C. Dies deutet darauf hin, dass diese Temperaturbereiche am häufigsten auftreten. Die Dichte nimmt an den Rändern, insbesondere bei Temperaturen unter 5°C und über 24°C, deutlich ab, was auf seltenere extreme Temperaturen hinweist. Insgesamt zeigt die Verteilung eine Konzentration der Temperaturen in zwei unterschiedlichen Bereichen, was saisonalen Schwankungen entspricht.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(vermietungen <span class="sc">~</span> temperatur, <span class="at">data=</span>raw.dataset) <span class="sc">|&gt;</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>()</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`geom_smooth()` using method = 'loess'</code></pre>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fav_stats</span>(raw.dataset<span class="sc">$</span>temperatur)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   min     Q1 median    Q3   max     mean       sd   n missing
+ -3.59 7.4825  15.21 23.02 33.83 15.03484 8.778967 500       0</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_dhistogram</span>(<span class="sc">~</span> temperatur, <span class="at">data=</span>raw.dataset) <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_dens</span>(<span class="at">linewidth =</span> <span class="dv">2</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -348,19 +394,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-</section>
-</section>
-<section id="windgeschwindigkeit" class="level2">
-<h2 class="anchored" data-anchor-id="windgeschwindigkeit">Windgeschwindigkeit</h2>
-<p>Windgeschwindigkeit in km/h.</p>
+<section id="vermietungen-in-abhängigkeit-zur-temperatur" class="level3">
+<h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-temperatur">Vermietungen in Abhängigkeit zur Temperatur</h3>
+<p>Die Abhängigkeit zwischen der Temperatur und der Anzahl der Vermietungen zeigt einen anfänglichen Anstieg der Vermietungszahlen mit zunehmender Temperatur, wobei ein Maximum bei etwa 20°- 25°C erreicht wird. Jenseits dieses Temperaturwertes nimmt die Anzahl der Vermietungen trotz weiter steigender Temperaturen ab. Dies legt nahe, dass gemäßigte Temperaturen um 20°C optimal für Vermietungen sind, während höhere Temperaturen tendenziell eine negative Auswirkung auf die Nachfrage haben könnten.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fav_stats</span>(raw.dataset<span class="sc">$</span>windgeschwindigkeit)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  min     Q1 median      Q3   max     mean       sd   n missing
- 1.49 8.9575  11.91 15.6925 34.41 12.86882 5.358726 500       0</code></pre>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(vermietungen <span class="sc">~</span> temperatur, <span class="at">data=</span>raw.dataset) <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>()</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using method = 'loess'</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_dhistogram</span>(<span class="sc">~</span> windgeschwindigkeit, <span class="at">data=</span>raw.dataset) <span class="sc">|&gt;</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_dens</span>(<span class="at">linewidth =</span> <span class="dv">2</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -369,14 +411,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<section id="vermietungen-in-abhängigkeit-zur-temperatur-1" class="level3">
-<h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-temperatur-1">Vermietungen in Abhängigkeit zur Temperatur</h3>
+</section>
+</section>
+<section id="windgeschwindigkeit" class="level2">
+<h2 class="anchored" data-anchor-id="windgeschwindigkeit">Windgeschwindigkeit</h2>
+<p>Die Verteilung der Windgeschwindigkeiten weist einen deutlichen Gipfel bei etwa 11 km/h auf und stellt damit die häufigste Windgeschwindigkeit in den Daten dar. Abseits dieser Wertes nimmt die Dichte der Verteilung ab. Höhere Windgeschwindigkeiten treten seltener auf. Die Verteilung ist leicht rechtsschief, was darauf hindeutet, dass extrem hohe Windgeschwindigkeiten weniger häufig sind, aber dennoch vorkommen.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(vermietungen <span class="sc">~</span> windgeschwindigkeit, <span class="at">data=</span>raw.dataset) <span class="sc">|&gt;</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>()</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`geom_smooth()` using method = 'loess'</code></pre>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fav_stats</span>(raw.dataset<span class="sc">$</span>windgeschwindigkeit)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  min     Q1 median      Q3   max     mean       sd   n missing
+ 1.49 8.9575  11.91 15.6925 34.41 12.86882 5.358726 500       0</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_dhistogram</span>(<span class="sc">~</span> windgeschwindigkeit, <span class="at">data=</span>raw.dataset) <span class="sc">|&gt;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_dens</span>(<span class="at">linewidth =</span> <span class="dv">2</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -385,19 +432,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-</section>
-</section>
-<section id="luftfeuchtigkeit" class="level2">
-<h2 class="anchored" data-anchor-id="luftfeuchtigkeit">Luftfeuchtigkeit</h2>
-<p>Luftfeuchtigkeit in %.</p>
+<section id="vermietungen-in-abhängigkeit-zur-windgeschwindigkeit" class="level3">
+<h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-windgeschwindigkeit">Vermietungen in Abhängigkeit zur Windgeschwindigkeit</h3>
+<p>Die Glättungslinie im Punktdiagramm zur Abhängigkeit der Vermietungen zur Windgeschwindigkeit verdeutlicht den Trend der Daten und zeigt, dass die Anzahl der Vermietungen zunächst mit zunehmender Windgeschwindigkeit steigt. Ab einem bestimmten Punkt beginnt sie jedoch wieder zu sinken.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fav_stats</span>(raw.dataset<span class="sc">$</span>luftfeuchtigkeit)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  min     Q1 median     Q3    max     mean       sd   n missing
- 3.88 50.935 62.345 74.015 103.61 62.38542 15.46771 500       0</code></pre>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(vermietungen <span class="sc">~</span> windgeschwindigkeit, <span class="at">data=</span>raw.dataset) <span class="sc">|&gt;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>()</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using method = 'loess'</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_dhistogram</span>(<span class="sc">~</span> luftfeuchtigkeit, <span class="at">data=</span>raw.dataset) <span class="sc">|&gt;</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_dens</span>(<span class="at">linewidth =</span> <span class="dv">2</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -406,14 +449,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<section id="vermietungen-in-abhängigkeit-zur-luftfeuchtigkeit" class="level3">
-<h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-luftfeuchtigkeit">Vermietungen in Abhängigkeit zur Luftfeuchtigkeit</h3>
+</section>
+</section>
+<section id="luftfeuchtigkeit" class="level2">
+<h2 class="anchored" data-anchor-id="luftfeuchtigkeit">Luftfeuchtigkeit</h2>
+<p>Verteilung der Luftfeuchtigkeitsdaten in %, mit einem Minimum von 3,88 und einem Maximum von 103,61. Das Maximum von 103,61 scheint hierbei ein fehlerhafter Wert zu sein, da Luftfeuchtigkeitswerte ein Höchstwert von 100 erreichen können. Der Mittelwert und der Median liegen nahe bei 62,39 bzw. 62,35. Im Gesamten ergibt sich hierbei eine Normalverteilung mit einer moderaten Streuung um den Mittelwert.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(vermietungen <span class="sc">~</span> luftfeuchtigkeit, <span class="at">data=</span>raw.dataset) <span class="sc">|&gt;</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>()</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`geom_smooth()` using method = 'loess'</code></pre>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fav_stats</span>(raw.dataset<span class="sc">$</span>luftfeuchtigkeit)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  min     Q1 median     Q3    max     mean       sd   n missing
+ 3.88 50.935 62.345 74.015 103.61 62.38542 15.46771 500       0</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_dhistogram</span>(<span class="sc">~</span> luftfeuchtigkeit, <span class="at">data=</span>raw.dataset) <span class="sc">|&gt;</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_dens</span>(<span class="at">linewidth =</span> <span class="dv">2</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -422,19 +470,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-</section>
-</section>
-<section id="vermietungen" class="level2">
-<h2 class="anchored" data-anchor-id="vermietungen">Vermietungen</h2>
-<p>Anzahl Vermitungen.</p>
+<section id="vermietungen-in-abhängigkeit-zur-luftfeuchtigkeit" class="level3">
+<h3 class="anchored" data-anchor-id="vermietungen-in-abhängigkeit-zur-luftfeuchtigkeit">Vermietungen in Abhängigkeit zur Luftfeuchtigkeit</h3>
+<p>Der höchste Punkt der Trendlinie im Punktdiagramm befindet sich ungefähr im Bereich einer Luftfeuchtigkeit von 50 bis 60, was darauf hindeutet, dass dieser Bereich optimal für die meisten Vermietungen ist.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fav_stats</span>(raw.dataset<span class="sc">$</span>vermietungen)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> min      Q1 median      Q3  max     mean       sd   n missing
-  23 2825.25 4514.5 5871.75 8715 4416.606 1989.573 500       0</code></pre>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_point</span>(vermietungen <span class="sc">~</span> luftfeuchtigkeit, <span class="at">data=</span>raw.dataset) <span class="sc">|&gt;</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_smooth</span>()</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using method = 'loess'</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gf_dhistogram</span>(<span class="sc">~</span> vermietungen, <span class="at">data=</span>raw.dataset) <span class="sc">|&gt;</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gf_dens</span>(<span class="at">linewidth =</span> <span class="dv">2</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -444,9 +488,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
+</section>
 <section id="preprocessing-der-daten" class="level2">
 <h2 class="anchored" data-anchor-id="preprocessing-der-daten">Preprocessing der Daten</h2>
 <p>Quelle: https://www.geeksforgeeks.org/data-preprocessing-in-r/</p>
+<p>Folgend wird die Aufbereitung des Datensatz systematisch in mehreren Schritten durchgeführt. Diese sind notwendig für die Optimierung der Daten, um anschließend das neuronale Netz zu traineren.</p>
+<p>Zunächst wird eine Kopie des ursprünglichen Datensatzes erstellt. Dies dient dem Zweck, die Originaldaten unverändert zu lassen und eine nicht-destruktive Bearbeitung zu ermöglichen. Diese Vorgehensweise stellt sicher, dass die Integrität der Ausgangsdaten während der Verarbeitung erhalten bleibt und bei Bedarf auf die Originaldaten zurückgegriffen werden kann.</p>
+<p>Im nächsten Schritt erfolgt die binäre Kodierung der Variablen „einfuehrungsphase“ und „arbeitstag“. Hierzu wird ein Mapping von „Nein“ zu 0 und „Ja“ zu 1 definiert.</p>
+<p>Anschließend wird die Variable „wetter“ ordinal kodiert. Die Werte „Schlecht“, „Nicht gut“ und „Gut“ werden in die numerischen Werte 0, 1 und 2 überführt. Diese Kodierung reflektiert die natürliche Reihenfolge der Kategorien, um die hierarchische Beziehung zwischen den Kategorien zu berücksichtigen.</p>
+<p>Für die Variable „jahreszeit“ wird die One-Hot-Kodierung verwendet. Mithilfe der Funktion model.matrix werden für jede Kategorie der „jahreszeit“-Variable separate binäre Spalten erstellt. Hierdruch wird ermöglicht, dass jede Kategorie der Variable in einer eigenen Spalte dargestellt wird, wobei der Wert 1 angibt, dass die Kategorie zutrifft, und 0, dass sie nicht zutrifft. Die ursprüngliche „jahreszeit“-Spalte wird nach der Kodierung entfernt, um Redundanz zu vermeiden und den Datensatz zu bereinigen.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>preprocess <span class="ot">&lt;-</span> <span class="cf">function</span>(dataset) {</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Make a copy of the data</span></span>
@@ -474,6 +524,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="preprocessing-ergebnisse" class="level3">
 <h3 class="anchored" data-anchor-id="preprocessing-ergebnisse">Preprocessing Ergebnisse</h3>
+<p>In der Vorverarbeitung der Ergebnisse wird zunächst ein Zufallszahlengenerator mit dem Wert 69 initialisiert, um die Reproduzierbarkeit der Ergebnisse sicherzustellen. Anschließend werden die Rohdaten sowohl für Anwendungen als auch für den Datensatz vorverarbeitet. Die vorverarbeiteten Daten werden in den Variablen <em>application</em> und <em>dataset</em> gespeichert.</p>
+<p>Um die Auswirkungen der Vorverarbeitung zu veranschaulichen, wird der Anfang des ursprünglichen Datensatzes <em>raw.dataset</em> und des vorverarbeiteten Datensatzes dataset mit der Funktion <em>head()</em> angezeigt. Dies ermöglicht einen direkten Vergleich der Daten vor und nach der Vorverarbeitung. Der Datensatz wird folgend für das Training vorbereitet. Die Features werden aus dem vorverarbeiteten Datensatz <em>dataset</em> extrahiert, indem die Spalte vermietungen ausgeschlossen wird, während die Zielvariable <em>vermietungen</em> separat ausgewählt wird. Der Datensatz wird dann in einen Trainings- und einen Validierungssatz aufgeteilt. Diese Aufteilung erfolgt zufällig, wobei 80 % der Daten für das Training und 20 % für die Validierung verwendet werden. Dies wird durch die Funktion <em>sample()</em> erreicht, die eine logische Vektorreihe erzeugt, die angibt, welche Zeilen in den Trainingssatz (<em>train.raw.dataset</em> und <em>train.dataset</em>) und welche in den Validierungssatz (<em>val.raw.dataset</em> und <em>val.dataset</em>) aufgenommen werden sollen. Schließlich werden die Features und Labels sowohl für den Trainings- als auch für den Validierungssatz getrennt gespeichert, indem die entsprechenden Zeilen aus den vorverarbeiteten Feature- und Labeldatensätzen ausgewählt werden.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make this example reproducible</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">69</span>)</span>
@@ -551,6 +603,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- Umfang von 2-4 Seiten -->
 <p>https://www.datacamp.com/tutorial/neural-network-models-r</p>
 <p>Gehen Sie hier auf die verwendete Methode zur Modellierung, Variablen, und Modellauswahl ein. Zitieren Sie hier auch die methodische Literatur.</p>
+<section id="modellauswahl" class="level2">
+<h2 class="anchored" data-anchor-id="modellauswahl">Modellauswahl</h2>
+<p>Damit die Performance, zur Beurteilung hier der MAE, des Vorhersage-Modells bewertet werden kann, wird zuvor ein weiteres, zweites Modell erstellt. Hierbei wird ein lineares Modell als Vergleichs-Modell gewählt. Durch das simple Base-Line Modell, steht für den Vergleich ein einfaches und schnell zu trainierendes Modell zur Verfügung, welches auf Grund des Aufbaus einen geringen Ressourcen Bedarf hat. Dargestellt wird hierbei jedoch lediglich ein linearer Zusammenhang, der gegebenenfalls nicht ausreichend die Realität abbildet, wodurch es zu einem erhöhten MAE kommen kann. (Buch: Modellieren in R; Seite 322ff.) Dies wird in den nachfolgenden Kapiteln bezüglich der Anwendung der Modelle betrachtet.</p>
+<p>Das Vorhersage-Modell basiert, im Gegensatz zum Vergleichs-Modell, auf einem neuronalen Netz. Dieses Netz wird aufgrund seiner höheren Komplexität eingesetzt, um den MAE signifikant zu verringern. Dies wird vor allem dadurch ermöglicht, dass das neuronale Netz in der Lage ist, von dem linearen Zusammenhang abzuweichen. In realen Szenarien existieren oft keine einfachen linearen Beziehungen zwischen den Variablen, weshalb das neuronale Netz, diese Beziehung erkennen und somit präzisere Vorhersagen liefern kann.</p>
+<p>Ein weiterer Aspekt für die Auswahl des neuronalen Netzes, ist die Gewichtung der Variablen im Modell. Während des trainings passt das Netz die Gewichte der einzelnen Ergebnisse so an, dass die relevanten Zusammenhänge aus dem Trainingsdatensatz effektiv in das Modell eingebunden werden. Auf diese Weise trägt das Netz dazu bei, dass wichtige Korrelationen zwischen den Variablen erkannt und festgehalten werden. (https://www.ibm.com/de-de/topics/neural-networks)</p>
+</section>
+<section id="modellierung" class="level2">
+<h2 class="anchored" data-anchor-id="modellierung">Modellierung</h2>
+<p>Durch die Modellierung eines Vorhersage-Modells, für die Vermietung von Fahrrädern, kann ein Ausschnitt der Wirklichkeit betrachtet und nach Ermittlung von Regelmäßigkeiten auf andere Daten angewendet werden. Hierbei ist zu beachten, dass die Annäherung durch das Modell und somit der Zielvariable an die Wirklichkeit verzerrt oder falsch sein kann. Dies kann vorliegen, da nicht die ganze Gesamtheit zum trainieren des Modells bekannt ist. (Buch: Modellieren in R; Seite 246). Wie bereits im vorherigen Abschnitt beschrieben, wird bei der nachfolgenden Ausarbeitung ein lineares Regressions-Modell und ein Neuronales Netz trainiert und angewendet.</p>
+<p>Das lineare Regressions-Modell stellt den Zusammenhang zwischen der abhängigen Variable „Vermietung“ und den im Datensatz vorhandenen unabhängigen Variablen dar. Dieses Zusammenhang ist, sofern vorhanden linear. Das Modell wird genutzt, um einen Trend abzubilden, der es ermöglicht, Vorhersagewerte für Kombinationen von Variablen aus dem Trainingsdatensatz zu ermitteln. Um die Genauigkeit des Modells zu bewerten, wird der MAE berechnet. (Buch: Modellieren in R; Seite 322ff.)</p>
+<p>Die Modellierung des neuronalen Netzes ist komplexer als das Base-Line Modell. Die einzelnen Neuronen in den nachfolgend erklärten Schichten, haben immer jeweils eine Verbindung zu allen Neuronen der folgenden Schicht. Es besteht aus einer Eingabeschicht, der so genannten Inputlayer. Hier werden die zu betrachtenden Werte in das Netz geladen. Bei dem vorliegenden Datensatz sind dies die zehn Variablen. Nachfolgende Schichten im neuronalen Netz sind die versteckten Schichten, die Hiddenlayer. Diese verarbeiten die Werte aus der vorherigen Schicht. Von der Schicht der Hiddenlayer liegen zwei vor. Nach der Verarbeitung werden die Werte in die letzte Schicht, der Outputlayer, übertragen. In dem vorliegenden Anwendungsfall, gibt es für diese Schicht ein Neuron. Es wird ausgegeben, ob eine Vermietung stattfindet oder nicht. Die Verarbeitung in diesem Netzwerk findet von der Inputlayer zum Outputlayer statt und die Ergebnisse werden lediglich an die nächste Ebene weitergegeben. Dadurch liegt ein Feedforward neuronales Netz vor, da die Daten in Vorwärtsrichtung fließen. (https://www.datacamp.com/tutorial/neural-network-models-r) Das zu erstellende Modell wird 5000 Mal trainiert um die Gewichtungen und somit die Ergebnisse zu optimieren. Damit eine Optimierung möglich ist, werden die besten Gewichte der einzelnen Durchgänge gespeichert. Um das Modell vor Overfitting, also der Überanpassung auf den Trainingsdatensatz, zu schützen, wird eine Dropout-Rate gesetzt. Diese sperrt je Durchlauf zufällig einen angegebenen Prozentsatz an Neuronen je Layer, die somit temporär nicht trainiert werden. Somit wird ein gleichmäßiges Training gewährleistet. (QUELLE?)</p>
+</section>
+<section id="variablen" class="level2">
+<h2 class="anchored" data-anchor-id="variablen">Variablen</h2>
+<p>Die Grundlage für die Modellierung bilden die zur Verfügung gestellten Daten. Diese Daten liegen, wie im vorherigen Kapitel zur <em>Explorativen Datenanalyse und Datenvorverarbeitung</em> beschrieben, in Form verschiedener Attribute mit unterschiedlichen Ausprägungen vor. Um diese Daten für die Modellierung nutzbar zu machen, wurde ein Preprocessing durchgeführt, bei dem die Daten für die weitere Verarbeitung angepasst und bereinigt wurden. Diese vorverarbeiteten Daten wurden anschließend separat von den Originaldaten gespeichert, um sicherzustellen, dass nur die bereinigten und angepassten Variablen in der Modellierung verwendet werden. In der nachfolgenden Modellierungsphase werden ausschließlich diese verarbeitenden Datensätze verwendet. Für beide Modelle, dem Base-Line Modell und dem neuronalen Netz, wurden sämtliche verfügbaren Attribute verwendet, um die Modelle zu trainieren. Das neuronale Netzwerk gewichtet hierbei die Relevanz der einzelnen Variablen um die bestmögliche Annäherung an die Beziehungen in den vorliegenden Trainingsdaten zu finden. (Buch: Neuronale Netze kompakt; Seite 71ff.)</p>
+<p>Die Auswahl der Variablen innerhalb des Codes der zu trainierenden Modelle ist dynamisch gestaltet. Das bedeutet, dass das Hinzufügen neuer oder das Entfernen bestehender Attribute keine Anpassung des Codes erfordert. Dadurch bleibt die Modellierung und das Training flexibel gegenüber Änderungen im Datensatz.</p>
+</section>
 </section>
 <section id="anwendung-ergebnis-und-vorhersage" class="level1">
 <h1>Anwendung, Ergebnis und Vorhersage</h1>
@@ -560,6 +629,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="modell-mit-den-daten-trainieren">Modell mit den Daten trainieren</h2>
 <section id="base-line-modell" class="level3">
 <h3 class="anchored" data-anchor-id="base-line-modell">Base-Line Modell</h3>
+<p>Um die Vorhersagegüte des neuronalen Netzes bestimmten zu können, wird zunächst das Base-Line Modell in Form einer linearen Regression erstellt, bei dem die Zielvariable von allen verfügbaren Prädiktoren im Trainingsdatensatz abhängt. Die Vorhersagegüte des Modells kann folgend anhand des Mean Absolute Error (MAE) bewertet und mit dem des neuronalen Netzes ins Verhältnis gesetzt werden.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Train a simple lm on all the data</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>lm.model <span class="ot">&lt;-</span> <span class="fu">lm</span>(vermietungen <span class="sc">~</span> ., <span class="at">data =</span> train.raw.dataset)</span>
@@ -599,9 +669,21 @@ F-statistic: 152.8 on 10 and 388 DF,  p-value: &lt; 2.2e-16</code></pre>
 <pre><code>[1] 636.2102</code></pre>
 </div>
 </div>
+<p>Die Residuen reichen von -3641,3 bis 2384,8, wobei der Median nahe bei 0 liegt (-3,4). Dies deutet darauf hin, dass das Modell die Daten gut mittelt, obwohl einige Abweichungen auftreten. Die Variable <em>einfuehrungsphaseNein</em> hat den stärksten positiven Effekt auf die Vermietungen (2057,883), was darauf schließen lässt, dass die Vermietungen signifikant höher sind, wenn keine Einführungsphase vorliegt. Die Jahreszeiten zeigen unterschiedliche Effekte. Im Herbst steigen die Vermietungen signifikant (+562,431), während sie im Winter stark sinken (-765,179). Der Sommer zeigt einen leichten, aber nicht stark signifikanten Rückgang (-297,132). Wetterbedingungen spielen ebenfalls eine wichtige Rolle: Bei „Nicht gutem“ und „Schlechtem“ Wetter sinken die Vermietungen signifikant um -390,531 bzw. -2115,621. Die Temperatur hat einen positiven Effekt: Mit jedem Grad Anstieg erhöhen sich die Vermietungen um 120,920. Windgeschwindigkeit und Luftfeuchtigkeit haben negative Effekte auf die Vermietungen (-43,602 bzw. -10,445).</p>
+<p>Der Multiple R-squared-Wert von 0,7975 zeigt, dass fast 80% der Variabilität in den Vermietungen durch die erklärenden Variablen im Modell erfasst wird und weist somit eine solide Anpassung des Modells auf.</p>
+<p>Der Residual Standard Error von 903,3 zeigt, dass die durchschnittliche Abweichung der Vorhersagen vom tatsächlichen Wert etwa 903 Vermietungen beträgt.</p>
+<p>Der F-statistic-Wert von 152,8 mit einem sehr niedrigen p-Wert (&lt; 2.2e-16) betont, dass das Modell insgesamt signifikant ist und die unabhängigen Variablen eine hohe Erklärungskraft für die Variation in den Vermietungen haben.</p>
+<p>Die lineare Regression stellt dar, dass insbesondere die Einfuehrungsphase und extreme Wetterbedingungen wie schlechtes Wetter sich stark auf die Vermietungen auswirken. Die Jahreszeiten haben ebenfalls einen signifikanten Einfluss, wobei der Winter einen deutlichen Rückgang und der Herbst einen Anstieg der Vermietungen bewirkt. Das Modell erklärt einen großen Teil der Variabilität der Vermietungen und ist damit eine solide Vorhersage.</p>
 </section>
 <section id="unser-modell" class="level3">
 <h3 class="anchored" data-anchor-id="unser-modell">Unser Modell</h3>
+<p>Zunächst wird, wie in dem Base-Line Modell, ein zufälliger Seed gesetzt (<em>set_random_seed(69)</em>), um die Reproduzierbarkeit der Ergebnisse zu gewährleisten. Zusätzlich die Nutzung der GPU ermöglicht, sofern diese verfügbar ist. Im Anschluss wird der Pfad für die Speicherung der Modellgewichte definiert (<em>checkpoint_path</em>), sodass das Modell während des Trainings regelmäßig gesichert werden kann.</p>
+<p>Um eine optimale Skalierung der Eingabedaten zu gewährleisten, wird ein Normalisierungslayer (<em>layer_normalization</em>) erstellt und an die Verteilung der Features im Datensatz (<em>dataset_features</em>) angepasst. Hierdurch wird sichergstellt, dass die Eingabedaten vor dem Durchlaufen des neuronalen Netzes auf eine vergleichebare Skala gebracht werden.</p>
+<p>Das Modell wird mit dann mit einer Eingabeschicht definiert, deren Dimensionen den Merkmalen des Datensatzes entsprechen (<em>input &lt;- layer_input(shape = dim(dataset_features))</em>).</p>
+<p>Das neuronale Netz selbst wird durch ein Eingabelayer definiert, dessen Form durch die Anzahl der Features im Datensatz bestimmt wird. Anschließend folgt eine Sequenz von weiteren Layern, beginnend mit der Normalisierung der Eingaben. Ein Dropout-Layer mit einer Rate von 5% wird hinzugefügt, um das Modell vor Überanpassung zu schützen. Darauf folgen zwei voll verbundene Layer (<em>dense layers</em>) mit jeweils 32 Neuronen, welche die ReLU-Aktivierungsfunktion verwenden, um nicht-lineare Zusammenhänge im Datensatz zu modellieren. Die Ausgabeschicht besteht aus einem einzigen Neuron, welches die Vorhersage der Zielvariable liefert.</p>
+<p>Das Modell wird anschließend kompiliert, wobei der Adam-Optimierer (<em>optimizer = ‘adam’</em>) zur Optimierung der Gewichte verwendet wird. Als Verlustfunktion wird der mittlere quadratische Fehler (<em>loss = ‘mse’</em>) eingesetzt, während der mittlere absolute Fehler (<em>mae</em>) als Metrik zur Bewertung der Modellleistung herangezogen wird. Ein Callback (<em>callback_model_checkpoint</em>) sorgt dafür, dass die Gewichte des Modells nach jeder Epoche gespeichert werden, wobei nur die besten Gewichte (gemessen an der Validierungsleistung) gesichert werden.</p>
+<p>Das Training des Modells erfolgt über 5000 Epochen (<em>epochs = 5000</em>) mit einer Batch-Größe von 64. Die Trainingsdaten werden in Form von Matrizen (<em>as.matrix(train.dataset_features)</em>) bereitgestellt, und der Validierungsdatensatz wird verwendet, um die Leistung des Modells während des Trainings zu überwachen. Nach Abschluss des Trainings werden die besten während des Trainings gespeicherten Gewichte geladen (<em>load_model_weights</em>), um sicherzustellen, dass die anschließende Evaluation auf der bestmöglichen Version des Modells basiert.</p>
+<p>Die abschließende Bewertung des Modells erfolgt anhand der Validierungsdaten, wobei die zuvor definierten Metriken, insbesondere der mittlere absolute Fehler, zur Beurteilung der Vorhersagegenauigkeit des Modells herangezogen werden.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set a random seed for training</span></span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set_random_seed</span>(<span class="dv">69</span>, <span class="at">disable_gpu =</span> <span class="cn">FALSE</span>)</span>
@@ -671,7 +753,7 @@ F-statistic: 152.8 on 10 and 388 DF,  p-value: &lt; 2.2e-16</code></pre>
 <span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">batch_size =</span> <span class="dv">64</span></span>
 <span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>2/2 - 0s - 16ms/step - loss: 586509.1250 - mae: 548.5580</code></pre>
+<pre><code>2/2 - 0s - 12ms/step - loss: 586509.1250 - mae: 548.5580</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$loss
@@ -685,6 +767,8 @@ $mae
 </section>
 <section id="modell-zur-vorhersage-anwenden" class="level2">
 <h2 class="anchored" data-anchor-id="modell-zur-vorhersage-anwenden">Modell zur Vorhersage anwenden</h2>
+<p>Um die Anwendung des trainierten neuronalen Netzes zur Vorhersage der Vermietungen durchzuführen, werden zunächst die Vorhersagen mit dem bereits trainierten Modell getroffen. Hierzu wird der Eingabedatensatz (<em>application</em>) in eine Matrix umgewandelt, sodass das Modell die Daten im erforderlichen Format erhält. Das neuronale Netz (<em>nn.model</em>) verarbeitet die Eingaben und generiert Vorhersagen, die in der Variablen <em>predictions</em> gespeichert werden.</p>
+<p>Anschließend werden diese Vorhersagen in den bestehenden Datensatz (<em>raw.application</em>) integriert. Zuerst wird eine Kopie des ursprünglichen Datensatzes (<em>raw.application</em>) erstellt, um die originalen Daten unverändert zu lassen. In der Kopie (<em>pred.application</em>) wird eine neue Spalte ‘vermietungen’ hinzugefügt, die die berechneten Vorhersagen enthält. Dabei werden die Vorhersagewerte in ganze Zahlen (<em>as.integer(predictions)</em>) umgewandelt, bevor sie in die Spalte eingefügt werden. Hierdruch wird ein erweiterten Datensatz erstellt, der sowohl die Originaldaten als auch die vom Modell vorhergesagten Werte beinhaltet.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict with the model</span></span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">nn.model</span>(<span class="fu">as.matrix</span>(application))</span>
@@ -693,7 +777,7 @@ $mae
 <span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>pred.application <span class="ot">&lt;-</span> raw.application</span>
 <span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>pred.application<span class="sc">$</span>vermietungen <span class="ot">&lt;-</span><span class="fu">as.integer</span>(predictions)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Kontrolle und Export:</p>
+<p>Abschließend wird der erweiterte Datensatz (<em>pred.application</em>), der die Vorhersagen des Modells enthält, in eine CSV-Datei exportiert.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Save results</span></span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv2</span>(pred.application, <span class="at">file =</span> <span class="st">"Prognose_IhrName.csv"</span>)</span></code><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></pre></div>

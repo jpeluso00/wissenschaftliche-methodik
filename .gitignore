@@ -1,3 +1,7 @@
+# Python
+.venv/
+venv/
+
 # History files
 .Rhistory
 .Rapp.history
