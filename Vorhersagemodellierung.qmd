@@ -104,7 +104,9 @@ Der vorliegende Datensatz ist in zwei Teildatenmengen ohne fehlende Werte aufget
 #| label: fig-vermietungen
 #| fig-cap: "Häufigkeitsverteilung der Vermietungen"
 
-fav_stats(raw.dataset$vermietungen)
+stats.vermietungen <- fav_stats(raw.dataset$vermietungen)
+stats.vermietungen
+
 gf_dhistogram(~ vermietungen, data=raw.dataset) |>
   gf_dens(linewidth = 1, color = "blue")
 ```
@@ -152,7 +154,11 @@ Die Häufigkeit der Vorkommen über die verschiedenen Jahreszeiten ist hinweg we
 gf_boxplot(vermietungen ~ jahreszeit, data=raw.dataset)
 ```
 
-Der Boxplot in @fig-vermietungen-jahreszeit zeigt, dass im Frühling und Herbst die Verteilungen der Vermietungen ähnlich sind, wobei beide Jahreszeiten relativ große Interquartilsabstände aufweisen. Dies deutet auf eine breite Streuung der Daten in diesen Perioden hin. Die Medianwerte sind in beiden Fällen hoch, sodass die Vermietungsaktivität in diesen Jahreszeiten stark vertreten ist. Im Sommer bleibt die Verteilung ähnlich, aber es gibt einen Anstieg im Medianwert, was darauf hinweist, dass die Vermietungen in dieser Jahreszeit tendenziell etwas höher sind. Der Winter hingegen zeigt eine deutliche Verringerung der Vermietungszahlen, wie durch den niedrigeren Median und den geringeren Interquartilsabstand ersichtlich ist. Die geringere Variabilität im Winter deutet darauf hin, dass die Vermietungsaktivitäten in dieser Jahreszeit relativ konstant, aber auf einem niedrigen Niveau sind.
+Der Boxplot in @fig-vermietungen-jahreszeit zeigt, dass im Frühling und Herbst die Verteilungen der Vermietungen ähnlich sind, wobei beide Jahreszeiten relativ große Interquartilsabstände aufweisen. Dies deutet auf eine breite Streuung der Daten in diesen Perioden hin. Die Medianwerte sind in beiden Fällen hoch, sodass die Vermietungsaktivität in diesen Jahreszeiten stark vertreten ist.
+Im Sommer bleibt die Verteilung ähnlich, aber es gibt einen Anstieg im Medianwert, was darauf hinweist, dass die Vermietungen in dieser Jahreszeit tendenziell etwas höher sind. Der Winter hingegen zeigt eine deutliche Verringerung der Vermietungszahlen, wie durch den niedrigeren Median und den geringeren Interquartilsabstand ersichtlich ist.
+Die geringere Variabilität im Winter deutet darauf hin, dass die Vermietungsaktivitäten in dieser Jahreszeit relativ konstant, aber auf einem niedrigen Niveau sind.
+
+Der Boxplot in @fig-vermietungen-jahreszeit zeigt auch, dass es für Sommer einen auffälligen Eintrag mit einer Anzahl Vermietungen von unter 2500 gibt, der potenziell als Ausreiser gilt.
 
 ## Wetter {#sec-datenanalyse-wetter}
 
@@ -204,7 +210,9 @@ Der Boxplot in @fig-vermietungen-arbeitstag zeigt, dass der Median der Vermietun
 #| label: fig-temperatur
 #| fig-cap: "Häufigkeitsverteilung der Temperatur"
 
-fav_stats(raw.dataset$temperatur)
+stats.temperatur <- fav_stats(raw.dataset$temperatur)
+stats.temperatur
+
 gf_dhistogram(~ temperatur, data=raw.dataset) |>
   gf_dens(linewidth = 1, color = "blue")
 ```
@@ -227,7 +235,9 @@ Die Abhängigkeit zwischen der Temperatur und der Anzahl der Vermietungen in @fi
 #| label: fig-windgeschwindigkeit
 #| fig-cap: "Häufigkeitsverteilung der Windgeschwindigkeit"
 
-fav_stats(raw.dataset$windgeschwindigkeit)
+stats.windgeschwindigkeit <- fav_stats(raw.dataset$windgeschwindigkeit)
+stats.windgeschwindigkeit
+
 gf_dhistogram(~ windgeschwindigkeit, data=raw.dataset) |>
   gf_dens(linewidth = 1, color = "blue")
 ```
@@ -250,7 +260,9 @@ Die Glättungslinie im Punktdiagramm zur Abhängigkeit der Vermietungen zur Wind
 #| label: fig-luftfeuchtigkeit
 #| fig-cap: "Häufigkeitsverteilung der Luftfeuchtigkeit"
 
-fav_stats(raw.dataset$luftfeuchtigkeit)
+stats.luftfeuchtigkeit <- fav_stats(raw.dataset$luftfeuchtigkeit)
+stats.luftfeuchtigkeit
+
 gf_dhistogram(~ luftfeuchtigkeit, data=raw.dataset) |>
   gf_dens(linewidth = 1, color = "blue")
 ```
@@ -266,6 +278,26 @@ gf_point(vermietungen ~ luftfeuchtigkeit, data=raw.dataset) |>
 ```
 
 Der höchste Punkt der Trendlinie im Punktdiagramm in @fig-vermietungen-luftfeuchtigkeit befindet sich ungefähr im Bereich einer Luftfeuchtigkeit von 50 bis 60, was darauf hindeutet, dass dieser Bereich optimal für die meisten Vermietungen ist.
+
+## Entfernen von Ausreißern in den Daten {#sec-datenanalyse-ausreißern}
+
+In @sec-datenanalyse-luftfeuchtigkeit und @sec-datenanalyse-jahreszeit wurde festgestellt, dass der Eintrag mit einer Luftfeuchtigkeit von `r stats.luftfeuchtigkeit$max`\% fehlerhaft ist und ein Eintrag für die Jahreszeit Sommer mit einer Anzahl Vermietungen von unter 2500 potenziell als Ausreiser gilt.
+Diese Einträge werden im folgenden aus den Daten entfernt.
+
+```{r}
+# Remove wrong data
+clean.raw.dataset <- raw.dataset[raw.dataset$luftfeuchtigkeit <= 100, ]
+clean.raw.dataset <- clean.raw.dataset[
+  !(
+    clean.raw.dataset$jahreszeit == "Sommer" &
+    clean.raw.dataset$vermietungen <= 2500
+  ),
+]
+
+# Update affected stats / counts
+stats.luftfeuchtigkeit <- fav_stats(clean.raw.dataset$luftfeuchtigkeit)
+counts.jahreszeit <- tally(~ jahreszeit, data=clean.raw.dataset)
+```
 
 ## Preprocessing der Daten {#sec-datenanalyse-preprocessing}
 
@@ -311,6 +343,23 @@ preprocess <- function(dataset) {
     select(-jahreszeit)
   dataset.copy <- cbind(encoded_jahreszeit, dataset.copy)
 
+  # Min/max scale temperatur
+  dataset.copy$temperatur = (
+    dataset.copy$temperatur - stats.temperatur$min
+  ) / (
+    stats.temperatur$max - stats.temperatur$min
+  )
+
+  # Min/max scale windgeschwindigkeit
+  dataset.copy$windgeschwindigkeit = (
+    dataset.copy$windgeschwindigkeit - stats.windgeschwindigkeit$min
+  ) / (
+    stats.windgeschwindigkeit$max - stats.windgeschwindigkeit$min
+  )
+
+  # Scale luftfeuchtigkeit
+  dataset.copy$luftfeuchtigkeit <- dataset.copy$luftfeuchtigkeit / 100
+  
   return(dataset.copy)
 }
 ```
@@ -327,10 +376,10 @@ set.seed(69)
 
 # Preprocess the data
 application <- preprocess(raw.application)
-dataset <- preprocess(raw.dataset)
+dataset <- preprocess(clean.raw.dataset)
 
 # Data before preprocessing
-head(raw.dataset)
+head(clean.raw.dataset)
 
 # Data after preprocessing
 head(dataset)
@@ -347,8 +396,8 @@ dataset.split <- sample(
   prob=c(0.8, 0.2)
 )
 
-train.raw.dataset = raw.dataset[dataset.split, ]
-val.raw.dataset = raw.dataset[!dataset.split, ]
+train.raw.dataset = clean.raw.dataset[dataset.split, ]
+val.raw.dataset = clean.raw.dataset[!dataset.split, ]
 
 train.dataset = dataset[dataset.split, ]
 val.dataset = dataset[!dataset.split, ]
@@ -408,7 +457,10 @@ lm.model <- lm(vermietungen ~ ., data = train.raw.dataset)
 summary(lm.model)
 
 # Calculate the MAE to compare models
-mae(val.raw.dataset$vermietungen, predict(lm.model, newdata = val.raw.dataset))
+mae(
+  val.raw.dataset$vermietungen,
+  predict(lm.model, newdata = val.raw.dataset)
+)
 ```
 
 Die Residuen reichen von -3641,3 bis 2384,8, wobei der Median nahe bei 0 liegt (-3,4). Dies deutet darauf hin, dass das Modell die Daten gut mittelt, obwohl einige Abweichungen auftreten. Die Variable *einfuehrungsphaseNein* hat den stärksten positiven Effekt auf die Vermietungen (2057,883), was darauf schließen lässt, dass die Vermietungen signifikant höher sind, wenn keine Einführungsphase vorliegt. Die Jahreszeiten zeigen unterschiedliche Effekte. Im Herbst steigen die Vermietungen signifikant (+562,431), während sie im Winter stark sinken (-765,179). Der Sommer zeigt einen leichten, aber nicht stark signifikanten Rückgang (-297,132). Wetterbedingungen spielen ebenfalls eine wichtige Rolle: Bei „Nicht gutem“ und „Schlechtem“ Wetter sinken die Vermietungen signifikant um -390,531 bzw. -2115,621. Die Temperatur hat einen positiven Effekt: Mit jedem Grad Anstieg erhöhen sich die Vermietungen um 120,920. Windgeschwindigkeit und Luftfeuchtigkeit haben negative Effekte auf die Vermietungen (-43,602 bzw. -10,445).
