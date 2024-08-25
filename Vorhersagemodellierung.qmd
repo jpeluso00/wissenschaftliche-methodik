@@ -369,7 +369,7 @@ preprocess <- function(dataset) {
 
 In der Vorverarbeitung der Ergebnisse wird zunächst ein Zufallszahlengenerator mit dem Wert 69 initialisiert, um die Reproduzierbarkeit der Ergebnisse sicherzustellen. Anschließend werden die Rohdaten sowohl für Anwendungen als auch für den Datensatz vorverarbeitet. Die vorverarbeiteten Daten werden in den Variablen *application* und *dataset* gespeichert.
 
-Um die Auswirkungen der Vorverarbeitung zu veranschaulichen, wird der Anfang des ursprünglichen Datensatzes *raw.dataset* und des vorverarbeiteten Datensatzes dataset mit der Funktion *head()* angezeigt. Dies ermöglicht einen direkten Vergleich der Daten vor und nach der Vorverarbeitung. Der Datensatz wird folgend für das Training vorbereitet. Die Features werden aus dem vorverarbeiteten Datensatz *dataset* extrahiert, indem die Spalte vermietungen ausgeschlossen wird, während die Zielvariable *vermietungen* separat ausgewählt wird. Der Datensatz wird dann in einen Trainings- und einen Validierungssatz aufgeteilt. Diese Aufteilung erfolgt zufällig, wobei 80 % der Daten für das Training und 20 % für die Validierung verwendet werden. Dies wird durch die Funktion *sample()* erreicht, die eine logische Vektorreihe erzeugt, die angibt, welche Zeilen in den Trainingssatz (*train.raw.dataset* und *train.dataset*) und welche in den Validierungssatz (*val.raw.dataset* und *val.dataset*) aufgenommen werden sollen. Schließlich werden die Features und Labels sowohl für den Trainings- als auch für den Validierungssatz getrennt gespeichert, indem die entsprechenden Zeilen aus den vorverarbeiteten Feature- und Labeldatensätzen ausgewählt werden.
+Um die Auswirkungen der Vorverarbeitung zu veranschaulichen, wird der Anfang des ursprünglichen Datensatzes *raw.dataset* und des vorverarbeiteten Datensatzes dataset mit der Funktion *head()* angezeigt. Dies ermöglicht einen direkten Vergleich der Daten vor und nach der Vorverarbeitung. Der Datensatz wird folgend für das Training vorbereitet. Die Features werden aus dem vorverarbeiteten Datensatz *dataset* extrahiert, indem die Spalte vermietungen ausgeschlossen wird, während die Zielvariable *vermietungen* separat ausgewählt wird. Der Datensatz wird dann in einen Trainings- und einen Testsatz aufgeteilt. Diese Aufteilung erfolgt zufällig, wobei 80 % der Daten für das Training und 20 % für die Test verwendet werden. Dies wird durch die Funktion *sample()* erreicht, die eine logische Vektorreihe erzeugt, die angibt, welche Zeilen in den Trainingssatz (*train.raw.dataset* und *train.dataset*) und welche in den Testsatz (*test.raw.dataset* und *test.dataset*) aufgenommen werden sollen. Schließlich werden die Features und Labels sowohl für den Trainings- als auch für den Testsatz getrennt gespeichert, indem die entsprechenden Zeilen aus den vorverarbeiteten Feature- und Labeldatensätzen ausgewählt werden.
 
 ```{r}
 # Make this example reproducible
@@ -398,15 +398,15 @@ dataset.split <- sample(
 )
 
 train.raw.dataset = clean.raw.dataset[dataset.split, ]
-val.raw.dataset = clean.raw.dataset[!dataset.split, ]
+test.raw.dataset = clean.raw.dataset[!dataset.split, ]
 
 train.dataset = dataset[dataset.split, ]
-val.dataset = dataset[!dataset.split, ]
+test.dataset = dataset[!dataset.split, ]
 
 train.dataset_features = dataset_features[dataset.split, ]
 train.dataset_labels = dataset_labels[dataset.split, ]
-val.dataset_features = dataset_features[!dataset.split, ]
-val.dataset_labels = dataset_labels[!dataset.split, ]
+test.dataset_features = dataset_features[!dataset.split, ]
+test.dataset_labels = dataset_labels[!dataset.split, ]
 ```
 
 # Methodenbeschreibung {#sec-methodenbeschreibung}
@@ -459,8 +459,8 @@ summary(lm.model)
 
 # Calculate the MAE to compare models
 mae(
-  val.raw.dataset$vermietungen,
-  predict(lm.model, newdata = val.raw.dataset)
+  test.raw.dataset$vermietungen,
+  predict(lm.model, newdata = test.raw.dataset)
 )
 ```
 
@@ -484,82 +484,129 @@ Das Modell wird mit dann mit einer Eingabeschicht definiert, deren Dimensionen d
 
 Das neuronale Netz selbst wird durch ein Eingabelayer definiert, dessen Form durch die Anzahl der Features im Datensatz bestimmt wird. Anschließend folgt eine Sequenz von weiteren Layern, beginnend mit der Normalisierung der Eingaben. Ein Dropout-Layer mit einer Rate von 5% wird hinzugefügt, um das Modell vor Überanpassung zu schützen. Darauf folgen zwei voll verbundene Layer (*dense layers*) mit jeweils 32 Neuronen, welche die ReLU-Aktivierungsfunktion verwenden, um nicht-lineare Zusammenhänge im Datensatz zu modellieren. Die Ausgabeschicht besteht aus einem einzigen Neuron, welches die Vorhersage der Zielvariable liefert.
 
-Das Modell wird anschließend kompiliert, wobei der Adam-Optimierer (*optimizer = 'adam'*) zur Optimierung der Gewichte verwendet wird. Als Verlustfunktion wird der mittlere quadratische Fehler (*loss = 'mse'*) eingesetzt, während der mittlere absolute Fehler (*mae*) als Metrik zur Bewertung der Modellleistung herangezogen wird. Ein Callback (*callback_model_checkpoint*) sorgt dafür, dass die Gewichte des Modells nach jeder Epoche gespeichert werden, wobei nur die besten Gewichte (gemessen an der Validierungsleistung) gesichert werden.
+Das Modell wird anschließend kompiliert, wobei der Adam-Optimierer (*optimizer = 'adam'*) zur Optimierung der Gewichte verwendet wird. Als Verlustfunktion wird der mittlere quadratische Fehler (*loss = 'mse'*) eingesetzt, während der mittlere absolute Fehler (*mae*) als Metrik zur Bewertung der Modellleistung herangezogen wird. Ein Callback (*callback_model_checkpoint*) sorgt dafür, dass die Gewichte des Modells nach jeder Epoche gespeichert werden, wobei nur die besten Gewichte (gemessen an der Testleistung) gesichert werden.
 
-Das Training des Modells erfolgt über 5000 Epochen (*epochs = 5000*) mit einer Batch-Größe von 64. Die Trainingsdaten werden in Form von Matrizen (*as.matrix(train.dataset_features)*) bereitgestellt, und der Validierungsdatensatz wird verwendet, um die Leistung des Modells während des Trainings zu überwachen. Nach Abschluss des Trainings werden die besten während des Trainings gespeicherten Gewichte geladen (*load_model_weights*), um sicherzustellen, dass die anschließende Evaluation auf der bestmöglichen Version des Modells basiert.
+Das Training des Modells erfolgt über 5000 Epochen (*epochs = 5000*) mit einer Batch-Größe von 64. Die Trainingsdaten werden in Form von Matrizen (*as.matrix(train.dataset_features)*) bereitgestellt, und der Testdatensatz wird verwendet, um die Leistung des Modells während des Trainings zu überwachen. Nach Abschluss des Trainings werden die besten während des Trainings gespeicherten Gewichte geladen (*load_model_weights*), um sicherzustellen, dass die anschließende Evaluation auf der bestmöglichen Version des Modells basiert.
 
-Die abschließende Bewertung des Modells erfolgt anhand der Validierungsdaten, wobei die zuvor definierten Metriken, insbesondere der mittlere absolute Fehler, zur Beurteilung der Vorhersagegenauigkeit des Modells herangezogen werden.
+Die abschließende Bewertung des Modells erfolgt anhand der Testdaten, wobei die zuvor definierten Metriken, insbesondere der mittlere absolute Fehler, zur Beurteilung der Vorhersagegenauigkeit des Modells herangezogen werden.
 
 ```{r}
-# Set a random seed for training
-set_random_seed(69, disable_gpu = FALSE)
-
-checkpoint_path <- "training_nn/cp.ckpt.weights.h5"
-checkpoint_dir <- fs::path_dir(checkpoint_path)
-
 # Adapt a normalizer on the data as we didn't normalize it yet
 normalizer <- layer_normalization(axis = -1L)
 normalizer |> adapt(as.matrix(dataset_features))
 
-# Define the input layer
-input <- layer_input(shape = dim(dataset_features)[2])
+# Define training for neural networks
+train.nn <- function(name, layers_hidden, epochs) {
+  # Set random seed
+  set_random_seed(69, disable_gpu = FALSE)
 
-# Define the feed forward and output
-output <- input |>
-  normalizer() |>
-  layer_dropout(rate = 0.05) |>
-  layer_dense(units = 32, activation = 'relu') |>
-  layer_dense(units = 32, activation = 'relu') |>
-  layer_dense(units = 1)
+  # Define paths for the states
+  chache_path <- str_interp("cache/nn.training.${name}.rds")
+  chache_dir <- fs::path_dir(chache_path)
+  if (!dir.exists(file.path(chache_dir))) {
+    dir.create(file.path(chache_dir))
+  }
 
-# Build the model
-nn.model <- keras_model(input, output)
+  checkpoint_path <- str_interp("checkpoints/${name}.weights.h5")
+  checkpoint_dir <- fs::path_dir(checkpoint_path)
+  if (!dir.exists(file.path(checkpoint_dir))) {
+    dir.create(file.path(checkpoint_dir))
+  }
 
-# Assign the optimizer and the metrics to use (mse and mae for regression)
-nn.model |> compile(
-  optimizer = 'adam',
-  loss = 'mse',
-  metrics = list('mae')
-)
+  # Build model
+  inputs <- layer_input(
+    shape = dim(dataset_features)[2],
+    name = "inputs"
+  )
+  outputs <- inputs |>
+    layers_hidden() |>
+    layer_dense(
+      units = 1,
+      name = "output"
+    )
+  nn.model <- keras_model(inputs, outputs)
+  nn.model$name <- name
 
-# Create a callback that saves the model's weights
-cp_callback <- callback_model_checkpoint(
-  filepath = checkpoint_path,
-  save_weights_only = TRUE,
-  save_best_only = TRUE,
-)
+  # Assign the optimizer and the metrics to use (mse and mae for regression)
+  nn.model |> compile(
+    optimizer = 'adam',
+    loss = 'mse',
+    metrics = list('mae')
+  )
 
-# Train the model with a 20% validation split
-if (file.exists("nn.training.rds")) {
-  training <- readRDS("nn.training.rds")
-} else {
-  nn.training <- nn.model |>
-  fit(
-    as.matrix(train.dataset_features),
-    as.matrix(train.dataset_labels),
-    epochs = 5000,
+  # Train the model with a 20% validation split
+  if (file.exists(chache_path) & file.exists(checkpoint_path)) {
+    nn.training <- readRDS(chache_path)
+  } else {
+    # Create a callback that saves the model weights
+    cp_callback <- callback_model_checkpoint(
+      filepath = checkpoint_path,
+      save_weights_only = TRUE,
+      save_best_only = TRUE,
+    )
+
+    # Train model and use test data to pick the best performing one
+    nn.training <- nn.model |>
+      fit(
+        as.matrix(train.dataset_features),
+        as.matrix(train.dataset_labels),
+        epochs = epochs,
+        batch_size = 64,
+        verbose = FALSE,
+        validation_data = list(
+          as.matrix(test.dataset_features),
+          as.matrix(test.dataset_labels)
+        ),
+        callbacks = list(cp_callback),
+      )
+    saveRDS(nn.training, chache_path)
+  }
+
+  # Loads the weights
+  load_model_weights(nn.model, checkpoint_path)
+  
+  nn.eval <- nn.model |> evaluate(
+    as.matrix(test.dataset_features),
+    as.matrix(test.dataset_labels),
     batch_size = 64,
-    verbose = FALSE,
-    validation_data = list(
-      as.matrix(val.dataset_features),
-      as.matrix(val.dataset_labels)
-    ),
-    callbacks = list(cp_callback),
+    verbose = 0
   )
-  saveRDS(training, "nn.training.rds")
+
+  results <- list(
+    model = nn.model,
+    training = nn.training,
+    mae = nn.eval$mae
+  )
+  return(results)
 }
-training |> plot()
+```
 
-# Loads the weights
-load_model_weights(nn.model, checkpoint_path)
+```{r}
+# Train model A
+results.A <- train.nn(
+  name = "Model.A",
+  layers_hidden = \(inputs) inputs |>
+    normalizer() |>
+    layer_dropout(rate = 0.05) |>
+    layer_dense(units = 32, activation = 'relu') |>
+    layer_dense(units = 32, activation = 'relu'),
+  epochs = 5000
+)
+results.A$training |> plot()
+results.A$mae
 
-# Evaluate model
-nn.model |>
-  evaluate(
-    as.matrix(val.dataset_features),
-    as.matrix(val.dataset_labels),
-    batch_size = 64
-  )
+# Train model B
+results.B <- train.nn(
+  name = "Model.B",
+  layers_hidden = \(inputs) inputs |> 
+    normalizer() |>
+    layer_dense(units = 32, activation = 'relu') |>
+    layer_dense(units = 32, activation = 'relu') |>
+    layer_dropout(rate = 0.1),
+  epochs = 5000
+)
+results.B$training |> plot()
+results.B$mae
 ```
 
 ## Modell zur Vorhersage anwenden {#sec-anwendung-vorhersage}
@@ -570,7 +617,7 @@ Anschließend werden diese Vorhersagen in den bestehenden Datensatz (*raw.applic
 
 ```{r}
 # Predict with the model
-predictions <- nn.model(as.matrix(application))
+predictions <- results.A$model(as.matrix(application))
 
 # Add predictions to the application
 pred.application <- raw.application
