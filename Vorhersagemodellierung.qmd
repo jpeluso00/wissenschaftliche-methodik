@@ -131,7 +131,7 @@ Der erste zu untersuchende Einflussfaktor ist die kategoriale Variable "Einführ
 gf_boxplot(vermietungen ~ einfuehrungsphase, data=raw.dataset)
 ```
 
-Der Boxplot in @fig-vermietungen-einfuehrungsphase veranschaulicht die Verteilung der Vermietungen im Kontext der Einführungsphase (Ja/Nein) und zeigt mehrere wesentliche Aspekte auf. Der Median der Vermietungen ist in der Gruppe ohne Einführungsphase („Nein“) höher als in der Gruppe mit Einführungsphase („Ja“). Dies weist auf eine größere zentrale Tendenz der Vermietungen hin, wenn keine Einführungsphase vorliegt. Zudem ist der Interquartilsabstand (IQR) in der Gruppe ohne Einführungsphase ebenfalls größer, was auf eine erhöhte Streuung der Daten in dieser Gruppe hindeutet. Beide Gruppen zeigen keine auffälligen Ausreißer, da alle Datenpunkte innerhalb der Whisker liegen. Insgesamt sind die Vermietungen in der Gruppe ohne Einführungsphase höher, was durch die Position der Box und der Whisker im Boxplot deutlich wird.
+Der Boxplot in @fig-vermietungen-einfuehrungsphase veranschaulicht die Verteilung der Vermietungen im Kontext der Einführungsphase und zeigt mehrere wesentliche Aspekte auf. Der Median der Vermietungen ist in der Gruppe ohne Einführungsphase („Nein“) höher als in der Gruppe mit Einführungsphase („Ja“). Dies weist auf eine größere zentrale Tendenz der Vermietungen hin, wenn keine Einführungsphase vorliegt. Zudem ist der Interquartilsabstand (IQR) in der Gruppe ohne Einführungsphase ebenfalls größer, was auf eine erhöhte Streuung der Daten in dieser Gruppe hindeutet. Beide Gruppen zeigen keine auffälligen Ausreißer, da alle Datenpunkte innerhalb der Whisker liegen. Insgesamt sind die Vermietungen in der Gruppe ohne Einführungsphase höher, was durch die Position der Box und der Whisker im Boxplot deutlich wird.
 
 ## Jahreszeit {#sec-datenanalyse-jahreszeit}
 
@@ -152,7 +152,7 @@ Die Häufigkeit der Vorkommen über die verschiedenen Jahreszeiten ist hinweg we
 gf_boxplot(vermietungen ~ jahreszeit, data=raw.dataset)
 ```
 
-@fig-vermietungen-jahreszeit zeigt, dass im Frühling und Herbst die Verteilungen der Vermietungen ähnlich sind, wobei beide Jahreszeiten relativ große Interquartilsabstände aufweisen. Dies deutet auf eine breite Streuung der Daten in diesen Perioden hin. Die Medianwerte sind in beiden Fällen hoch, sodass die Vermietungsaktivität in diesen Jahreszeiten stark vertreten ist. Im Sommer bleibt die Verteilung ähnlich, aber es gibt einen Anstieg  im Medianwert, was darauf hinweist, dass die Vermietungen in dieser Jahreszeit tendenziell etwas höher sind. Der Winter hingegen zeigt eine deutliche Verringerung der Vermietungszahlen, wie durch den niedrigeren Median und den geringeren Interquartilsabstand ersichtlich ist. Die geringere Variabilität im Winter deutet darauf hin, dass die Vermietungsaktivitäten in dieser Jahreszeit relativ konstant, aber auf einem niedrigen Niveau sind.
+Der Boxplot in @fig-vermietungen-jahreszeit zeigt, dass im Frühling und Herbst die Verteilungen der Vermietungen ähnlich sind, wobei beide Jahreszeiten relativ große Interquartilsabstände aufweisen. Dies deutet auf eine breite Streuung der Daten in diesen Perioden hin. Die Medianwerte sind in beiden Fällen hoch, sodass die Vermietungsaktivität in diesen Jahreszeiten stark vertreten ist. Im Sommer bleibt die Verteilung ähnlich, aber es gibt einen Anstieg im Medianwert, was darauf hinweist, dass die Vermietungen in dieser Jahreszeit tendenziell etwas höher sind. Der Winter hingegen zeigt eine deutliche Verringerung der Vermietungszahlen, wie durch den niedrigeren Median und den geringeren Interquartilsabstand ersichtlich ist. Die geringere Variabilität im Winter deutet darauf hin, dass die Vermietungsaktivitäten in dieser Jahreszeit relativ konstant, aber auf einem niedrigen Niveau sind.
 
 ## Wetter {#sec-datenanalyse-wetter}
 
@@ -166,7 +166,7 @@ gf_bar(~ wetter, data=raw.dataset)
 
 Das Balkendiagramm in @fig-wetter illustriert die Häufigkeit der Wetterkategorien "Gut", "Nicht gut" und "Schlecht". Die Kategorie "Gut" weist mit `r counts.wetter[1]` die höchste Anzahl von Beobachtungen auf. Die Kategorie "Nicht gut" liegt mit `r counts.wetter[2]` in der Mitte, mit etwa der Hälfte der Zählungen von "Gut", was zeigt, dass solche Wetterbedingungen weniger häufig sind, aber dennoch häufiger als "Schlecht" vorkommen. Die Kategorie "Schlecht" verzeichnet mit `r counts.wetter[3]` die geringste Anzahl von Beobachtungen und tritt somit am seltensten auf.
 
-Das Balkendiagramm zeigt eine deutliche Dominanz guten Wetters, während schlechtes Wetter selten ist. "Nicht gut" liegt in einer mittleren Häufigkeitsposition, was die Variabilität der Wetterbedingungen verdeutlicht, jedoch mit einer klaren Präferenz für gutes Wetter.
+Dies zeigt eine deutliche Dominanz guten Wetters, während schlechtes Wetter selten ist. "Nicht gut" liegt in einer mittleren Häufigkeitsposition, was die Variabilität der Wetterbedingungen verdeutlicht, jedoch mit einer klaren Präferenz für gutes Wetter.
 
 ```{r}
 #| label: fig-vermietungen-wetter
@@ -209,7 +209,7 @@ gf_dhistogram(~ temperatur, data=raw.dataset) |>
   gf_dens(linewidth = 1, color = "blue")
 ```
 
-Die Temperatur zeigt eine bimodale Verteilung der Daten, mit zwei Häufigkeitsspitzen bei etwa 8°C und 24°C. Dies deutet darauf hin, dass diese Temperaturbereiche am häufigsten auftreten. Die Dichte nimmt an den Rändern, insbesondere bei Temperaturen unter 5°C und über 24°C, deutlich ab, was auf seltenere extreme Temperaturen hinweist. Insgesamt zeigt die Verteilung eine Konzentration der Temperaturen in zwei unterschiedlichen Bereichen, was saisonalen Schwankungen entspricht.
+Das Histogramm in @fig-temperatur zeigt, dass die Temperatur eine bimodale Verteilung der Daten hat, mit zwei Häufigkeitsspitzen bei etwa 8°C und 24°C. Dies deutet darauf hin, dass diese Temperaturbereiche am häufigsten auftreten. Die Dichte nimmt an den Rändern, insbesondere bei Temperaturen unter 5°C und über 24°C, deutlich ab, was auf seltenere extreme Temperaturen hinweist. Insgesamt zeigt die Verteilung eine Konzentration der Temperaturen in zwei unterschiedlichen Bereichen, was saisonalen Schwankungen entspricht.
 
 ```{r}
 #| label: fig-vermietungen-temperatur
@@ -219,7 +219,7 @@ gf_point(vermietungen ~ temperatur, data=raw.dataset) |>
   gf_smooth(method = "loess")
 ```
 
-Die Abhängigkeit zwischen der Temperatur und der Anzahl der Vermietungen zeigt einen anfänglichen Anstieg der Vermietungszahlen mit zunehmender Temperatur, wobei ein Maximum bei etwa 20°- 25°C erreicht wird. Jenseits dieses Temperaturwertes nimmt die Anzahl der Vermietungen trotz weiter steigender Temperaturen ab. Dies legt nahe, dass gemäßigte Temperaturen um 20°C optimal für Vermietungen sind, während höhere Temperaturen tendenziell eine negative Auswirkung auf die Nachfrage haben könnten.
+Die Abhängigkeit zwischen der Temperatur und der Anzahl der Vermietungen in @fig-vermietungen-temperatur zeigt einen anfänglichen Anstieg der Vermietungszahlen mit zunehmender Temperatur, wobei ein Maximum bei etwa 20°- 25°C erreicht wird. Jenseits dieses Temperaturwertes nimmt die Anzahl der Vermietungen trotz weiter steigender Temperaturen ab. Dies legt nahe, dass gemäßigte Temperaturen um 20°C optimal für Vermietungen sind, während höhere Temperaturen tendenziell eine negative Auswirkung auf die Nachfrage haben könnten.
 
 ## Windgeschwindigkeit {#sec-datenanalyse-windgeschwindigkeit}
 
@@ -255,7 +255,7 @@ gf_dhistogram(~ luftfeuchtigkeit, data=raw.dataset) |>
   gf_dens(linewidth = 1, color = "blue")
 ```
 
-Verteilung der Luftfeuchtigkeitsdaten in %, mit einem Minimum von 3,88 und einem Maximum von 103,61. Das Maximum von 103,61 scheint hierbei ein fehlerhafter Wert zu sein, da Luftfeuchtigkeitswerte ein Höchstwert von 100 erreichen können. Der Mittelwert und der Median liegen nahe bei 62,39 bzw. 62,35. Im Gesamten ergibt sich hierbei eine Normalverteilung mit einer moderaten Streuung um den Mittelwert.
+Das Histogramm in @fig-luftfeuchtigkeit zeigt die Verteilung der Luftfeuchtigkeitsdaten in \%, mit einem Minimum von 3,88 und einem Maximum von 103,61. Das Maximum von 103,61 scheint hierbei ein fehlerhafter Wert zu sein, da Luftfeuchtigkeitswerte ein Höchstwert von 100 erreichen können. Der Mittelwert und der Median liegen nahe bei 62,39 bzw. 62,35. Im Gesamten ergibt sich hierbei eine Normalverteilung mit einer moderaten Streuung um den Mittelwert.
 
 ```{r}
 #| label: fig-vermietungen-luftfeuchtigkeit
@@ -265,7 +265,7 @@ gf_point(vermietungen ~ luftfeuchtigkeit, data=raw.dataset) |>
   gf_smooth(method = "loess")
 ```
 
-Der höchste Punkt der Trendlinie im Punktdiagramm befindet sich ungefähr im Bereich einer Luftfeuchtigkeit von 50 bis 60, was darauf hindeutet, dass dieser Bereich optimal für die meisten Vermietungen ist.
+Der höchste Punkt der Trendlinie im Punktdiagramm in @fig-vermietungen-luftfeuchtigkeit befindet sich ungefähr im Bereich einer Luftfeuchtigkeit von 50 bis 60, was darauf hindeutet, dass dieser Bereich optimal für die meisten Vermietungen ist.
 
 ## Preprocessing der Daten {#sec-datenanalyse-preprocessing}
 
