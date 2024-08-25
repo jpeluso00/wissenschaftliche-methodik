@@ -5,6 +5,7 @@ lang: de
 author: "Marcel Albers, Koen Loogman, Jacques Peluso und Steffen Seegler"
 date: "`r Sys.Date()`"
 bibliography: references.bib
+bibliographystyle: harvard
 format: 
   html:
     toc: true
