@@ -454,14 +454,17 @@ Um die Vorhersagegüte des neuronalen Netzes bestimmten zu können, wird zunäch
 
 ```{r}
 # Train a simple lm on all the data
-lm.model <- lm(vermietungen ~ ., data = train.raw.dataset)
-summary(lm.model)
+result.base <- list()
+result.base$model <- lm(vermietungen ~ ., data = train.raw.dataset)
+result.base$model$name <- "Model.Base"
+summary(result.base$model)
 
 # Calculate the MAE to compare models
-mae(
+result.base$mae <- mae(
   test.raw.dataset$vermietungen,
-  predict(lm.model, newdata = test.raw.dataset)
+  predict(result.base$model, newdata = test.raw.dataset)
 )
+result.base$mae
 ```
 
 Die Residuen reichen von -3641,3 bis 2384,8, wobei der Median nahe bei 0 liegt (-3,4). Dies deutet darauf hin, dass das Modell die Daten gut mittelt, obwohl einige Abweichungen auftreten. Die Variable *einfuehrungsphaseNein* hat den stärksten positiven Effekt auf die Vermietungen (2057,883), was darauf schließen lässt, dass die Vermietungen signifikant höher sind, wenn keine Einführungsphase vorliegt. Die Jahreszeiten zeigen unterschiedliche Effekte. Im Herbst steigen die Vermietungen signifikant (+562,431), während sie im Winter stark sinken (-765,179). Der Sommer zeigt einen leichten, aber nicht stark signifikanten Rückgang (-297,132). Wetterbedingungen spielen ebenfalls eine wichtige Rolle: Bei „Nicht gutem“ und „Schlechtem“ Wetter sinken die Vermietungen signifikant um -390,531 bzw. -2115,621. Die Temperatur hat einen positiven Effekt: Mit jedem Grad Anstieg erhöhen sich die Vermietungen um 120,920. Windgeschwindigkeit und Luftfeuchtigkeit haben negative Effekte auf die Vermietungen (-43,602 bzw. -10,445).
@@ -491,9 +494,8 @@ Das Training des Modells erfolgt über 5000 Epochen (*epochs = 5000*) mit einer 
 Die abschließende Bewertung des Modells erfolgt anhand der Testdaten, wobei die zuvor definierten Metriken, insbesondere der mittlere absolute Fehler, zur Beurteilung der Vorhersagegenauigkeit des Modells herangezogen werden.
 
 ```{r}
-# Adapt a normalizer on the data as we didn't normalize it yet
-normalizer <- layer_normalization(axis = -1L)
-normalizer |> adapt(as.matrix(dataset_features))
+#| label: define-training
+#| include: false
 
 # Define training for neural networks
 train.nn <- function(name, layers_hidden, epochs) {
@@ -579,11 +581,27 @@ train.nn <- function(name, layers_hidden, epochs) {
   )
   return(results)
 }
+
+# Define results table
+results <- data.frame(Name=c(), MAE=c(), Result=c())
+results.add <- function(result) {
+  df <- data.frame(
+    Name=c(result$model$name),
+    MAE=c(result$mae),
+    Result=c(deparse(substitute(result)))
+  )
+  results <<- rbind(results, df)
+}
+results.add(result.base)
 ```
 
 ```{r}
+# Adapt a normalizer on the data as we didn't normalize it yet
+normalizer <- layer_normalization(axis = -1L)
+normalizer |> adapt(as.matrix(dataset_features))
+
 # Train model A
-results.A <- train.nn(
+result.A <- train.nn(
   name = "Model.A",
   layers_hidden = \(inputs) inputs |>
     normalizer() |>
@@ -592,11 +610,12 @@ results.A <- train.nn(
     layer_dense(units = 32, activation = 'relu'),
   epochs = 5000
 )
-results.A$training |> plot()
-results.A$mae
+results.add(result.A)
+result.A$training |> plot()
+result.A$mae
 
 # Train model B
-results.B <- train.nn(
+result.B <- train.nn(
   name = "Model.B",
   layers_hidden = \(inputs) inputs |> 
     normalizer() |>
@@ -605,8 +624,9 @@ results.B <- train.nn(
     layer_dropout(rate = 0.1),
   epochs = 5000
 )
-results.B$training |> plot()
-results.B$mae
+results.add(result.B)
+result.B$training |> plot()
+result.B$mae
 ```
 
 ## Modell zur Vorhersage anwenden {#sec-anwendung-vorhersage}
@@ -616,8 +636,21 @@ Um die Anwendung des trainierten neuronalen Netzes zur Vorhersage der Vermietung
 Anschließend werden diese Vorhersagen in den bestehenden Datensatz (*raw.application*) integriert. Zuerst wird eine Kopie des ursprünglichen Datensatzes (*raw.application*) erstellt, um die originalen Daten unverändert zu lassen. In der Kopie (*pred.application*) wird eine neue Spalte 'vermietungen' hinzugefügt, die die berechneten Vorhersagen enthält. Dabei werden die Vorhersagewerte in ganze Zahlen (*as.integer(predictions)*) umgewandelt, bevor sie in die Spalte eingefügt werden. Hierdruch wird ein erweiterten Datensatz erstellt, der sowohl die Originaldaten als auch die vom Modell vorhergesagten Werte beinhaltet.
 
 ```{r}
+#| label: fig-vergleich
+#| fig-cap: "Vergleich der Modelle anhand vom Testdaten MAE"
+
+# Plot the MAE
+ggplot(results, aes(x = MAE, y = Name)) +
+  geom_bar(stat = "identity")
+
+# Select best model
+results <- results[order(results$MAE), ]
+result.best <- get(results$Result[1])
+```
+
+```{r}
 # Predict with the model
-predictions <- results.A$model(as.matrix(application))
+predictions <- result.best$model(as.matrix(application))
 
 # Add predictions to the application
 pred.application <- raw.application
