@@ -4,13 +4,15 @@ subtitle: "Prognosemodell"
 lang: de
 author: "Marcel Albers, Koen Loogman, Jacques Peluso und Steffen Seegler"
 date: "`r Sys.Date()`"
+bibliography: references.bib
+bibliographystyle: harvard
 format: 
   html:
     toc: true
     html-math-method: katex
   pdf:
     toc: true
-    number-sections: false
+    number-sections: true
     colorlinks: true 
     papersize: a4
 editor_options: 
@@ -27,31 +29,45 @@ library(psych)
 library(keras3)
 library(tensorflow)
 library(Metrics)
+library(reticulate)
 
-# Run once for setup
-#install_tensorflow()
-#tf$config$list_physical_devices("GPU")
+# Setup python environment
+use_virtualenv(virtualenv = "./venv")
+# install_tensorflow(envname = "./venv", restart_session = FALSE)
+
+# Check if GPU is available for training
+# tf$config$list_physical_devices("GPU")
 ```
 
 <!-- Sollten Umlaute falsch angezeigt werden: "File -> Reopen with Encoding -> UTF8" -->
 
-# Einleitung
-
-## Aufgabenstellung
-
-Für die Vermietung von Fahrrädern sind verschiedene Aspekte ausschlaggebend. In dem Fall des vorliegenden Szenarios sind dies die potentiell erklärenden Variablen Einführungsphase, Jahreszeit, Wetter, Arbeitstag, Temperatur, Windgeschwindigkeit und Luftfeuchtigkeit. Die Ausprägung dieser wurden von früheren Vermietungen in einem Trainingsdatensatz festgehalten. Um künftige Fahrradvermietungen vorhersagen zu können, müssen die Zusammenhänge zwischen den genannten Variablen ermittelt und in einem Modell festgehalten werden. Ein zweiter Datensatz, der Anwendungsdatensatz, dient als Grundlage für den Performancetest.
-
-## Zielsetzung
-
-Ziel der Arbeit ist es, ein Modell zu entwickeln, welches die Zielvariable \^y0 für die gegeben Anwendungsdaten x0 voraussagt. Die Zielvariable beschreibt hierbei die Anzahl an täglichen Fahrradvermietungen. Basis der Modellierung bilden die Trainingsdaten x,y. Die Bewertung von diesem Wert findet mithilfe des mittleren absoluten Fehlers - MAE (mean absolute error) statt. Der MAETest ist möglichst klein zu halten. Wie häufig wird eine Fahrradvermietung täglich stattfinden?
-
-## Aufbau der Arbeit
-
-Das nachfolgende Kapitel *Explorative Datenanalyse und Datenverarbeitung* befasst sich mit der detaillierten Beschreibung des vorliegenden Datensatzes und der Analyse von diesem. Hierbei werden die Zusammenhänge von verschiedenen Konstellationen der Attribute betrachtet. Des Weiteren findet eine Datenaufbereitung statt, die für die spätere Verarbeitung der Daten in den Modellen notwendig ist. Im darauf folgenden Kapitel, der *Methodenbeschreibung*, wird die Auswahl der Modelle und die Funktionsweise dieser erläutert. Nach dem Training des Modells, wird dieses angewendet, die Ergebnisse aufgeführt, betrachtet und eine Vorhersage getroffen. Die *Zusammenfassung* der Arbeit stellt die Ergebnisse dar und führt diese als abschließendes Kapitel zusammen.
+# Einleitung {#sec-einleitung}
 
 <!-- Umfang von 0,5-1,5 Seiten -->
 
-#Einlesen der relevanten Datensätze, wobei die entsprechenden CSV-Dateien aus dem festgelegten Verzeichnis data/raw geladen werden.
+<!--
+Abbildungen: https://quarto.org/docs/authoring/figures.html
+Quellen: https://quarto.org/docs/authoring/citations.html
+Referenzen: https://quarto.org/docs/authoring/cross-references.html
+-->
+
+## Aufgabenstellung {#sec-einleitung-aufgabenstellung}
+
+Für die Vermietung von Fahrrädern sind verschiedene Aspekte ausschlaggebend. In dem Fall des vorliegenden Szenarios sind dies die potentiell erklärenden Variablen Einführungsphase, Jahreszeit, Wetter, Arbeitstag, Temperatur, Windgeschwindigkeit und Luftfeuchtigkeit. Die Ausprägung dieser wurden von früheren Vermietungen in einem Trainingsdatensatz festgehalten. Um künftige Fahrradvermietungen vorhersagen zu können, müssen die Zusammenhänge zwischen den genannten Variablen ermittelt und in einem Modell festgehalten werden. Ein zweiter Datensatz, der Anwendungsdatensatz, dient als Grundlage für den Performancetest.
+
+## Zielsetzung {#sec-einleitung-zielsetzung}
+
+Ziel der Arbeit ist es, ein Modell zu entwickeln, welches die Zielvariable $\hat{y}_n$ für die gegeben Anwendungsdaten $x_n$ voraussagt. Die Zielvariable beschreibt hierbei die Anzahl an täglichen Fahrradvermietungen. Basis der Modellierung bilden die Trainingsdaten $x$, $y$. Die Bewertung von diesem Wert findet mithilfe des mittleren absoluten Fehlers - MAE (mean absolute error) statt. Der MAETest ist möglichst klein zu halten. Wie häufig wird eine Fahrradvermietung täglich stattfinden?
+
+## Aufbau der Arbeit {#sec-einleitung-aufbau}
+
+Das nachfolgende Kapitel *Explorative Datenanalyse und Datenverarbeitung* befasst sich mit der detaillierten Beschreibung des vorliegenden Datensatzes und der Analyse von diesem. Hierbei werden die Zusammenhänge von verschiedenen Konstellationen der Attribute betrachtet. Des Weiteren findet eine Datenaufbereitung statt, die für die spätere Verarbeitung der Daten in den Modellen notwendig ist. Im darauf folgenden Kapitel, der *Methodenbeschreibung*, wird die Auswahl der Modelle und die Funktionsweise dieser erläutert. Nach dem Training des Modells, wird dieses angewendet, die Ergebnisse aufgeführt, betrachtet und eine Vorhersage getroffen. Die *Zusammenfassung* der Arbeit stellt die Ergebnisse dar und führt diese als abschließendes Kapitel zusammen.
+
+# Explorative Datenanalyse und Datenvorverarbeitung {#sec-datenanalyse}
+
+<!-- Umfang von 2-4 Seiten -->
+
+Einlesen der relevanten Datensätze, wobei die entsprechenden CSV-Dateien aus dem festgelegten Verzeichnis data/raw geladen werden.
 
 ```{r}
 # Load data
@@ -63,13 +79,9 @@ str(raw.application)
 str(raw.dataset)
 ```
 
-# Explorative Datenanalyse und Datenvorverarbeitung
+Der vorliegende Datensatz ist in zwei Teildatenmengen ohne fehlende Werte aufgeteilt. Diese umfassen meteorologische und temporale Informationen, die in einem strukturierten Format bereitgestellt wurden. Die Gesamtdatenmenge bildet sich aus aus den Anwendungsdaten, bestehend aus `r dim(raw.application)[1]` Beobachtungen und `r dim(raw.application)[2]` Variablen und den Trainingsdaten, bestehend aus `r dim(raw.dataset)[1]` Beobachtungen und `r dim(raw.dataset)[2]` Variablen. Die ersten `r dim(raw.application)[2]` Variablen der Datensätze sind formal deckungsgleich. Die zusätzliche Variable des Trainingsdatensatzes enthält die Zielvariable, die durch die Modellierung angenähert wird.
 
-<!-- Umfang von 2-4 Seiten -->
-
-Der vorliegende Datensatz ist in zwei Teildatenmengen ohne fehlende Werte aufgeteilt. Diese umfassen meteorologische und temporale Informationen, die in einem strukturierten Format bereitgestellt wurden. Die Gesamtdatenmenge bildet sich aus aus den Anwendungsdaten, bestehend aus 200 Beobachtungen und 7 Variablen und den Trainingsdaten, bestehend aus 500 Beobachtungen und 8 Variablen. Die ersten 7 Variablen der Datensätze sind formal deckungsgleich. Die zusätzliche Variable des Trainingsdatensatzes enthält die Zielvariable, die durch die Modellierung angenähert wird.
-
-## Variablenübersicht:
+## Variablenübersicht {#sec-datenanalyse-variablenübersicht}
 
 -   *Einführungsphase*: Nominalskalierte, kategorische Variable mit den Ausprägungen "Ja" und "Nein".
 
@@ -87,140 +99,208 @@ Der vorliegende Datensatz ist in zwei Teildatenmengen ohne fehlende Werte aufget
 
 -   *Vermietungen*: Verhältnisskalierte, diskret, metrische Variable und gibt die Anzahl der Vermietungen als Ganzzahl an.
 
-## Häufigkeitsverteilung der Vermietungen
-
-Die Analyse der Häufigkeitsverteilung der Vermietungen zeigt eine Verteilung mit einem Hauptpeak und zwei kleineren Peaks, die links und rechts von diesem liegen. Diese Verteilung weist eine unimodale Struktur auf, wobei die kleineren Peaks auf Variationen innerhalb der Daten hinweisen. Dieses Muster kann durch die unterschiedlichen Einflüsse der Variablen im Datensatz verursacht werden, welche die Vermietungszahlen beeinflussen. Diese werden in dem folgenden Absatz näher betrachtet.
+## Vermietungen {#sec-datenanalyse-vermietungen}
 
 ```{r}
-fav_stats(raw.dataset$vermietungen)
+#| label: fig-vermietungen
+#| fig-cap: "Häufigkeitsverteilung der Vermietungen"
+
+stats.vermietungen <- fav_stats(raw.dataset$vermietungen)
+stats.vermietungen
+
 gf_dhistogram(~ vermietungen, data=raw.dataset) |>
-  gf_dens(linewidth = 2)
+  gf_dens(linewidth = 1, color = "blue")
 ```
 
-Der erste zu untersuchende Einflussfaktor ist die kategoriale Variable "Einführungsphase" und deren Verteilung. Beide Kategorien "Ja" und "Nein" haben eine ähnliche Anzahl von Einträgen (Ja=244, Nein=256). Insgesamt zeigt die Verteilung, dass es keinen signifikanten Unterschied in der Anzahl der Einträge zwischen den beiden Kategorien gibt.
+Die Analyse der Häufigkeitsverteilung der Vermietungen in @fig-vermietungen zeigt eine Verteilung mit einem Hauptpeak und zwei kleineren Peaks, die links und rechts von diesem liegen. Diese Verteilung weist eine unimodale Struktur auf, wobei die kleineren Peaks auf Variationen innerhalb der Daten hinweisen. Dieses Muster kann durch die unterschiedlichen Einflüsse der Variablen im Datensatz verursacht werden, welche die Vermietungszahlen beeinflussen. Diese werden in dem folgenden Absatz näher betrachtet.
 
-## Einfuehrungsphase
+## Einfuehrungsphase {#sec-datenanalyse-einfuehrungsphase}
 
 ```{r}
+#| label: fig-einfuehrungsphase
+#| fig-cap: "Häufigkeitsverteilung der Einfuehrungsphase"
+
+counts.einfuehrungsphase <- tally(~ einfuehrungsphase, data=raw.dataset)
 gf_bar(~ einfuehrungsphase, data=raw.dataset)
 ```
 
-### Vermietungen in Abhängigkeit zur Einfuehrungsphase
+Der erste zu untersuchende Einflussfaktor ist die kategoriale Variable "Einführungsphase" und deren Verteilung. Beide Kategorien "Ja" und "Nein" haben eine ähnliche Anzahl von Einträgen (Ja=`r counts.einfuehrungsphase[1]`, Nein=`r counts.einfuehrungsphase[2]`). Insgesamt zeigt die Verteilung in @fig-einfuehrungsphase, dass es keinen signifikanten Unterschied in der Anzahl der Einträge zwischen den beiden Kategorien gibt.
 
-Der Boxplot veranschaulicht die Verteilung der Vermietungen im Kontext der Einführungsphase (Ja/Nein) und zeigt mehrere wesentliche Aspekte auf. Der Median der Vermietungen ist in der Gruppe ohne Einführungsphase („Nein“) höher als in der Gruppe mit Einführungsphase („Ja“). Dies weist auf eine größere zentrale Tendenz der Vermietungen hin, wenn keine Einführungsphase vorliegt. Zudem ist der Interquartilsabstand (IQR) in der Gruppe ohne Einführungsphase ebenfalls größer, was auf eine erhöhte Streuung der Daten in dieser Gruppe hindeutet. Beide Gruppen zeigen keine auffälligen Ausreißer, da alle Datenpunkte innerhalb der Whisker liegen. Insgesamt sind die Vermietungen in der Gruppe ohne Einführungsphase höher, was durch die Position der Box und der Whisker im Boxplot deutlich wird.
 
 ```{r}
+#| label: fig-vermietungen-einfuehrungsphase
+#| fig-cap: "Vermietungen in Abhängigkeit zur Einfuehrungsphase"
+
 gf_boxplot(vermietungen ~ einfuehrungsphase, data=raw.dataset)
 ```
 
-## Jahreszeit
+Der Boxplot in @fig-vermietungen-einfuehrungsphase veranschaulicht die Verteilung der Vermietungen im Kontext der Einführungsphase und zeigt mehrere wesentliche Aspekte auf. Der Median der Vermietungen ist in der Gruppe ohne Einführungsphase („Nein“) höher als in der Gruppe mit Einführungsphase („Ja“). Dies weist auf eine größere zentrale Tendenz der Vermietungen hin, wenn keine Einführungsphase vorliegt. Zudem ist der Interquartilsabstand (IQR) in der Gruppe ohne Einführungsphase ebenfalls größer, was auf eine erhöhte Streuung der Daten in dieser Gruppe hindeutet. Beide Gruppen zeigen keine auffälligen Ausreißer, da alle Datenpunkte innerhalb der Whisker liegen. Insgesamt sind die Vermietungen in der Gruppe ohne Einführungsphase höher, was durch die Position der Box und der Whisker im Boxplot deutlich wird.
 
-Die Häufigkeit der Vorkommen über die verschiedenen Jahreszeiten ist hinweg weitgehend gleichmäßig verteilt. Dies bedeutet, dass es keine signifikanten Unterschiede oder ausgeprägte Schwankungen in der Anzahl der Vorkommen zu verschiedenen Zeiten des Jahres gibt. 
+## Jahreszeit {#sec-datenanalyse-jahreszeit}
 
 ```{r}
+#| label: fig-jahreszeit
+#| fig-cap: "Häufigkeitsverteilung der Jahreszeit"
+
+counts.jahreszeit <- tally(~ jahreszeit, data=raw.dataset)
 gf_bar(~ jahreszeit, data=raw.dataset)
 ```
 
-### Vermietungen in Abhängigkeit zur Jahreszeit
-
-Im Frühling und Herbst sind die Verteilungen der Vermietungen ähnlich, wobei beide Jahreszeiten relativ große Interquartilsabstände aufweisen. Dies deutet auf eine breite Streuung der Daten in diesen Perioden hin. Die Medianwerte sind in beiden Fällen hoch, sodass die Vermietungsaktivität in diesen Jahreszeiten stark vertreten ist. Im Sommer bleibt die Verteilung ähnlich, aber es gibt einen Anstieg  im Medianwert, was darauf hinweist, dass die Vermietungen in dieser Jahreszeit tendenziell etwas höher sind. Der Winter hingegen zeigt eine deutliche Verringerung der Vermietungszahlen, wie durch den niedrigeren Median und den geringeren Interquartilsabstand ersichtlich ist. Die geringere Variabilität im Winter deutet darauf hin, dass die Vermietungsaktivitäten in dieser Jahreszeit relativ konstant, aber auf einem niedrigen Niveau sind.
+Die Häufigkeit der Vorkommen über die verschiedenen Jahreszeiten ist hinweg weitgehend gleichmäßig verteilt, wie in @fig-jahreszeit zu sehen ist. Dies bedeutet, dass es keine signifikanten Unterschiede oder ausgeprägte Schwankungen in der Anzahl der Vorkommen zu verschiedenen Zeiten des Jahres gibt.
 
 ```{r}
+#| label: fig-vermietungen-jahreszeit
+#| fig-cap: "Vermietungen in Abhängigkeit zur Jahreszeit"
+
 gf_boxplot(vermietungen ~ jahreszeit, data=raw.dataset)
 ```
 
-## Wetter
+Der Boxplot in @fig-vermietungen-jahreszeit zeigt, dass im Frühling und Herbst die Verteilungen der Vermietungen ähnlich sind, wobei beide Jahreszeiten relativ große Interquartilsabstände aufweisen. Dies deutet auf eine breite Streuung der Daten in diesen Perioden hin. Die Medianwerte sind in beiden Fällen hoch, sodass die Vermietungsaktivität in diesen Jahreszeiten stark vertreten ist.
+Im Sommer bleibt die Verteilung ähnlich, aber es gibt einen Anstieg im Medianwert, was darauf hinweist, dass die Vermietungen in dieser Jahreszeit tendenziell etwas höher sind. Der Winter hingegen zeigt eine deutliche Verringerung der Vermietungszahlen, wie durch den niedrigeren Median und den geringeren Interquartilsabstand ersichtlich ist.
+Die geringere Variabilität im Winter deutet darauf hin, dass die Vermietungsaktivitäten in dieser Jahreszeit relativ konstant, aber auf einem niedrigen Niveau sind.
 
-Das Balkendiagramm illustriert die Häufigkeit der Wetterkategorien "Gut", "Nicht gut" und "Schlecht". Die Kategorie "Gut" weist die höchste Anzahl von Beobachtungen auf. Die Kategorie "Nicht gut" liegt in der Mitte, mit etwa der Hälfte der Zählungen von "Gut", was zeigt, dass solche Wetterbedingungen weniger häufig sind, aber dennoch häufiger als "Schlecht" vorkommen. Die Kategorie "Schlecht" verzeichnet die geringste Anzahl von Beobachtungen und tritt somit am seltensten auf.
+Der Boxplot in @fig-vermietungen-jahreszeit zeigt auch, dass es für Sommer einen auffälligen Eintrag mit einer Anzahl Vermietungen von unter 2500 gibt, der potenziell als Ausreiser gilt.
 
-Das Balkendiagramm zeigt eine deutliche Dominanz guten Wetters, während schlechtes Wetter selten ist. "Nicht gut" liegt in einer mittleren Häufigkeitsposition, was die Variabilität der Wetterbedingungen verdeutlicht, jedoch mit einer klaren Präferenz für gutes Wetter.
+## Wetter {#sec-datenanalyse-wetter}
 
 ```{r}
+#| label: fig-wetter
+#| fig-cap: "Häufigkeitsverteilung vom Wetter"
+
+counts.wetter <- tally(~ wetter, data=raw.dataset)
 gf_bar(~ wetter, data=raw.dataset)
 ```
 
-### Vermietungen in Abhängigkeit zum Wetter
+Das Balkendiagramm in @fig-wetter illustriert die Häufigkeit der Wetterkategorien "Gut", "Nicht gut" und "Schlecht". Die Kategorie "Gut" weist mit `r counts.wetter[1]` die höchste Anzahl von Beobachtungen auf. Die Kategorie "Nicht gut" liegt mit `r counts.wetter[2]` in der Mitte, mit etwa der Hälfte der Zählungen von "Gut", was zeigt, dass solche Wetterbedingungen weniger häufig sind, aber dennoch häufiger als "Schlecht" vorkommen. Die Kategorie "Schlecht" verzeichnet mit `r counts.wetter[3]` die geringste Anzahl von Beobachtungen und tritt somit am seltensten auf.
 
-Die Boxplots zeigen, dass die Vermietungszahlen bei gutem Wetter am höchsten sind, mit einem Median knapp unter 5000 und einer breiten Streuung. Bei "Nicht gut" liegt der Median etwas niedriger, aber ähnlich, mit geringerer Streuung. Die Vermietungszahlen sind bei schlechtem Wetter deutlich niedriger, mit einem Median unter 2500 und einer kleineren Streuung. Gutes Wetter führt demnach zu den höchsten und variabelsten Vermietungszahlen, während schlechtes Wetter mit deutlich geringerer Nachfrage verbunden ist.
+Dies zeigt eine deutliche Dominanz guten Wetters, während schlechtes Wetter selten ist. "Nicht gut" liegt in einer mittleren Häufigkeitsposition, was die Variabilität der Wetterbedingungen verdeutlicht, jedoch mit einer klaren Präferenz für gutes Wetter.
 
 ```{r}
+#| label: fig-vermietungen-wetter
+#| fig-cap: "Vermietungen in Abhängigkeit zum Wetter"
+
 gf_boxplot(vermietungen ~ wetter, data=raw.dataset)
 ```
 
-## Arbeitstag
+Die Boxplots in @fig-vermietungen-wetter zeigen, dass die Vermietungszahlen bei gutem Wetter am höchsten sind, mit einem Median knapp unter 5000 und einer breiten Streuung. Bei "Nicht gut" liegt der Median etwas niedriger, aber ähnlich, mit geringerer Streuung. Die Vermietungszahlen sind bei schlechtem Wetter deutlich niedriger, mit einem Median unter 2500 und einer kleineren Streuung. Gutes Wetter führt demnach zu den höchsten und variabelsten Vermietungszahlen, während schlechtes Wetter mit deutlich geringerer Nachfrage verbunden ist.
 
-Das Diagramm zeigt, dass die meisten Beobachtungen (\>300) an Arbeitstagen gesammelt wurden, was darauf hindeutet, dass diese Tage in der zugrunde liegenden Datensatz häufiger beobachtet wurden als Nicht-Arbeitstage. Vermietungen werden demnach häufiger an Arbeitstagen als an Nicht-Arbeitstagen wie Wochenenden, Feiertagen oder in den Ferien durchgeführt.
+## Arbeitstag {#sec-datenanalyse-arbeitstag}
 
 ```{r}
+#| label: fig-arbeitstag
+#| fig-cap: "Häufigkeitsverteilung vom Arbeitstag"
+
+counts.arbeitstag <- tally(~ arbeitstag, data=raw.dataset)
 gf_bar(~ arbeitstag, data=raw.dataset)
 ```
 
-### Vermietungen in Abhängigkeit zum Arbeitstag
-
-Der Median der Vermietungen ist an Arbeitstagen etwas niedriger als an Nicht-Arbeitstagen. Der Interquartilsabstand (IQR) ist in beiden Fällen ähnlich, was darauf hindeutet, dass die Streuung der mittleren 50% der Daten an beiden Tagen vergleichbar ist. Die Whisker erstrecken sich ebenfalls in ähnlicher Weise, was auf eine vergleichbare Spannweite der Daten hinweist. Die Verteilungen sind relativ symmetrisch, da die Mediane etwa in der Mitte der Boxen liegen. Zudem gibt es keine offensichtlichen Ausreißer, da keine Punkte außerhalb der Whisker zu sehen sind. Schlussfolgernd lässt sich dazu sagen, dass die Vermietungen an Arbeitstagen und Nicht-Arbeitstagen ähnliche Verteilungen aufweisen, wobei die Medianwerte an Nicht-Arbeitstagen geringfügig höher sind.
+Das Diagramm in @fig-arbeitstag zeigt, dass die meisten Beobachtungen (`r counts.arbeitstag[1]`) an Arbeitstagen gesammelt wurden, was darauf hindeutet, dass diese Tage in der zugrunde liegenden Datensatz häufiger beobachtet wurden als Nicht-Arbeitstage. Vermietungen werden demnach häufiger an Arbeitstagen als an Nicht-Arbeitstagen wie Wochenenden, Feiertagen oder in den Ferien durchgeführt.
 
 ```{r}
+#| label: fig-vermietungen-arbeitstag
+#| fig-cap: "Vermietungen in Abhängigkeit zum Arbeitstag"
+
 gf_boxplot(vermietungen ~ arbeitstag, data=raw.dataset)
 ```
 
-## Temperatur
+Der Boxplot in @fig-vermietungen-arbeitstag zeigt, dass der Median der Vermietungen ist an Arbeitstagen etwas niedriger als an Nicht-Arbeitstagen. Der Interquartilsabstand (IQR) ist in beiden Fällen ähnlich, was darauf hindeutet, dass die Streuung der mittleren 50% der Daten an beiden Tagen vergleichbar ist. Die Whisker erstrecken sich ebenfalls in ähnlicher Weise, was auf eine vergleichbare Spannweite der Daten hinweist. Die Verteilungen sind relativ symmetrisch, da die Mediane etwa in der Mitte der Boxen liegen. Zudem gibt es keine offensichtlichen Ausreißer, da keine Punkte außerhalb der Whisker zu sehen sind. Schlussfolgernd lässt sich dazu sagen, dass die Vermietungen an Arbeitstagen und Nicht-Arbeitstagen ähnliche Verteilungen aufweisen, wobei die Medianwerte an Nicht-Arbeitstagen geringfügig höher sind.
 
-Die Temperatur zeigt eine bimodale Verteilung der Daten, mit zwei Häufigkeitsspitzen bei etwa 8°C und 24°C. Dies deutet darauf hin, dass diese Temperaturbereiche am häufigsten auftreten. Die Dichte nimmt an den Rändern, insbesondere bei Temperaturen unter 5°C und über 24°C, deutlich ab, was auf seltenere extreme Temperaturen hinweist. Insgesamt zeigt die Verteilung eine Konzentration der Temperaturen in zwei unterschiedlichen Bereichen, was saisonalen Schwankungen entspricht.
+## Temperatur {#sec-datenanalyse-temperatur}
 
 ```{r}
-fav_stats(raw.dataset$temperatur)
+#| label: fig-temperatur
+#| fig-cap: "Häufigkeitsverteilung der Temperatur"
+
+stats.temperatur <- fav_stats(raw.dataset$temperatur)
+stats.temperatur
+
 gf_dhistogram(~ temperatur, data=raw.dataset) |>
-  gf_dens(linewidth = 2)
+  gf_dens(linewidth = 1, color = "blue")
 ```
 
-### Vermietungen in Abhängigkeit zur Temperatur
-
-Die Abhängigkeit zwischen der Temperatur und der Anzahl der Vermietungen zeigt einen anfänglichen Anstieg der Vermietungszahlen mit zunehmender Temperatur, wobei ein Maximum bei etwa 20°- 25°C erreicht wird. Jenseits dieses Temperaturwertes nimmt die Anzahl der Vermietungen trotz weiter steigender Temperaturen ab. Dies legt nahe, dass gemäßigte Temperaturen um 20°C optimal für Vermietungen sind, während höhere Temperaturen tendenziell eine negative Auswirkung auf die Nachfrage haben könnten.
+Das Histogramm in @fig-temperatur zeigt, dass die Temperatur eine bimodale Verteilung der Daten hat, mit zwei Häufigkeitsspitzen bei etwa 8°C und 24°C. Dies deutet darauf hin, dass diese Temperaturbereiche am häufigsten auftreten. Die Dichte nimmt an den Rändern, insbesondere bei Temperaturen unter 5°C und über 24°C, deutlich ab, was auf seltenere extreme Temperaturen hinweist. Insgesamt zeigt die Verteilung eine Konzentration der Temperaturen in zwei unterschiedlichen Bereichen, was saisonalen Schwankungen entspricht.
 
 ```{r}
+#| label: fig-vermietungen-temperatur
+#| fig-cap: "Vermietungen in Abhängigkeit zur Temperatur"
+
 gf_point(vermietungen ~ temperatur, data=raw.dataset) |>
-  gf_smooth()
+  gf_smooth(method = "loess")
 ```
 
-## Windgeschwindigkeit
+Die Abhängigkeit zwischen der Temperatur und der Anzahl der Vermietungen in @fig-vermietungen-temperatur zeigt einen anfänglichen Anstieg der Vermietungszahlen mit zunehmender Temperatur, wobei ein Maximum bei etwa 20°- 25°C erreicht wird. Jenseits dieses Temperaturwertes nimmt die Anzahl der Vermietungen trotz weiter steigender Temperaturen ab. Dies legt nahe, dass gemäßigte Temperaturen um 20°C optimal für Vermietungen sind, während höhere Temperaturen tendenziell eine negative Auswirkung auf die Nachfrage haben könnten.
 
-Die Verteilung der Windgeschwindigkeiten weist einen deutlichen Gipfel bei etwa 11 km/h auf und stellt damit die häufigste Windgeschwindigkeit in den Daten dar. Abseits dieser Wertes nimmt die Dichte der Verteilung ab. Höhere Windgeschwindigkeiten treten seltener auf. Die Verteilung ist leicht rechtsschief, was darauf hindeutet, dass extrem hohe Windgeschwindigkeiten weniger häufig sind, aber dennoch vorkommen.
+## Windgeschwindigkeit {#sec-datenanalyse-windgeschwindigkeit}
 
 ```{r}
-fav_stats(raw.dataset$windgeschwindigkeit)
+#| label: fig-windgeschwindigkeit
+#| fig-cap: "Häufigkeitsverteilung der Windgeschwindigkeit"
+
+stats.windgeschwindigkeit <- fav_stats(raw.dataset$windgeschwindigkeit)
+stats.windgeschwindigkeit
+
 gf_dhistogram(~ windgeschwindigkeit, data=raw.dataset) |>
-  gf_dens(linewidth = 2)
+  gf_dens(linewidth = 1, color = "blue")
 ```
 
-### Vermietungen in Abhängigkeit zur Windgeschwindigkeit
-
-Die Glättungslinie im Punktdiagramm zur Abhängigkeit der Vermietungen zur Windgeschwindigkeit verdeutlicht den Trend der Daten und zeigt, dass die Anzahl der Vermietungen zunächst mit zunehmender Windgeschwindigkeit steigt. Ab einem bestimmten Punkt beginnt sie jedoch wieder zu sinken.
+Die Verteilung der Windgeschwindigkeiten in @fig-windgeschwindigkeit weist einen deutlichen Gipfel bei etwa 11 km/h auf und stellt damit die häufigste Windgeschwindigkeit in den Daten dar. Abseits dieser Wertes nimmt die Dichte der Verteilung ab. Höhere Windgeschwindigkeiten treten seltener auf. Die Verteilung ist leicht rechtsschief, was darauf hindeutet, dass extrem hohe Windgeschwindigkeiten weniger häufig sind, aber dennoch vorkommen.
 
 ```{r}
+#| label: fig-vermietungen-windgeschwindigkeit
+#| fig-cap: "Vermietungen in Abhängigkeit zur Windgeschwindigkeit"
+
 gf_point(vermietungen ~ windgeschwindigkeit, data=raw.dataset) |>
-  gf_smooth()
+  gf_smooth(method = "loess")
 ```
 
-## Luftfeuchtigkeit
+Die Glättungslinie im Punktdiagramm zur Abhängigkeit der Vermietungen zur Windgeschwindigkeit in @fig-vermietungen-windgeschwindigkeit verdeutlicht den Trend der Daten und zeigt, dass die Anzahl der Vermietungen zunächst mit zunehmender Windgeschwindigkeit steigt. Ab einem bestimmten Punkt beginnt sie jedoch wieder zu sinken.
 
-Verteilung der Luftfeuchtigkeitsdaten in %, mit einem Minimum von 3,88 und einem Maximum von 103,61. Das Maximum von 103,61 scheint hierbei ein fehlerhafter Wert zu sein, da Luftfeuchtigkeitswerte ein Höchstwert von 100 erreichen können. Der Mittelwert und der Median liegen nahe bei 62,39 bzw. 62,35. Im Gesamten ergibt sich hierbei eine Normalverteilung mit einer moderaten Streuung um den Mittelwert.
+## Luftfeuchtigkeit {#sec-datenanalyse-luftfeuchtigkeit}
 
 ```{r}
-fav_stats(raw.dataset$luftfeuchtigkeit)
+#| label: fig-luftfeuchtigkeit
+#| fig-cap: "Häufigkeitsverteilung der Luftfeuchtigkeit"
+
+stats.luftfeuchtigkeit <- fav_stats(raw.dataset$luftfeuchtigkeit)
+stats.luftfeuchtigkeit
+
 gf_dhistogram(~ luftfeuchtigkeit, data=raw.dataset) |>
-  gf_dens(linewidth = 2)
+  gf_dens(linewidth = 1, color = "blue")
 ```
 
-### Vermietungen in Abhängigkeit zur Luftfeuchtigkeit
-
-Der höchste Punkt der Trendlinie im Punktdiagramm befindet sich ungefähr im Bereich einer Luftfeuchtigkeit von 50 bis 60, was darauf hindeutet, dass dieser Bereich optimal für die meisten Vermietungen ist.
+Das Histogramm in @fig-luftfeuchtigkeit zeigt die Verteilung der Luftfeuchtigkeitsdaten in \%, mit einem Minimum von 3,88 und einem Maximum von 103,61. Das Maximum von 103,61 scheint hierbei ein fehlerhafter Wert zu sein, da Luftfeuchtigkeitswerte ein Höchstwert von 100 erreichen können. Der Mittelwert und der Median liegen nahe bei 62,39 bzw. 62,35. Im Gesamten ergibt sich hierbei eine Normalverteilung mit einer moderaten Streuung um den Mittelwert.
 
 ```{r}
+#| label: fig-vermietungen-luftfeuchtigkeit
+#| fig-cap: "Vermietungen in Abhängigkeit zur Luftfeuchtigkeit"
+
 gf_point(vermietungen ~ luftfeuchtigkeit, data=raw.dataset) |>
-  gf_smooth()
+  gf_smooth(method = "loess")
 ```
 
-## Preprocessing der Daten
+Der höchste Punkt der Trendlinie im Punktdiagramm in @fig-vermietungen-luftfeuchtigkeit befindet sich ungefähr im Bereich einer Luftfeuchtigkeit von 50 bis 60, was darauf hindeutet, dass dieser Bereich optimal für die meisten Vermietungen ist.
+
+## Entfernen von Ausreißern in den Daten {#sec-datenanalyse-ausreißern}
+
+In @sec-datenanalyse-luftfeuchtigkeit und @sec-datenanalyse-jahreszeit wurde festgestellt, dass der Eintrag mit einer Luftfeuchtigkeit von `r stats.luftfeuchtigkeit$max`\% fehlerhaft ist und ein Eintrag für die Jahreszeit Sommer mit einer Anzahl Vermietungen von unter 2500 potenziell als Ausreiser gilt.
+Diese Einträge werden im folgenden aus den Daten entfernt.
+
+```{r}
+# Remove wrong data
+clean.raw.dataset <- raw.dataset[raw.dataset$luftfeuchtigkeit <= 100, ]
+clean.raw.dataset <- clean.raw.dataset[
+  !(
+    clean.raw.dataset$jahreszeit == "Sommer" &
+    clean.raw.dataset$vermietungen <= 2500
+  ),
+]
+
+# Update affected stats / counts
+stats.luftfeuchtigkeit <- fav_stats(clean.raw.dataset$luftfeuchtigkeit)
+counts.jahreszeit <- tally(~ jahreszeit, data=clean.raw.dataset)
+```
+
+## Preprocessing der Daten {#sec-datenanalyse-preprocessing}
 
 Quelle: https://www.geeksforgeeks.org/data-preprocessing-in-r/
 
@@ -241,30 +321,55 @@ preprocess <- function(dataset) {
 
   # Encode einfuehrungsphase and arbeitstag (binary encoding)
   yn_mapping <- c("Nein" = 0, "Ja" = 1)
-  dataset.copy$einfuehrungsphase <- yn_mapping[as.character(dataset$einfuehrungsphase)]
-  dataset.copy$arbeitstag <- yn_mapping[as.character(dataset$arbeitstag)]
+  dataset.copy$einfuehrungsphase <- yn_mapping[
+    as.character(dataset$einfuehrungsphase)
+  ]
+  dataset.copy$arbeitstag <- yn_mapping[
+    as.character(dataset$arbeitstag)
+  ]
 
   # Encode wetter (ordinal encoding)
   wetter_mapping <- c("Schlecht" = 0, "Nicht gut" = 1, "Gut" = 2)
-  dataset.copy$wetter <- wetter_mapping[as.character(dataset$wetter)]
+  dataset.copy$wetter <- wetter_mapping[
+    as.character(dataset$wetter)
+  ]
 
   # Encode jahreszeit (one-hot encoding)
-  encoded_jahreszeit <- as.data.frame(model.matrix(~ jahreszeit - 1, dataset))
+  encoded_jahreszeit <- as.data.frame(
+    model.matrix(~ jahreszeit - 1, dataset)
+  )
 
   # Add the new columns to the encoded data frame and remove the old column
   dataset.copy <- dataset.copy |>
     select(-jahreszeit)
   dataset.copy <- cbind(encoded_jahreszeit, dataset.copy)
 
+  # Min/max scale temperatur
+  dataset.copy$temperatur = (
+    dataset.copy$temperatur - stats.temperatur$min
+  ) / (
+    stats.temperatur$max - stats.temperatur$min
+  )
+
+  # Min/max scale windgeschwindigkeit
+  dataset.copy$windgeschwindigkeit = (
+    dataset.copy$windgeschwindigkeit - stats.windgeschwindigkeit$min
+  ) / (
+    stats.windgeschwindigkeit$max - stats.windgeschwindigkeit$min
+  )
+
+  # Scale luftfeuchtigkeit
+  dataset.copy$luftfeuchtigkeit <- dataset.copy$luftfeuchtigkeit / 100
+  
   return(dataset.copy)
 }
 ```
 
-### Preprocessing Ergebnisse
+### Preprocessing Ergebnisse {#sec-datenanalyse-preprocessing-ergebnisse}
 
 In der Vorverarbeitung der Ergebnisse wird zunächst ein Zufallszahlengenerator mit dem Wert 69 initialisiert, um die Reproduzierbarkeit der Ergebnisse sicherzustellen. Anschließend werden die Rohdaten sowohl für Anwendungen als auch für den Datensatz vorverarbeitet. Die vorverarbeiteten Daten werden in den Variablen *application* und *dataset* gespeichert.
 
-Um die Auswirkungen der Vorverarbeitung zu veranschaulichen, wird der Anfang des ursprünglichen Datensatzes *raw.dataset* und des vorverarbeiteten Datensatzes dataset mit der Funktion *head()* angezeigt. Dies ermöglicht einen direkten Vergleich der Daten vor und nach der Vorverarbeitung. Der Datensatz wird folgend für das Training vorbereitet. Die Features werden aus dem vorverarbeiteten Datensatz *dataset* extrahiert, indem die Spalte vermietungen ausgeschlossen wird, während die Zielvariable *vermietungen* separat ausgewählt wird. Der Datensatz wird dann in einen Trainings- und einen Validierungssatz aufgeteilt. Diese Aufteilung erfolgt zufällig, wobei 80 % der Daten für das Training und 20 % für die Validierung verwendet werden. Dies wird durch die Funktion *sample()* erreicht, die eine logische Vektorreihe erzeugt, die angibt, welche Zeilen in den Trainingssatz (*train.raw.dataset* und *train.dataset*) und welche in den Validierungssatz (*val.raw.dataset* und *val.dataset*) aufgenommen werden sollen. Schließlich werden die Features und Labels sowohl für den Trainings- als auch für den Validierungssatz getrennt gespeichert, indem die entsprechenden Zeilen aus den vorverarbeiteten Feature- und Labeldatensätzen ausgewählt werden.
+Um die Auswirkungen der Vorverarbeitung zu veranschaulichen, wird der Anfang des ursprünglichen Datensatzes *raw.dataset* und des vorverarbeiteten Datensatzes dataset mit der Funktion *head()* angezeigt. Dies ermöglicht einen direkten Vergleich der Daten vor und nach der Vorverarbeitung. Der Datensatz wird folgend für das Training vorbereitet. Die Features werden aus dem vorverarbeiteten Datensatz *dataset* extrahiert, indem die Spalte vermietungen ausgeschlossen wird, während die Zielvariable *vermietungen* separat ausgewählt wird. Der Datensatz wird dann in einen Trainings- und einen Testsatz aufgeteilt. Diese Aufteilung erfolgt zufällig, wobei 80 % der Daten für das Training und 20 % für die Test verwendet werden. Dies wird durch die Funktion *sample()* erreicht, die eine logische Vektorreihe erzeugt, die angibt, welche Zeilen in den Trainingssatz (*train.raw.dataset* und *train.dataset*) und welche in den Testsatz (*test.raw.dataset* und *test.dataset*) aufgenommen werden sollen. Schließlich werden die Features und Labels sowohl für den Trainings- als auch für den Testsatz getrennt gespeichert, indem die entsprechenden Zeilen aus den vorverarbeiteten Feature- und Labeldatensätzen ausgewählt werden.
 
 ```{r}
 # Make this example reproducible
@@ -272,10 +377,10 @@ set.seed(69)
 
 # Preprocess the data
 application <- preprocess(raw.application)
-dataset <- preprocess(raw.dataset)
+dataset <- preprocess(clean.raw.dataset)
 
 # Data before preprocessing
-head(raw.dataset)
+head(clean.raw.dataset)
 
 # Data after preprocessing
 head(dataset)
@@ -285,21 +390,26 @@ dataset_features <- dataset |> select(-vermietungen)
 dataset_labels <- dataset |> select(vermietungen)
 
 # Use 80% of dataset for training and 20% for testing
-dataset.split <- sample(c(TRUE, FALSE), nrow(dataset), replace=TRUE, prob=c(0.8, 0.2))
+dataset.split <- sample(
+  c(TRUE, FALSE),
+  nrow(dataset),
+  replace=TRUE,
+  prob=c(0.8, 0.2)
+)
 
-train.raw.dataset = raw.dataset[dataset.split, ]
-val.raw.dataset = raw.dataset[!dataset.split, ]
+train.raw.dataset = clean.raw.dataset[dataset.split, ]
+test.raw.dataset = clean.raw.dataset[!dataset.split, ]
 
 train.dataset = dataset[dataset.split, ]
-val.dataset = dataset[!dataset.split, ]
+test.dataset = dataset[!dataset.split, ]
 
 train.dataset_features = dataset_features[dataset.split, ]
 train.dataset_labels = dataset_labels[dataset.split, ]
-val.dataset_features = dataset_features[!dataset.split, ]
-val.dataset_labels = dataset_labels[!dataset.split, ]
+test.dataset_features = dataset_features[!dataset.split, ]
+test.dataset_labels = dataset_labels[!dataset.split, ]
 ```
 
-# Methodenbeschreibung
+# Methodenbeschreibung {#sec-methodenbeschreibung}
 
 <!-- Umfang von 2-4 Seiten -->
 
@@ -307,7 +417,7 @@ https://www.datacamp.com/tutorial/neural-network-models-r
 
 Gehen Sie hier auf die verwendete Methode zur Modellierung, Variablen, und Modellauswahl ein. Zitieren Sie hier auch die methodische Literatur.
 
-## Modellauswahl
+## Modellauswahl {#sec-methodenbeschreibung-modellauswahl}
 
 Damit die Performance, zur Beurteilung hier der MAE, des Vorhersage-Modells bewertet werden kann, wird zuvor ein weiteres, zweites Modell erstellt. Hierbei wird ein lineares Modell als Vergleichs-Modell gewählt. Durch das simple Base-Line Modell, steht für den Vergleich ein einfaches und schnell zu trainierendes Modell zur Verfügung, welches auf Grund des Aufbaus einen geringen Ressourcen Bedarf hat. Dargestellt wird hierbei jedoch lediglich ein linearer Zusammenhang, der gegebenenfalls nicht ausreichend die Realität abbildet, wodurch es zu einem erhöhten MAE kommen kann. (Buch: Modellieren in R; Seite 322ff.) Dies wird in den nachfolgenden Kapiteln bezüglich der Anwendung der Modelle betrachtet.
 
@@ -315,29 +425,30 @@ Das Vorhersage-Modell basiert, im Gegensatz zum Vergleichs-Modell, auf einem neu
 
 Ein weiterer Aspekt für die Auswahl des neuronalen Netzes, ist die Gewichtung der Variablen im Modell. Während des trainings passt das Netz die Gewichte der einzelnen Ergebnisse so an, dass die relevanten Zusammenhänge aus dem Trainingsdatensatz effektiv in das Modell eingebunden werden. Auf diese Weise trägt das Netz dazu bei, dass wichtige Korrelationen zwischen den Variablen erkannt und festgehalten werden. (https://www.ibm.com/de-de/topics/neural-networks)
 
-## Modellierung
+## Modellierung {#sec-methodenbeschreibung-modellierung}
 
 Durch die Modellierung eines Vorhersage-Modells, für die Vermietung von Fahrrädern, kann ein Ausschnitt der Wirklichkeit betrachtet und nach Ermittlung von Regelmäßigkeiten auf andere Daten angewendet werden. Hierbei ist zu beachten, dass die Annäherung durch das Modell und somit der Zielvariable an die Wirklichkeit verzerrt oder falsch sein kann. Dies kann vorliegen, da nicht die ganze Gesamtheit zum trainieren des Modells bekannt ist. (Buch: Modellieren in R; Seite 246). Wie bereits im vorherigen Abschnitt beschrieben, wird bei der nachfolgenden Ausarbeitung ein lineares Regressions-Modell und ein Neuronales Netz trainiert und angewendet.
 
 Das lineare Regressions-Modell stellt den Zusammenhang zwischen der abhängigen Variable „Vermietung“ und den im Datensatz vorhandenen unabhängigen Variablen dar. Dieses Zusammenhang ist, sofern vorhanden linear. Das Modell wird genutzt, um einen Trend abzubilden, der es ermöglicht, Vorhersagewerte für Kombinationen von Variablen aus dem Trainingsdatensatz zu ermitteln. Um die Genauigkeit des Modells zu bewerten, wird der MAE berechnet. (Buch: Modellieren in R; Seite 322ff.)
 
-Die Modellierung des neuronalen Netzes ist komplexer als das Base-Line Modell. Die einzelnen Neuronen in den nachfolgend erklärten Schichten, haben immer jeweils eine Verbindung zu allen Neuronen der folgenden Schicht. Es besteht aus einer Eingabeschicht, der so genannten Inputlayer. Hier werden die zu betrachtenden Werte in das Netz geladen. Bei dem vorliegenden Datensatz sind dies die zehn Variablen. Nachfolgende Schichten im neuronalen Netz sind die versteckten Schichten, die Hiddenlayer. Diese verarbeiten die Werte aus der vorherigen Schicht. Von der Schicht der Hiddenlayer liegen zwei vor. Nach der Verarbeitung werden die Werte in die letzte Schicht, der Outputlayer, übertragen. In dem vorliegenden Anwendungsfall, gibt es für diese Schicht ein Neuron. Es wird ausgegeben, ob eine Vermietung stattfindet oder nicht. Die Verarbeitung in diesem Netzwerk findet von der Inputlayer zum Outputlayer statt und die Ergebnisse werden lediglich an die nächste Ebene weitergegeben. Dadurch liegt ein Feedforward neuronales Netz vor, da die Daten in Vorwärtsrichtung fließen. (https://www.datacamp.com/tutorial/neural-network-models-r) Das zu erstellende Modell wird 5000 Mal trainiert um die Gewichtungen und somit die Ergebnisse zu optimieren. Damit eine Optimierung möglich ist, werden die besten Gewichte der einzelnen Durchgänge gespeichert. Um das Modell vor Overfitting, also der Überanpassung auf den Trainingsdatensatz, zu schützen, wird eine Dropout-Rate gesetzt. Diese sperrt je Durchlauf zufällig einen angegebenen Prozentsatz an Neuronen je Layer, die somit temporär nicht trainiert werden. Somit wird ein gleichmäßiges Training gewährleistet. (QUELLE?)
+Die Modellierung des neuronalen Netzes ist komplexer als das Base-Line Modell. Die einzelnen Neuronen in den nachfolgend erklärten Schichten, haben immer jeweils eine Verbindung zu allen Neuronen der folgenden Schicht. Es besteht aus einer Eingabeschicht, der so genannten Inputlayer. Hier werden die zu betrachtenden Werte in das Netz geladen. Bei dem vorliegenden Datensatz sind dies die zehn Variablen. Nachfolgende Schichten im neuronalen Netz sind die versteckten Schichten, die Hiddenlayer. Diese verarbeiten die Werte aus der vorherigen Schicht. Von der Schicht der Hiddenlayer liegen zwei vor. Nach der Verarbeitung werden die Werte in die letzte Schicht, der Outputlayer, übertragen. In dem vorliegenden Anwendungsfall, gibt es für diese Schicht ein Neuron. Es wird ausgegeben, ob eine Vermietung stattfindet oder nicht. Die Verarbeitung in diesem Netzwerk findet von der Inputlayer zum Outputlayer statt und die Ergebnisse werden lediglich an die nächste Ebene weitergegeben. Dadurch liegt ein Feedforward neuronales Netz vor, da die Daten in Vorwärtsrichtung fließen. [@Awan2023]
+Das zu erstellende Modell wird 5000 Mal trainiert um die Gewichtungen und somit die Ergebnisse zu optimieren. Damit eine Optimierung möglich ist, werden die besten Gewichte der einzelnen Durchgänge gespeichert. Um das Modell vor Overfitting, also der Überanpassung auf den Trainingsdatensatz, zu schützen, wird eine Dropout-Rate gesetzt. Diese sperrt je Durchlauf zufällig einen angegebenen Prozentsatz an Neuronen je Layer, die somit temporär nicht trainiert werden. Somit wird ein gleichmäßiges Training gewährleistet. (QUELLE?)
 
-## Variablen
+## Variablen {#sec-methodenbeschreibung-variablen}
 
 Die Grundlage für die Modellierung bilden die zur Verfügung gestellten Daten. Diese Daten liegen, wie im vorherigen Kapitel zur *Explorativen Datenanalyse und Datenvorverarbeitung* beschrieben, in Form verschiedener Attribute mit unterschiedlichen Ausprägungen vor. Um diese Daten für die Modellierung nutzbar zu machen, wurde ein Preprocessing durchgeführt, bei dem die Daten für die weitere Verarbeitung angepasst und bereinigt wurden. Diese vorverarbeiteten Daten wurden anschließend separat von den Originaldaten gespeichert, um sicherzustellen, dass nur die bereinigten und angepassten Variablen in der Modellierung verwendet werden. In der nachfolgenden Modellierungsphase werden ausschließlich diese verarbeitenden Datensätze verwendet. Für beide Modelle, dem Base-Line Modell und dem neuronalen Netz, wurden sämtliche verfügbaren Attribute verwendet, um die Modelle zu trainieren. Das neuronale Netzwerk gewichtet hierbei die Relevanz der einzelnen Variablen um die bestmögliche Annäherung an die Beziehungen in den vorliegenden Trainingsdaten zu finden. (Buch: Neuronale Netze kompakt; Seite 71ff.)
 
 Die Auswahl der Variablen innerhalb des Codes der zu trainierenden Modelle ist dynamisch gestaltet. Das bedeutet, dass das Hinzufügen neuer oder das Entfernen bestehender Attribute keine Anpassung des Codes erfordert. Dadurch bleibt die Modellierung und das Training flexibel gegenüber Änderungen im Datensatz.
 
-# Anwendung, Ergebnis und Vorhersage
+# Anwendung, Ergebnis und Vorhersage {#sec-anwendung}
 
 <!-- Umfang von 2-4 Seiten -->
 
 Wenden Sie hier Ihr Modell an und Interpretieren Sie Ihr Ergebnis. Bei Einzelarbeiten sollte der reine Text (ohne Code, Abbildungen etc.) einen Umfang von ca. 1--2 Seiten haben, bei Gruppenarbeiten einen von ca. 2--4 Seiten.
 
-## Modell mit den Daten trainieren
+## Modell mit den Daten trainieren {#sec-anwendung-trainieren}
 
-### Base-Line Modell
+### Base-Line Modell {#sec-anwendung-trainieren-baseline}
 
 Um die Vorhersagegüte des neuronalen Netzes bestimmten zu können, wird zunächst das Base-Line Modell in Form einer linearen Regression erstellt, bei dem die Zielvariable von allen verfügbaren Prädiktoren im Trainingsdatensatz abhängt. Die Vorhersagegüte des Modells kann folgend anhand des Mean Absolute Error (MAE) bewertet und mit dem des neuronalen Netzes ins Verhältnis gesetzt werden.
 
@@ -347,7 +458,10 @@ lm.model <- lm(vermietungen ~ ., data = train.raw.dataset)
 summary(lm.model)
 
 # Calculate the MAE to compare models
-mae(val.raw.dataset$vermietungen, predict(lm.model, newdata = val.raw.dataset))
+mae(
+  test.raw.dataset$vermietungen,
+  predict(lm.model, newdata = test.raw.dataset)
+)
 ```
 
 Die Residuen reichen von -3641,3 bis 2384,8, wobei der Median nahe bei 0 liegt (-3,4). Dies deutet darauf hin, dass das Modell die Daten gut mittelt, obwohl einige Abweichungen auftreten. Die Variable *einfuehrungsphaseNein* hat den stärksten positiven Effekt auf die Vermietungen (2057,883), was darauf schließen lässt, dass die Vermietungen signifikant höher sind, wenn keine Einführungsphase vorliegt. Die Jahreszeiten zeigen unterschiedliche Effekte. Im Herbst steigen die Vermietungen signifikant (+562,431), während sie im Winter stark sinken (-765,179). Der Sommer zeigt einen leichten, aber nicht stark signifikanten Rückgang (-297,132). Wetterbedingungen spielen ebenfalls eine wichtige Rolle: Bei „Nicht gutem“ und „Schlechtem“ Wetter sinken die Vermietungen signifikant um -390,531 bzw. -2115,621. Die Temperatur hat einen positiven Effekt: Mit jedem Grad Anstieg erhöhen sich die Vermietungen um 120,920. Windgeschwindigkeit und Luftfeuchtigkeit haben negative Effekte auf die Vermietungen (-43,602 bzw. -10,445).
@@ -360,7 +474,7 @@ Der F-statistic-Wert von 152,8 mit einem sehr niedrigen p-Wert (\< 2.2e-16) beto
 
 Die lineare Regression stellt dar, dass insbesondere die Einfuehrungsphase und extreme Wetterbedingungen wie schlechtes Wetter sich stark auf die Vermietungen auswirken. Die Jahreszeiten haben ebenfalls einen signifikanten Einfluss, wobei der Winter einen deutlichen Rückgang und der Herbst einen Anstieg der Vermietungen bewirkt. Das Modell erklärt einen großen Teil der Variabilität der Vermietungen und ist damit eine solide Vorhersage.
 
-### Unser Modell
+### Unser Modell {#sec-anwendung-trainieren-ours}
 
 Zunächst wird, wie in dem Base-Line Modell, ein zufälliger Seed gesetzt (*set_random_seed(69)*), um die Reproduzierbarkeit der Ergebnisse zu gewährleisten. Zusätzlich die Nutzung der GPU ermöglicht, sofern diese verfügbar ist. Im Anschluss wird der Pfad für die Speicherung der Modellgewichte definiert (*checkpoint_path*), sodass das Modell während des Trainings regelmäßig gesichert werden kann.
 
@@ -370,77 +484,132 @@ Das Modell wird mit dann mit einer Eingabeschicht definiert, deren Dimensionen d
 
 Das neuronale Netz selbst wird durch ein Eingabelayer definiert, dessen Form durch die Anzahl der Features im Datensatz bestimmt wird. Anschließend folgt eine Sequenz von weiteren Layern, beginnend mit der Normalisierung der Eingaben. Ein Dropout-Layer mit einer Rate von 5% wird hinzugefügt, um das Modell vor Überanpassung zu schützen. Darauf folgen zwei voll verbundene Layer (*dense layers*) mit jeweils 32 Neuronen, welche die ReLU-Aktivierungsfunktion verwenden, um nicht-lineare Zusammenhänge im Datensatz zu modellieren. Die Ausgabeschicht besteht aus einem einzigen Neuron, welches die Vorhersage der Zielvariable liefert.
 
-Das Modell wird anschließend kompiliert, wobei der Adam-Optimierer (*optimizer = 'adam'*) zur Optimierung der Gewichte verwendet wird. Als Verlustfunktion wird der mittlere quadratische Fehler (*loss = 'mse'*) eingesetzt, während der mittlere absolute Fehler (*mae*) als Metrik zur Bewertung der Modellleistung herangezogen wird. Ein Callback (*callback_model_checkpoint*) sorgt dafür, dass die Gewichte des Modells nach jeder Epoche gespeichert werden, wobei nur die besten Gewichte (gemessen an der Validierungsleistung) gesichert werden.
+Das Modell wird anschließend kompiliert, wobei der Adam-Optimierer (*optimizer = 'adam'*) zur Optimierung der Gewichte verwendet wird. Als Verlustfunktion wird der mittlere quadratische Fehler (*loss = 'mse'*) eingesetzt, während der mittlere absolute Fehler (*mae*) als Metrik zur Bewertung der Modellleistung herangezogen wird. Ein Callback (*callback_model_checkpoint*) sorgt dafür, dass die Gewichte des Modells nach jeder Epoche gespeichert werden, wobei nur die besten Gewichte (gemessen an der Testleistung) gesichert werden.
 
-Das Training des Modells erfolgt über 5000 Epochen (*epochs = 5000*) mit einer Batch-Größe von 64. Die Trainingsdaten werden in Form von Matrizen (*as.matrix(train.dataset_features)*) bereitgestellt, und der Validierungsdatensatz wird verwendet, um die Leistung des Modells während des Trainings zu überwachen. Nach Abschluss des Trainings werden die besten während des Trainings gespeicherten Gewichte geladen (*load_model_weights*), um sicherzustellen, dass die anschließende Evaluation auf der bestmöglichen Version des Modells basiert.
+Das Training des Modells erfolgt über 5000 Epochen (*epochs = 5000*) mit einer Batch-Größe von 64. Die Trainingsdaten werden in Form von Matrizen (*as.matrix(train.dataset_features)*) bereitgestellt, und der Testdatensatz wird verwendet, um die Leistung des Modells während des Trainings zu überwachen. Nach Abschluss des Trainings werden die besten während des Trainings gespeicherten Gewichte geladen (*load_model_weights*), um sicherzustellen, dass die anschließende Evaluation auf der bestmöglichen Version des Modells basiert.
 
-Die abschließende Bewertung des Modells erfolgt anhand der Validierungsdaten, wobei die zuvor definierten Metriken, insbesondere der mittlere absolute Fehler, zur Beurteilung der Vorhersagegenauigkeit des Modells herangezogen werden.
+Die abschließende Bewertung des Modells erfolgt anhand der Testdaten, wobei die zuvor definierten Metriken, insbesondere der mittlere absolute Fehler, zur Beurteilung der Vorhersagegenauigkeit des Modells herangezogen werden.
 
 ```{r}
-# Set a random seed for training
-set_random_seed(69, disable_gpu = FALSE)
-
-checkpoint_path <- "training_nn/cp.ckpt.weights.h5"
-checkpoint_dir <- fs::path_dir(checkpoint_path)
-
 # Adapt a normalizer on the data as we didn't normalize it yet
 normalizer <- layer_normalization(axis = -1L)
 normalizer |> adapt(as.matrix(dataset_features))
 
-# Define the input layer
-input <- layer_input(shape = dim(dataset_features)[2])
+# Define training for neural networks
+train.nn <- function(name, layers_hidden, epochs) {
+  # Set random seed
+  set_random_seed(69, disable_gpu = FALSE)
 
-# Define the feed forward and output
-output <- input |>
-  normalizer() |>
-  layer_dropout(rate = 0.05) |>
-  layer_dense(units = 32, activation = 'relu') |>
-  layer_dense(units = 32, activation = 'relu') |>
-  layer_dense(units = 1)
+  # Define paths for the states
+  chache_path <- str_interp("cache/nn.training.${name}.rds")
+  chache_dir <- fs::path_dir(chache_path)
+  if (!dir.exists(file.path(chache_dir))) {
+    dir.create(file.path(chache_dir))
+  }
 
-# Build the model
-nn.model <- keras_model(input, output)
+  checkpoint_path <- str_interp("checkpoints/${name}.weights.h5")
+  checkpoint_dir <- fs::path_dir(checkpoint_path)
+  if (!dir.exists(file.path(checkpoint_dir))) {
+    dir.create(file.path(checkpoint_dir))
+  }
 
-# Assign the optimizer and the metrics to use (mse and mae for regression)
-nn.model |> compile(
-  optimizer = 'adam',
-  loss = 'mse',
-  metrics = list('mae')
-)
-
-# Create a callback that saves the model's weights
-cp_callback <- callback_model_checkpoint(
-  filepath = checkpoint_path,
-  save_weights_only = TRUE,
-  save_best_only = TRUE,
-)
-
-# Train the model with a 20% validation split
-nn.model |>
-  fit(
-    as.matrix(train.dataset_features),
-    as.matrix(train.dataset_labels),
-    epochs = 5000,
-    batch_size = 64,
-    verbose = FALSE,
-    validation_data = list(as.matrix(val.dataset_features), as.matrix(val.dataset_labels)),
-    callbacks = list(cp_callback),
-  ) |>
-  plot()
-
-# Loads the weights
-load_model_weights(nn.model, checkpoint_path)
-
-# Evaluate model
-nn.model |>
-  evaluate(
-    as.matrix(val.dataset_features),
-    as.matrix(val.dataset_labels),
-    batch_size = 64
+  # Build model
+  inputs <- layer_input(
+    shape = dim(dataset_features)[2],
+    name = "inputs"
   )
+  outputs <- inputs |>
+    layers_hidden() |>
+    layer_dense(
+      units = 1,
+      name = "output"
+    )
+  nn.model <- keras_model(inputs, outputs)
+  nn.model$name <- name
+
+  # Assign the optimizer and the metrics to use (mse and mae for regression)
+  nn.model |> compile(
+    optimizer = 'adam',
+    loss = 'mse',
+    metrics = list('mae')
+  )
+
+  # Train the model with a 20% validation split
+  if (file.exists(chache_path) & file.exists(checkpoint_path)) {
+    nn.training <- readRDS(chache_path)
+  } else {
+    # Create a callback that saves the model weights
+    cp_callback <- callback_model_checkpoint(
+      filepath = checkpoint_path,
+      save_weights_only = TRUE,
+      save_best_only = TRUE,
+    )
+
+    # Train model and use test data to pick the best performing one
+    nn.training <- nn.model |>
+      fit(
+        as.matrix(train.dataset_features),
+        as.matrix(train.dataset_labels),
+        epochs = epochs,
+        batch_size = 64,
+        verbose = FALSE,
+        validation_data = list(
+          as.matrix(test.dataset_features),
+          as.matrix(test.dataset_labels)
+        ),
+        callbacks = list(cp_callback),
+      )
+    saveRDS(nn.training, chache_path)
+  }
+
+  # Loads the weights
+  load_model_weights(nn.model, checkpoint_path)
+  
+  nn.eval <- nn.model |> evaluate(
+    as.matrix(test.dataset_features),
+    as.matrix(test.dataset_labels),
+    batch_size = 64,
+    verbose = 0
+  )
+
+  results <- list(
+    model = nn.model,
+    training = nn.training,
+    mae = nn.eval$mae
+  )
+  return(results)
+}
 ```
 
-## Modell zur Vorhersage anwenden
+```{r}
+# Train model A
+results.A <- train.nn(
+  name = "Model.A",
+  layers_hidden = \(inputs) inputs |>
+    normalizer() |>
+    layer_dropout(rate = 0.05) |>
+    layer_dense(units = 32, activation = 'relu') |>
+    layer_dense(units = 32, activation = 'relu'),
+  epochs = 5000
+)
+results.A$training |> plot()
+results.A$mae
+
+# Train model B
+results.B <- train.nn(
+  name = "Model.B",
+  layers_hidden = \(inputs) inputs |> 
+    normalizer() |>
+    layer_dense(units = 32, activation = 'relu') |>
+    layer_dense(units = 32, activation = 'relu') |>
+    layer_dropout(rate = 0.1),
+  epochs = 5000
+)
+results.B$training |> plot()
+results.B$mae
+```
+
+## Modell zur Vorhersage anwenden {#sec-anwendung-vorhersage}
 
 Um die Anwendung des trainierten neuronalen Netzes zur Vorhersage der Vermietungen durchzuführen, werden zunächst die Vorhersagen mit dem bereits trainierten Modell getroffen. Hierzu wird der Eingabedatensatz (*application*) in eine Matrix umgewandelt, sodass das Modell die Daten im erforderlichen Format erhält. Das neuronale Netz (*nn.model*) verarbeitet die Eingaben und generiert Vorhersagen, die in der Variablen *predictions* gespeichert werden.
 
@@ -448,7 +617,7 @@ Anschließend werden diese Vorhersagen in den bestehenden Datensatz (*raw.applic
 
 ```{r}
 # Predict with the model
-predictions <- nn.model(as.matrix(application))
+predictions <- results.A$model(as.matrix(application))
 
 # Add predictions to the application
 pred.application <- raw.application
@@ -462,7 +631,7 @@ Abschließend wird der erweiterte Datensatz (*pred.application*), der die Vorher
 write.csv2(pred.application, file = "Prognose_IhrName.csv")
 ```
 
-# 6. Zusammenfassung
+# Zusammenfassung {#sec-zusammenfassung}
 
 <!-- Umfang von 0,5-1 Seiten -->
 
@@ -470,7 +639,7 @@ Fassen Sie kurz die zentralen Ergebnisse zusammen (0,5--1 Seite). Gehen Sie auch
 
 *Hinweis:* Laden Sie das aus der qmd-Datei gerenderte pdf-Dokument als Prüfungsleistung im OC hoch (keine gedruckte Abgabe erforderlich). Als Zusatzmaterial laden Sie die qmd-Datei und die csv-Datei mit den Daten Ihrer Prognose (`Prognose_IhrName.csv`) hoch.
 
-# Literatur
+# Literatur {#sec-literatur}
 
 Hier stehen die im Text verwendeten Quellen:
 
