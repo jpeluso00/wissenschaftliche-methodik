@@ -45,12 +45,13 @@ tf$config$list_physical_devices("GPU")
 
 <!-- Umfang von 0,5-1,5 Seiten -->
 
+```{=html}
 <!--
 Abbildungen: https://quarto.org/docs/authoring/figures.html
 Quellen: https://quarto.org/docs/authoring/citations.html
 Referenzen: https://quarto.org/docs/authoring/cross-references.html
 -->
-
+```
 ## Aufgabenstellung {#sec-einleitung-aufgabenstellung}
 
 Für die Vermietung von Fahrrädern sind verschiedene Aspekte ausschlaggebend. In dem Fall des vorliegenden Szenarios sind dies die potentiell erklärenden Variablen Einführungsphase, Jahreszeit, Wetter, Arbeitstag, Temperatur, Windgeschwindigkeit und Luftfeuchtigkeit. Die Ausprägung dieser wurden von früheren Vermietungen in einem Trainingsdatensatz festgehalten. Um künftige Fahrradvermietungen vorhersagen zu können, müssen die Zusammenhänge zwischen den genannten Variablen ermittelt und in einem Modell festgehalten werden. Ein zweiter Datensatz, der Anwendungsdatensatz, dient als Grundlage für den Performancetest.
@@ -126,7 +127,6 @@ gf_bar(~ einfuehrungsphase, data=raw.dataset)
 
 Der erste zu untersuchende Einflussfaktor ist die kategoriale Variable "Einführungsphase" und deren Verteilung. Beide Kategorien "Ja" und "Nein" haben eine ähnliche Anzahl von Einträgen (Ja=`r counts.einfuehrungsphase[1]`, Nein=`r counts.einfuehrungsphase[2]`). Insgesamt zeigt die Verteilung in @fig-einfuehrungsphase, dass es keinen signifikanten Unterschied in der Anzahl der Einträge zwischen den beiden Kategorien gibt.
 
-
 ```{r}
 #| label: fig-vermietungen-einfuehrungsphase
 #| fig-cap: "Vermietungen in Abhängigkeit zur Einfuehrungsphase"
@@ -155,9 +155,7 @@ Die Häufigkeit der Vorkommen über die verschiedenen Jahreszeiten hinweg ist we
 gf_boxplot(vermietungen ~ jahreszeit, data=raw.dataset)
 ```
 
-Der Boxplot in @fig-vermietungen-jahreszeit zeigt, dass im Frühling und Herbst die Verteilungen der Vermietungen ähnlich sind, wobei beide Jahreszeiten relativ große Interquartilsabstände aufweisen. Dies deutet auf eine breite Streuung der Daten in diesen Perioden hin. Die Medianwerte sind in beiden Fällen hoch, sodass die Vermietungsaktivität in diesen Jahreszeiten stark vertreten ist.
-Im Sommer bleibt die Verteilung ähnlich, aber es gibt einen Anstieg im Medianwert, was darauf hinweist, dass die Vermietungen in dieser Jahreszeit tendenziell etwas höher sind. Der Winter hingegen zeigt eine deutliche Verringerung der Vermietungszahlen, wie durch den niedrigeren Median und den geringeren Interquartilsabstand ersichtlich ist.
-Die geringere Variabilität im Winter deutet darauf hin, dass die Anzahl der Vermietungen in dieser Jahreszeit relativ konstant auf einem niedrigen Niveau sind.
+Der Boxplot in @fig-vermietungen-jahreszeit zeigt, dass im Frühling und Herbst die Verteilungen der Vermietungen ähnlich sind, wobei beide Jahreszeiten relativ große Interquartilsabstände aufweisen. Dies deutet auf eine breite Streuung der Daten in diesen Perioden hin. Die Medianwerte sind in beiden Fällen hoch, sodass die Vermietungsaktivität in diesen Jahreszeiten stark vertreten ist. Im Sommer bleibt die Verteilung ähnlich, aber es gibt einen Anstieg im Medianwert, was darauf hinweist, dass die Vermietungen in dieser Jahreszeit tendenziell etwas höher sind. Der Winter hingegen zeigt eine deutliche Verringerung der Vermietungszahlen, wie durch den niedrigeren Median und den geringeren Interquartilsabstand ersichtlich ist. Die geringere Variabilität im Winter deutet darauf hin, dass die Anzahl der Vermietungen in dieser Jahreszeit relativ konstant auf einem niedrigen Niveau sind.
 
 Der Boxplot in @fig-vermietungen-jahreszeit zeigt auch, dass es für Sommer einen auffälligen Eintrag mit einer Anzahl Vermietungen von unter 2500 gibt, der potenziell als Ausreiser gilt.
 
@@ -171,7 +169,7 @@ counts.wetter <- tally(~ wetter, data=raw.dataset)
 gf_bar(~ wetter, data=raw.dataset)
 ```
 
-Das Balkendiagramm in @fig-wetter illustriert die Häufigkeit der Wetterkategorien "Gut", "Nicht gut" und "Schlecht". Die Kategorie "Gut" weist mit `r counts.wetter[1]` die höchste Anzahl von Beobachtungen auf. Mit `r counts.wetter[2]`  liegt die Kategorie "Nicht gut" in der Mitte, mit etwa der Hälfte der Anzahl der Ausprägung "Gut", was zeigt, dass solche Wetterbedingungen weniger häufig sind, aber dennoch häufiger als "Schlecht" vorkommen. Die Kategorie "Schlecht" verzeichnet mit `r counts.wetter[3]` die geringste Anzahl von Beobachtungen und tritt somit am seltensten auf.
+Das Balkendiagramm in @fig-wetter illustriert die Häufigkeit der Wetterkategorien "Gut", "Nicht gut" und "Schlecht". Die Kategorie "Gut" weist mit `r counts.wetter[1]` die höchste Anzahl von Beobachtungen auf. Mit `r counts.wetter[2]` liegt die Kategorie "Nicht gut" in der Mitte, mit etwa der Hälfte der Anzahl der Ausprägung "Gut", was zeigt, dass solche Wetterbedingungen weniger häufig sind, aber dennoch häufiger als "Schlecht" vorkommen. Die Kategorie "Schlecht" verzeichnet mit `r counts.wetter[3]` die geringste Anzahl von Beobachtungen und tritt somit am seltensten auf.
 
 Dies zeigt ein deutlich vermehrtes Auftreten guten Wetters, während schlechtes Wetter selten ist. "Nicht gut" liegt in einer mittleren Anzahl, was die Variabilität der Wetterbedingungen verdeutlicht, jedoch mit einer klaren Präferenz für gutes Wetter.
 
@@ -268,7 +266,7 @@ gf_dhistogram(~ luftfeuchtigkeit, data=raw.dataset) |>
   gf_dens(linewidth = 1, color = "blue")
 ```
 
-Das Histogramm in @fig-luftfeuchtigkeit zeigt die Verteilung der Luftfeuchtigkeitsdaten in \%, mit einem Minimum von 3,88 und einem Maximum von 103,61. Das Maximum von 103,61 scheint hierbei ein fehlerhafter Wert zu sein, da Luftfeuchtigkeitswerte ein Höchstwert von 100 erreichen können. Der Mittelwert und der Median liegen bei 62,39 und 62,35. Im Gesamten ergibt sich hierbei eine Normalverteilung mit einer moderaten Streuung um den Mittelwert.
+Das Histogramm in @fig-luftfeuchtigkeit zeigt die Verteilung der Luftfeuchtigkeitsdaten in %, mit einem Minimum von 3,88 und einem Maximum von 103,61. Das Maximum von 103,61 scheint hierbei ein fehlerhafter Wert zu sein, da Luftfeuchtigkeitswerte ein Höchstwert von 100 erreichen können. Der Mittelwert und der Median liegen bei 62,39 und 62,35. Im Gesamten ergibt sich hierbei eine Normalverteilung mit einer moderaten Streuung um den Mittelwert.
 
 ```{r}
 #| label: fig-vermietungen-luftfeuchtigkeit
@@ -282,8 +280,7 @@ Der höchste Punkt der Trendlinie im Punktdiagramm in @fig-vermietungen-luftfeuc
 
 ## Entfernen von Ausreißern in den Daten {#sec-datenanalyse-ausreißern}
 
-In @sec-datenanalyse-luftfeuchtigkeit und @sec-datenanalyse-jahreszeit wurde festgestellt, dass der Eintrag mit einer Luftfeuchtigkeit von `r stats.luftfeuchtigkeit$max`\% fehlerhaft ist und ein Eintrag für die Jahreszeit Sommer mit einer Anzahl Vermietungen von unter 2500 potenziell als Ausreiser gilt.
-Diese Einträge werden im folgenden aus den Daten entfernt.
+In @sec-datenanalyse-luftfeuchtigkeit und @sec-datenanalyse-jahreszeit wurde festgestellt, dass der Eintrag mit einer Luftfeuchtigkeit von `r stats.luftfeuchtigkeit$max`% fehlerhaft ist und ein Eintrag für die Jahreszeit Sommer mit einer Anzahl Vermietungen von unter 2500 potenziell als Ausreiser gilt. Diese Einträge werden im folgenden aus den Daten entfernt.
 
 ```{r}
 # Remove wrong data
@@ -431,8 +428,7 @@ Durch die Modellierung eines Vorhersage-Modells, für die Vermietung von Fahrrä
 
 Das lineare Regressions-Modell stellt den Zusammenhang zwischen der abhängigen Variable „Vermietung“ und den im Datensatz vorhandenen unabhängigen Variablen dar. Dieses Zusammenhang ist, sofern vorhanden linear. Das Modell wird genutzt, um einen Trend abzubilden, der es ermöglicht, Vorhersagewerte für Kombinationen von Variablen aus dem Trainingsdatensatz zu ermitteln. Um die Genauigkeit des Modells zu bewerten, wird der MAE berechnet. (Buch: Modellieren in R; Seite 322ff.)
 
-Die Modellierung des neuronalen Netzes ist komplexer als das Base-Line Modell. Die einzelnen Neuronen in den nachfolgend erklärten Schichten, haben immer jeweils eine Verbindung zu allen Neuronen der folgenden Schicht. Es besteht aus einer Eingabeschicht, dem so genannten Inputlayer. Hier werden die zu betrachtenden Werte in das Netz geladen. Bei dem vorliegenden Datensatz sind dies die zehn Variablen. Nachfolgende Schichten im neuronalen Netz sind die versteckten Schichten, die Hiddenlayer. Diese verarbeiten die Werte aus der vorherigen Schicht. Von der Schicht der Hiddenlayer liegen zwei vor. Nach der Verarbeitung werden die Werte in die letzte Schicht, der Outputlayer, übertragen. In dem vorliegenden Anwendungsfall, gibt es für diese Schicht ein Neuron. Es wird ausgegeben, ob eine Vermietung stattfindet oder nicht. Die Verarbeitung in diesem Netzwerk findet von der Inputlayer zum Outputlayer statt und die Ergebnisse werden lediglich an die nächste Ebene weitergegeben. Dadurch liegt ein Feedforward neuronales Netz vor, da die Daten in Vorwärtsrichtung fließen. [@Awan2023]
-Das zu erstellende Modell wird 5000 Mal trainiert um die Gewichtungen und somit die Ergebnisse zu optimieren. Damit eine Optimierung möglich ist, werden die besten Gewichte der einzelnen Durchgänge gespeichert. Um das Modell vor Overfitting, also der Überanpassung auf den Trainingsdatensatz, zu schützen, wird eine Dropout-Rate gesetzt. Diese sperrt je Durchlauf zufällig einen angegebenen Prozentsatz an Neuronen je Layer, die somit temporär nicht trainiert werden. Somit wird ein gleichmäßiges Training gewährleistet. (QUELLE?)
+Die Modellierung des neuronalen Netzes ist komplexer als das Base-Line Modell. Die einzelnen Neuronen in den nachfolgend erklärten Schichten, haben immer jeweils eine Verbindung zu allen Neuronen der folgenden Schicht. Es besteht aus einer Eingabeschicht, dem so genannten Inputlayer. Hier werden die zu betrachtenden Werte in das Netz geladen. Bei dem vorliegenden Datensatz sind dies die zehn Variablen. Nachfolgende Schichten im neuronalen Netz sind die versteckten Schichten, die Hiddenlayer. Diese verarbeiten die Werte aus der vorherigen Schicht. Von der Schicht der Hiddenlayer liegen zwei vor. Nach der Verarbeitung werden die Werte in die letzte Schicht, der Outputlayer, übertragen. In dem vorliegenden Anwendungsfall, gibt es für diese Schicht ein Neuron. Es wird ausgegeben, ob eine Vermietung stattfindet oder nicht. Die Verarbeitung in diesem Netzwerk findet von der Inputlayer zum Outputlayer statt und die Ergebnisse werden lediglich an die nächste Ebene weitergegeben. Dadurch liegt ein Feedforward neuronales Netz vor, da die Daten in Vorwärtsrichtung fließen. [@Awan2023] Das zu erstellende Modell wird 5000 Mal trainiert um die Gewichtungen und somit die Ergebnisse zu optimieren. Damit eine Optimierung möglich ist, werden die besten Gewichte der einzelnen Durchgänge gespeichert. Um das Modell vor Overfitting, also der Überanpassung auf den Trainingsdatensatz, zu schützen, wird eine Dropout-Rate gesetzt. Diese sperrt je Durchlauf zufällig einen angegebenen Prozentsatz an Neuronen je Layer, die somit temporär nicht trainiert werden. Somit wird ein gleichmäßiges Training gewährleistet. (QUELLE?)
 
 ## Variablen {#sec-methodenbeschreibung-variablen}
 
@@ -668,9 +664,7 @@ write.csv2(pred.application, file = "Prognose_IhrName.csv")
 
 <!-- Umfang von 0,5-1 Seiten -->
 
-Fassen Sie kurz die zentralen Ergebnisse zusammen (0,5--1 Seite). Gehen Sie auch auf die Grenzen Ihrer Analyse ein.
-In der vorliegenden Ausarbeitung konnte ein Modell zur Vorhersage der Vermietungen in Abhängigkeit verschiedener Faktoren erarbeitet werden. Als Modell wurde ein neuronales Netz gewählt, welches einen MAE von (*mae*) erreicht. 
-*Hinweis:* Laden Sie das aus der qmd-Datei gerenderte pdf-Dokument als Prüfungsleistung im OC hoch (keine gedruckte Abgabe erforderlich). Als Zusatzmaterial laden Sie die qmd-Datei und die csv-Datei mit den Daten Ihrer Prognose (`Prognose_IhrName.csv`) hoch.
+Fassen Sie kurz die zentralen Ergebnisse zusammen (0,5--1 Seite). Gehen Sie auch auf die Grenzen Ihrer Analyse ein. In der vorliegenden Ausarbeitung konnte ein Modell zur Vorhersage der Vermietungen in Abhängigkeit verschiedener Faktoren erarbeitet werden. Als Modell wurde ein neuronales Netz gewählt, welches einen MAE von (`r results$MAE[1]`) erreicht. *Hinweis:* Laden Sie das aus der qmd-Datei gerenderte pdf-Dokument als Prüfungsleistung im OC hoch (keine gedruckte Abgabe erforderlich). Als Zusatzmaterial laden Sie die qmd-Datei und die csv-Datei mit den Daten Ihrer Prognose (`Prognose_IhrName.csv`) hoch.
 
 # Literatur {#sec-literatur}
 
