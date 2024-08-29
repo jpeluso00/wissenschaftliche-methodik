@@ -33,16 +33,18 @@ library(reticulate)
 
 # Setup python environment
 use_virtualenv(virtualenv = "./venv")
-# install_tensorflow(envname = "./venv", restart_session = FALSE)
+#install_tensorflow(envname = "./venv", restart_session = FALSE)
+# Create venv in terminal: python -m venv venv
 
 # Check if GPU is available for training
-tf$config$list_physical_devices("GPU")
+#tf$config$list_physical_devices("GPU")
 ```
 
 <!-- Sollten Umlaute falsch angezeigt werden: "File -> Reopen with Encoding -> UTF8" -->
 
 # Einleitung {#sec-einleitung}
 
+```{=html}
 <!--
 Umfang von 0,5-1,5 Seiten
 
@@ -50,7 +52,7 @@ Abbildungen: https://quarto.org/docs/authoring/figures.html
 Quellen: https://quarto.org/docs/authoring/citations.html
 Referenzen: https://quarto.org/docs/authoring/cross-references.html
 -->
-
+```
 ## Aufgabenstellung {#sec-einleitung-aufgabenstellung}
 
 Für die Vermietung von Fahrrädern sind verschiedene Aspekte ausschlaggebend. In dem Fall des vorliegenden Szenarios sind dies die potentiell erklärenden Variablen Einführungsphase, Jahreszeit, Wetter, Arbeitstag, Temperatur, Windgeschwindigkeit und Luftfeuchtigkeit. Die Ausprägung dieser wurden von früheren Vermietungen in einem Trainingsdatensatz festgehalten. Um künftige Fahrradvermietungen vorhersagen zu können, müssen die Zusammenhänge zwischen den genannten Variablen ermittelt und in einem Modell festgehalten werden. Ein zweiter Datensatz, der Anwendungsdatensatz, dient als Grundlage für den Performancetest.
@@ -363,8 +365,7 @@ preprocess <- function(dataset) {
 }
 ```
 
-Anschließend werden die Rohdaten sowohl für Anwendungen als auch für den Datensatz vorverarbeitet.
-Die vorverarbeiteten Daten werden in den Variablen *application* und *dataset* gespeichert.
+Anschließend werden die Rohdaten sowohl für Anwendungen als auch für den Datensatz vorverarbeitet. Die vorverarbeiteten Daten werden in den Variablen *application* und *dataset* gespeichert.
 
 Der Datensatz wird folgend für das Training von neuronale Netze mit Keras vorbereitet. Die Features werden aus dem vorverarbeiteten Datensatz *dataset* extrahiert, indem die Spalte vermietungen ausgeschlossen wird, während die Zielvariable *vermietungen* separat ausgewählt wird.
 
@@ -420,12 +421,14 @@ Nach der Vorverarbeitung sind die Anzahl Variablen von `r dim(clean.raw.dataset)
 
 # Methodenbeschreibung {#sec-methodenbeschreibung}
 
+```{=html}
 <!--
 Umfang von 2-4 Seiten
 Gehen Sie hier auf die verwendete Methode zur Modellierung, Variablen, und Modellauswahl ein. Zitieren Sie hier auch die methodische Literatur.
 -->
-
+```
 ## Modellauswahl {#sec-methodenbeschreibung-modellauswahl}
+
 https://www.datacamp.com/tutorial/neural-network-models-r
 
 Damit die Performance, zur Beurteilung hier der MAE, des Vorhersage-Modells bewertet werden kann, wird zuvor ein weiteres, zweites Modell erstellt. Hierbei wird ein lineares Modell als Vergleichs-Modell gewählt. Durch das simple Base-Line Modell, steht für den Vergleich ein einfaches und schnell zu trainierendes Modell zur Verfügung, welches auf Grund des Aufbaus einen geringen Ressourcen Bedarf hat. Dargestellt wird hierbei jedoch lediglich ein linearer Zusammenhang, der gegebenenfalls nicht ausreichend die Realität abbildet, wodurch es zu einem erhöhten MAE kommen kann. (Buch: Modellieren in R; Seite 322ff.) Dies wird in den nachfolgenden Kapiteln bezüglich der Anwendung der Modelle betrachtet.
@@ -465,6 +468,8 @@ Um die Vorhersagegüte des neuronalen Netzes bestimmen zu können, wird zunächs
 result.base <- list()
 result.base$model <- lm(vermietungen ~ ., data = train.raw.dataset)
 result.base$model$name <- "Model.Base"
+result.base$model$neurons <- "nv"
+result.base$model$dropr <- "nv"
 summary(result.base$model)
 
 # Calculate the MAE to compare models
@@ -506,7 +511,7 @@ Die abschließende Bewertung des Modells erfolgt anhand der Testdaten, wobei die
 #| include: false
 
 # Define training for neural networks
-train.nn <- function(name, layers_hidden, epochs) {
+train.nn <- function(name,neurons,dropr, layers_hidden, epochs) {
   # Set random seed
   set_random_seed(69, disable_gpu = FALSE)
 
@@ -536,6 +541,8 @@ train.nn <- function(name, layers_hidden, epochs) {
     )
   nn.model <- keras_model(inputs, outputs)
   nn.model$name <- name
+  nn.model$neurons <- neurons
+  nn.model$dropr <- dropr
 
   # Assign the optimizer and the metrics to use (mse and mae for regression)
   nn.model |> compile(
@@ -591,10 +598,12 @@ train.nn <- function(name, layers_hidden, epochs) {
 }
 
 # Define results table
-results <- data.frame(Name=c(), MAE=c(), Result=c())
+results <- data.frame(Name=c(),Neurons=c(),Dropr=c(), MAE=c(), Result=c())
 results.add <- function(result) {
   df <- data.frame(
     Name=c(result$model$name),
+    Neurons=c(result$model$neurons),
+    Dropr=c(result$model$dropr),
     MAE=c(result$mae),
     Result=c(deparse(substitute(result)))
   )
@@ -611,6 +620,8 @@ normalizer |> adapt(as.matrix(dataset_features))
 # Train model A
 result.A <- train.nn(
   name = "Model.A",
+  neurons = "32",
+  dropr="5%",
   layers_hidden = \(inputs) inputs |>
     normalizer() |>
     layer_dropout(rate = 0.05) |>
@@ -623,6 +634,8 @@ results.add(result.A)
 # Train model B
 result.B <- train.nn(
   name = "Model.B",
+  neurons = "32",
+  dropr="10%",
   layers_hidden = \(inputs) inputs |>
     normalizer() |>
     layer_dense(units = 32, activation = 'relu') |>
@@ -635,6 +648,8 @@ results.add(result.B)
 # Train model C
 result.C <- train.nn(
   name = "Model.C",
+  neurons = "32",
+  dropr="5%",
   layers_hidden = \(inputs) inputs |>
     layer_dropout(rate = 0.05) |>
     layer_dense(units = 32, activation = 'relu') |>
@@ -646,6 +661,8 @@ results.add(result.C)
 # Train model D
 result.D <- train.nn(
   name = "Model.D",
+  neurons = "64",
+  dropr="5%",
   layers_hidden = \(inputs) inputs |>
     normalizer() |>
     layer_dropout(rate = 0.05) |>
@@ -658,6 +675,8 @@ results.add(result.D)
 # Train model E
 result.E <- train.nn(
   name = "Model.E",
+  neurons = "16",
+  dropr="5%",
   layers_hidden = \(inputs) inputs |>
     normalizer() |>
     layer_dropout(rate = 0.05) |>
@@ -686,6 +705,7 @@ ggplot(results, aes(x = MAE, y = Name)) +
 results <- results[order(results$MAE), ]
 result.best <- get(results$Result[1])
 result.best$training |> plot()
+
 ```
 
 ```{r}
@@ -708,7 +728,9 @@ write.csv2(pred.application, file = "Prognose_IhrName.csv")
 
 <!-- Umfang von 0,5-1 Seiten -->
 
-Fassen Sie kurz die zentralen Ergebnisse zusammen (0,5--1 Seite). Gehen Sie auch auf die Grenzen Ihrer Analyse ein. In der vorliegenden Ausarbeitung konnte ein Modell zur Vorhersage der Vermietungen in Abhängigkeit verschiedener Faktoren erarbeitet werden. Als Modell wurde ein neuronales Netz gewählt, welches einen MAE von (`r result.best$MAE`) erreicht. *Hinweis:* Laden Sie das aus der qmd-Datei gerenderte pdf-Dokument als Prüfungsleistung im OC hoch (keine gedruckte Abgabe erforderlich). Als Zusatzmaterial laden Sie die qmd-Datei und die csv-Datei mit den Daten Ihrer Prognose (`Prognose_IhrName.csv`) hoch.
+Fassen Sie kurz die zentralen Ergebnisse zusammen (0,5--1 Seite). Gehen Sie auch auf die Grenzen Ihrer Analyse ein. In der vorliegenden Ausarbeitung konnte ein Modell zur Vorhersage der Vermietungen in Abhängigkeit verschiedener Faktoren erarbeitet werden. Als Modell wurde ein neuronales Netz gewählt, welches einen MAE von (`r results$MAE[1]`) erreicht. Die Anzahl des besten Modells liegt bei 
+`r results$name[1]` und hat `r results$Neurons[1]` Input Neuronen. Als Dropout Rate wurde das Modell mit `r results$dropr[1]` trainiert. Für das Training und den Vergleich der Modelle wurden verschiedene Wert der Hyperparameter genutzt. In einer weiteren Betrachtung des Themas könnte zur Optimierung der Hyperparameter per Gridsearch stattfinden. Außerdem könnte zur Erkennung von längerfristigen Wirkung von zeitlichen Ereignissen auch eine Analyse der Zeitreihen Daten stattfinden, dieses könnte sich auf das Wetter des Vortages beziehen allerdings, beispielsweise: wenn das Wetter am Vortag schlecht war und die Vermietungen niedrig werden am nächsten Tag mehr/weniger Fahrräder vermietet.
+*Hinweis:* Laden Sie das aus der qmd-Datei gerenderte pdf-Dokument als Prüfungsleistung im OC hoch (keine gedruckte Abgabe erforderlich). Als Zusatzmaterial laden Sie die qmd-Datei und die csv-Datei mit den Daten Ihrer Prognose (`Prognose_IhrName.csv`) hoch.
 
 # Literatur {#sec-literatur}
 
