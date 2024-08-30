@@ -64,6 +64,7 @@ Ziel der Arbeit ist es, ein Modell zu entwickeln, welches die Zielvariable $\hat
 ## Aufbau der Arbeit {#sec-einleitung-aufbau}
 
 *In dieser Arbeit wurden die Kapitel im Rahmen von Gruppenarbeiten und nicht durch individuelle Bearbeitung erstellt.*
+
 Das nachfolgende @sec-datenanalyse *Explorative Datenanalyse und Datenverarbeitung* befasst sich mit der detaillierten Beschreibung des vorliegenden Datensatzes und der Analyse von diesem. Hierbei werden die Zusammenhänge von verschiedenen Konstellationen der Einflussfaktoren betrachtet. Des Weiteren findet eine Datenaufbereitung statt, die für die spätere Verarbeitung der Daten in den Modellen notwendig ist. Im darauf folgenden @sec-methodenbeschreibung, der *Methodenbeschreibung*, wird die Auswahl der Modelle und die Funktionsweise dieser erläutert. Nach dem Training des Modells, wird dieses angewendet, die Ergebnisse aufgeführt, diese betrachtet und eine Vorhersage getroffen. Die *Zusammenfassung* der Arbeit stellt die Ergebnisse dar und führt diese als abschließendes Kapitel zusammen.
 
 # Explorative Datenanalyse und Datenvorverarbeitung {#sec-datenanalyse}
