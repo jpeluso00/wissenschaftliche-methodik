@@ -487,7 +487,7 @@ Der F-statistic-Wert von 152,8 mit einem sehr niedrigen p-Wert (\< 2.2e-16) beto
 
 Die lineare Regression stellt dar, dass insbesondere die Einfuehrungsphase und extreme Wetterbedingungen wie schlechtes Wetter sich stark auf die Vermietungen auswirken. Die Jahreszeiten haben ebenfalls einen signifikanten Einfluss, wobei der Winter einen deutlichen Rückgang und der Herbst einen Anstieg der Vermietungen bewirkt. Das Modell erklärt einen großen Teil der Variabilität der Vermietungen und ist damit eine solide Vorhersage.
 
-Schließlich wurde der MAE berechnet, indem die tatsächlichen Vermietungszahlen mit den vom Modell vorhergesagten Werten verglichen wurden. Der berechnete MAE-Wert (*623.8114*) wurde in *result.base\$mae* gespeichert und wird später als Referenzwert für den Vergleich mit dem neuronalen Netzwerk verwendet.
+Schließlich wurde der MAE berechnet, indem die tatsächlichen Vermietungszahlen mit den vom Modell vorhergesagten Werten verglichen wurden. Der berechnete MAE-Wert (623.8114) wurde in *result.base\$mae* gespeichert und wird später als Referenzwert für den Vergleich mit dem neuronalen Netzwerk verwendet.
 
 ### Unser Modell {#sec-anwendung-trainieren-ours}
 
