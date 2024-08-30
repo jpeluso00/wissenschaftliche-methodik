@@ -719,7 +719,7 @@ Abschließend wird der erweiterte Datensatz (*pred.application*), der die Vorher
 
 ```{r}
 # Save results
-write.csv2(pred.application, file = "Prognose_IhrName.csv")
+write.csv2(pred.application$vermietungen, file = "Prognose_IhrName.csv")
 ```
 
 # Zusammenfassung {#sec-zusammenfassung}
