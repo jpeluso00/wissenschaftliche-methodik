@@ -59,7 +59,7 @@ Für die Vermietung von Fahrrädern sind verschiedene Aspekte ausschlaggebend. I
 
 ## Zielsetzung {#sec-einleitung-zielsetzung}
 
-Ziel der Arbeit ist es, ein Modell zu entwickeln, welches die Zielvariable $\hat{y}_n$ für die gegeben Anwendungsdaten $x_n$ voraussagt. Die Zielvariable beschreibt hierbei die Anzahl an täglichen Fahrradvermietungen. Basis der Modellierung bilden die Trainingsdaten $x$, $y$. Die Bewertung von diesem Wert findet mithilfe des mittleren absoluten Fehlers - MAE (mean absolute error) statt. Der MAETest ist möglichst klein zu halten. Wie häufig wird eine Fahrradvermietung täglich stattfinden?
+Ziel der Arbeit ist es, ein Modell zu entwickeln, welches die Zielvariable $\hat{y}_n$ für die gegeben Anwendungsdaten $x_n$ voraussagt. Die Zielvariable beschreibt hierbei die Anzahl an täglichen Fahrradvermietungen. Basis der Modellierung bilden die Trainingsdaten $x$, $y$. Die Bewertung von diesem Wert findet mithilfe des mittleren absoluten Fehlers - MAE (mean absolute error) statt. Der MAE-Test ist möglichst klein zu halten. Wie häufig wird eine Fahrradvermietung täglich stattfinden?
 
 ## Aufbau der Arbeit {#sec-einleitung-aufbau}
 
@@ -228,7 +228,7 @@ gf_point(vermietungen ~ temperatur, data=raw.dataset) |>
   gf_smooth(method = "loess")
 ```
 
-Die Abhängigkeit zwischen der Temperatur und der Anzahl der Vermietungen in @fig-vermietungen-temperatur zeigt einen anfänglichen Anstieg der Vermietungszahlen mit zunehmender Temperatur, wobei ein Maximum bei etwa 20°- 25°C erreicht wird. Jenseits dieses Temperaturwertes nimmt die Anzahl der Vermietungen trotz weiter steigender Temperaturen ab. Dies legt nahe, dass gemäßigte Temperaturen zwischen 20-25°C optimal für Vermietungen sind, während höhere Temperaturen tendenziell eine negative Auswirkung auf die Nachfrage haben könnten.
+Die Abhängigkeit zwischen der Temperatur und der Anzahl der Vermietungen in @fig-vermietungen-temperatur zeigt einen anfänglichen Anstieg der Vermietungszahlen mit zunehmender Temperatur, wobei ein Maximum bei etwa 20-25°C erreicht wird. Jenseits dieses Temperaturwertes nimmt die Anzahl der Vermietungen trotz weiter steigender Temperaturen ab. Dies legt nahe, dass gemäßigte Temperaturen zwischen 20-25°C optimal für Vermietungen sind, während höhere Temperaturen tendenziell eine negative Auswirkung auf die Nachfrage haben könnten.
 
 ## Windgeschwindigkeit {#sec-datenanalyse-windgeschwindigkeit}
 
@@ -380,7 +380,7 @@ dataset_features <- dataset |> select(-vermietungen)
 dataset_labels <- dataset |> select(vermietungen)
 ```
 
-Für den Split der Daten in Train und Test Daten wird zunächst ein Zufallszahlengenerator mit dem Wert 69 initialisiert, um die Reproduzierbarkeit der Ergebnisse sicherzustellen. Der Datensatz wird dann in einen Trainings- und einen Testsatz aufgeteilt. Diese Aufteilung erfolgt zufällig, wobei 80 % der Daten für das Training und 20 % für den Test verwendet werden. Dies wird durch die Funktion *sample()* erreicht, die eine logische Vektorreihe erzeugt, die angibt, welche Zeilen in den Trainingssatz (*train.raw.dataset* und *train.dataset*) und welche in den Testsatz (*test.raw.dataset* und *test.dataset*) aufgenommen werden sollen. Schließlich werden die Features und Labels sowohl für den Trainings- als auch für den Testsatz getrennt gespeichert, indem die entsprechenden Zeilen aus den vorverarbeiteten Feature- und Labeldatensätzen ausgewählt werden.
+Für den Split der Daten in Train und Test Daten wird zunächst ein Zufallszahlengenerator mit dem Wert 69 initialisiert, um die Reproduzierbarkeit der Ergebnisse sicherzustellen. Der Datensatz wird dann in einen Trainings- und einen Testsatz aufgeteilt. Diese Aufteilung erfolgt zufällig, wobei 80% der Daten für das Training und 20% für den Test verwendet werden. Dies wird durch die Funktion *sample()* erreicht, die eine logische Vektorreihe erzeugt, die angibt, welche Zeilen in den Trainingssatz (*train.raw.dataset* und *train.dataset*) und welche in den Testsatz (*test.raw.dataset* und *test.dataset*) aufgenommen werden sollen. Schließlich werden die Features und Labels sowohl für den Trainings- als auch für den Testsatz getrennt gespeichert, indem die entsprechenden Zeilen aus den vorverarbeiteten Feature- und Labeldatensätzen ausgewählt werden.
 
 ```{r}
 # Make this example reproducible
@@ -442,7 +442,7 @@ Durch die Modellierung eines Vorhersage-Modells, für die Vermietung von Fahrrä
 
 Das lineare Regressions-Modell stellt den Zusammenhang zwischen der abhängigen Variable "Vermietung" und den im Datensatz vorhandenen unabhängigen Variablen dar. Dieses Zusammenhang ist, sofern vorhanden linear. Das Modell wird genutzt, um einen Trend abzubilden, der es ermöglicht, Vorhersagewerte für Kombinationen von Variablen aus dem Trainingsdatensatz zu ermitteln. Um die Genauigkeit des Modells zu bewerten, wird der MAE berechnet [@Sauer2019]. 
 
-Die Modellierung des neuronalen Netzes ist komplexer als das Base-Line Modell. Die einzelnen Neuronen in den nachfolgend erklärten Schichten, haben immer jeweils eine Verbindung zu allen Neuronen der folgenden Schicht. Es besteht aus einer Eingabeschicht, dem so genannten Inputlayer. Hier werden die zu betrachtenden Werte in das Netz geladen. Bei dem vorliegenden Datensatz sind dies die zehn Variablen. Nachfolgende Schichten im neuronalen Netz sind die versteckten Schichten, die Hiddenlayer. Diese verarbeiten die Werte aus der vorherigen Schicht. Von der Schicht der Hiddenlayer liegen zwei vor. Nach der Verarbeitung werden die Werte in die letzte Schicht, der Outputlayer, übertragen. In dem vorliegenden Anwendungsfall, gibt es für diese Schicht ein Neuron. Es wird ausgegeben, ob eine Vermietung stattfindet oder nicht. Die Verarbeitung in diesem Netzwerk findet von der Inputlayer zum Outputlayer statt und die Ergebnisse werden lediglich an die nächste Ebene weitergegeben. Dadurch liegt ein Feedforward neuronales Netz vor, da die Daten in Vorwärtsrichtung fließen. [@Awan2023] Das zu erstellende Modell wird 5000 Mal trainiert um die Gewichtungen und somit die Ergebnisse zu optimieren. Damit eine Optimierung möglich ist, werden die besten Gewichte der einzelnen Durchgänge gespeichert. Um das Modell vor Overfitting, also der Überanpassung auf den Trainingsdatensatz, zu schützen, wird eine Dropout-Rate gesetzt. Diese sperrt je Durchlauf zufällig einen angegebenen Prozentsatz an Neuronen je Layer, die somit temporär nicht trainiert werden. Somit wird ein gleichmäßiges Training gewährleistet [@Sonnet2022].
+Die Modellierung des neuronalen Netzes ist komplexer als das Base-Line Modell. Die einzelnen Neuronen in den nachfolgend erklärten Schichten, haben immer jeweils eine Verbindung zu allen Neuronen der folgenden Schicht. Es besteht aus einer Eingabeschicht, dem so genannten Inputlayer. Hier werden die zu betrachtenden Werte in das Netz geladen. Bei dem vorliegenden Datensatz sind dies die zehn Variablen. Nachfolgende Schichten im neuronalen Netz sind die versteckten Schichten, die Hiddenlayer. Diese verarbeiten die Werte aus der vorherigen Schicht. Von der Schicht der Hiddenlayer liegen zwei vor. Nach der Verarbeitung werden die Werte in die letzte Schicht, der Outputlayer, übertragen. In dem vorliegenden Anwendungsfall, gibt es für diese Schicht ein Neuron. Es wird ausgegeben, ob eine Vermietung stattfindet oder nicht. Die Verarbeitung in diesem Netzwerk findet von der Inputlayer zum Outputlayer statt und die Ergebnisse werden lediglich an die nächste Ebene weitergegeben. Dadurch liegt ein Feedforward neuronales Netz vor, da die Daten in Vorwärtsrichtung fließen [@Awan2023]. Das zu erstellende Modell wird 5000 Mal trainiert um die Gewichtungen und somit die Ergebnisse zu optimieren. Damit eine Optimierung möglich ist, werden die besten Gewichte der einzelnen Durchgänge gespeichert. Um das Modell vor Overfitting, also der Überanpassung auf den Trainingsdatensatz, zu schützen, wird eine Dropout-Rate gesetzt. Diese sperrt je Durchlauf zufällig einen angegebenen Prozentsatz an Neuronen je Layer, die somit temporär nicht trainiert werden. Somit wird ein gleichmäßiges Training gewährleistet [@Sonnet2022].
 
 ## Variablen {#sec-methodenbeschreibung-variablen}
 
@@ -459,7 +459,6 @@ Die Auswahl der Variablen innerhalb des Codes der zu trainierenden Modelle ist d
 ### Base-Line Modell {#sec-anwendung-trainieren-baseline}
 Um die Leistungsfähigkeit unseres Modells folgend adäquat zu bewerten, wird ein Vergleichsmaßstab in Form eines Base-Line Modells definiert, der eine sinnvolle Interpretation der erzielten Ergebnisse ermöglicht. Die bloße Aussage, dass das Modell "gute Ergebnisse" liefert, bleibt sonst ohne Kontext und Bezugspunkt. Um dies zu konkretisieren, wird ein grundlegendes Referenzmodell betrachtet, der als Ausgangspunkt dient. Die Vorhersagegüte des Modells kann anschließend anhand des Mean Absolute Error (MAE) bewertet und mit dem des neuronalen Netzes verglichen werden [@Nielsen2019].
 
-Um die Vorhersagegüte des neuronalen Netzes bestimmen zu können, wird zunächst das Base-Line Modell in Form einer linearen Regression erstellt, bei dem die Zielvariable von allen verfügbaren Prädiktoren im Trainingsdatensatz abhängt. Die Vorhersagegüte des Modells kann folgend anhand des Mean Absolute Error (MAE) bewertet und mit dem des neuronalen Netzes ins Verhältnis gesetzt werden.
 
 ```{r}
 # Train a simple lm on all the data
@@ -487,6 +486,8 @@ Der Residual Standard Error von 903,3 zeigt, dass die durchschnittliche Abweichu
 Der F-statistic-Wert von 152,8 mit einem sehr niedrigen p-Wert (\< 2.2e-16) betont, dass das Modell insgesamt signifikant ist und die unabhängigen Variablen eine hohe Erklärungskraft für die Variation in den Vermietungen haben.
 
 Die lineare Regression stellt dar, dass insbesondere die Einfuehrungsphase und extreme Wetterbedingungen wie schlechtes Wetter sich stark auf die Vermietungen auswirken. Die Jahreszeiten haben ebenfalls einen signifikanten Einfluss, wobei der Winter einen deutlichen Rückgang und der Herbst einen Anstieg der Vermietungen bewirkt. Das Modell erklärt einen großen Teil der Variabilität der Vermietungen und ist damit eine solide Vorhersage.
+
+Schließlich wurde der MAE berechnet, indem die tatsächlichen Vermietungszahlen mit den vom Modell vorhergesagten Werten verglichen wurden. Der berechnete MAE-Wert (*623.8114*) wurde in *result.base\$mae* gespeichert und wird später als Referenzwert für den Vergleich mit dem neuronalen Netzwerk verwendet.
 
 ### Unser Modell {#sec-anwendung-trainieren-ours}
 
