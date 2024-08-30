@@ -33,16 +33,18 @@ library(reticulate)
 
 # Setup python environment
 use_virtualenv(virtualenv = "./venv")
-# install_tensorflow(envname = "./venv", restart_session = FALSE)
+#install_tensorflow(envname = "./venv", restart_session = FALSE)
+# Create venv in terminal: python -m venv venv
 
 # Check if GPU is available for training
-tf$config$list_physical_devices("GPU")
+#tf$config$list_physical_devices("GPU")
 ```
 
 <!-- Sollten Umlaute falsch angezeigt werden: "File -> Reopen with Encoding -> UTF8" -->
 
 # Einleitung {#sec-einleitung}
 
+```{=html}
 <!--
 Umfang von 0,5-1,5 Seiten
 
@@ -50,10 +52,10 @@ Abbildungen: https://quarto.org/docs/authoring/figures.html
 Quellen: https://quarto.org/docs/authoring/citations.html
 Referenzen: https://quarto.org/docs/authoring/cross-references.html
 -->
-
+```
 ## Aufgabenstellung {#sec-einleitung-aufgabenstellung}
 
-Für die Vermietung von Fahrrädern sind verschiedene Aspekte ausschlaggebend. In dem Fall des vorliegenden Szenarios sind dies die potentiell erklärenden Variablen Einführungsphase, Jahreszeit, Wetter, Arbeitstag, Temperatur, Windgeschwindigkeit und Luftfeuchtigkeit. Die Ausprägung dieser wurden von früheren Vermietungen in einem Trainingsdatensatz festgehalten. Um künftige Fahrradvermietungen vorhersagen zu können, müssen die Zusammenhänge zwischen den genannten Variablen ermittelt und in einem Modell festgehalten werden. Ein zweiter Datensatz, der Anwendungsdatensatz, dient als Grundlage für den Performancetest.
+Für die Vermietung von Fahrrädern sind verschiedene Aspekte ausschlaggebend. In dem Fall des vorliegenden Szenarios sind diese Einflussfaktoren die potentiell erklärenden Variablen Einführungsphase, Jahreszeit, Wetter, Arbeitstag, Temperatur, Windgeschwindigkeit und Luftfeuchtigkeit. Die Ausprägung dieser wurden von früheren Vermietungen in einem Datensatz gespeichert. Um künftige Fahrradvermietungen vorhersagen zu können, müssen die Zusammenhänge zwischen den genannten Variablen ermittelt und in einem Modell festgehalten werden. Ein zweiter Datensatz, der Anwendungsdatensatz, dient als Grundlage für den Performancetest.
 
 ## Zielsetzung {#sec-einleitung-zielsetzung}
 
@@ -61,13 +63,13 @@ Ziel der Arbeit ist es, ein Modell zu entwickeln, welches die Zielvariable $\hat
 
 ## Aufbau der Arbeit {#sec-einleitung-aufbau}
 
-Das nachfolgende @sec-datenanalyse *Explorative Datenanalyse und Datenverarbeitung* befasst sich mit der detaillierten Beschreibung des vorliegenden Datensatzes und der Analyse von diesem. Hierbei werden die Zusammenhänge von verschiedenen Konstellationen der Attribute betrachtet. Des Weiteren findet eine Datenaufbereitung statt, die für die spätere Verarbeitung der Daten in den Modellen notwendig ist. Im darauf folgenden @sec-methodenbeschreibung, der *Methodenbeschreibung*, wird die Auswahl der Modelle und die Funktionsweise dieser erläutert. Nach dem Training des Modells, wird dieses angewendet, die Ergebnisse aufgeführt, betrachtet und eine Vorhersage getroffen. Die *Zusammenfassung* der Arbeit stellt die Ergebnisse dar und führt diese als abschließendes Kapitel zusammen.
+Das nachfolgende @sec-datenanalyse *Explorative Datenanalyse und Datenverarbeitung* befasst sich mit der detaillierten Beschreibung des vorliegenden Datensatzes und der Analyse von diesem. Hierbei werden die Zusammenhänge von verschiedenen Konstellationen der Einflussfaktoren betrachtet. Des Weiteren findet eine Datenaufbereitung statt, die für die spätere Verarbeitung der Daten in den Modellen notwendig ist. Im darauf folgenden @sec-methodenbeschreibung, der *Methodenbeschreibung*, wird die Auswahl der Modelle und die Funktionsweise dieser erläutert. Nach dem Training des Modells, wird dieses angewendet, die Ergebnisse aufgeführt, diese betrachtet und eine Vorhersage getroffen. Die *Zusammenfassung* der Arbeit stellt die Ergebnisse dar und führt diese als abschließendes Kapitel zusammen.
 
 # Explorative Datenanalyse und Datenvorverarbeitung {#sec-datenanalyse}
 
 <!-- Umfang von 2-4 Seiten -->
 
-Für die Explorative Datenanalyse und die darauf Folgenden Schritte, werden sowohl Anwendungs als auch Trainings Daten aus den zur Verfügung gestellten csv Dateien gelesen.
+Für die Explorative Datenanalyse und die darauf folgenden Schritte werden sowohl Anwendungs-/ als auch Trainingsdaten aus den zur Verfügung gestellten csv Dateien gelesen.
 
 ```{r}
 # Load data
@@ -79,7 +81,7 @@ str(raw.application)
 str(raw.dataset)
 ```
 
-Der vorliegende Datensatz ist in zwei Teildatenmengen ohne fehlende Werte aufgeteilt. Diese umfassen meteorologische und temporale Informationen, die in einem strukturierten Format bereitgestellt wurden. Die Gesamtdatenmenge bildet sich aus aus den Anwendungsdaten, bestehend aus `r dim(raw.application)[1]` Beobachtungen und `r dim(raw.application)[2]` Variablen und den Trainingsdaten, bestehend aus `r dim(raw.dataset)[1]` Beobachtungen und `r dim(raw.dataset)[2]` Variablen. Die ersten `r dim(raw.application)[2]` Variablen der Datensätze sind formal deckungsgleich. Die zusätzliche Variable des Trainingsdatensatzes enthält die Zielvariable, die durch die Modellierung angenähert wird.
+Der vorliegende Datensatz ist in zwei Teildatenmengen ohne fehlende Werte aufgeteilt. Diese umfassen meteorologische und temporale Informationen, die in einem strukturierten Format bereitgestellt wurden. Die Gesamtdatenmenge bildet sich aus den Anwendungsdaten, bestehend aus `r dim(raw.application)[1]` Beobachtungen und `r dim(raw.application)[2]` Variablen und den Trainingsdaten, bestehend aus `r dim(raw.dataset)[1]` Beobachtungen und `r dim(raw.dataset)[2]` Variablen. Die ersten `r dim(raw.application)[2]` Variablen der Datensätze sind formal deckungsgleich. Die zusätzliche Variable des Trainingsdatensatzes enthält die Zielvariable, die durch die Modellierung angenähert wird.
 
 ## Variablenübersicht {#sec-datenanalyse-variablenübersicht}
 
@@ -179,7 +181,7 @@ Dies zeigt ein deutlich vermehrtes Auftreten guten Wetters, während schlechtes 
 gf_boxplot(vermietungen ~ wetter, data=raw.dataset)
 ```
 
-Die Boxplots in @fig-vermietungen-wetter zeigen, dass die Vermietungszahlen bei gutem Wetter am höchsten sind, mit einem Median knapp unter 5000 und einer breiten Streuung. Bei "Nicht gut" liegt der Median geringfügig niedriger, mit geringerer Streuung. Die Vermietungszahlen sind bei schlechtem Wetter deutlich niedriger, mit einem Median unter 2500 und einer kleineren Streuung. Gutes Wetter führt demnach zu der höchsten und variabelsten Anzahl der Vermietungen, während schlechtes Wetter mit deutlich geringerer Nachfrage verbunden ist.
+Die Boxplots in @fig-vermietungen-wetter zeigen, mit einem Median knapp unter 5000 und einer breiten Streuung, dass die Vermietungszahlen bei gutem Wetter am höchsten sind. Bei "Nicht gut" liegt der Median, mit geringerer Streuung, geringfügig niedriger. Die Vermietungszahlen sind bei schlechtem Wetter, mit einem Median unter 2500 und einer kleineren Streuung, deutlich niedriger. Gutes Wetter führt demnach zu der höchsten und variabelsten Anzahl der Vermietungen, während schlechtes Wetter mit deutlich geringerer Nachfrage verbunden ist.
 
 ## Arbeitstag {#sec-datenanalyse-arbeitstag}
 
@@ -225,7 +227,7 @@ gf_point(vermietungen ~ temperatur, data=raw.dataset) |>
   gf_smooth(method = "loess")
 ```
 
-Die Abhängigkeit zwischen der Temperatur und der Anzahl der Vermietungen in @fig-vermietungen-temperatur zeigt einen anfänglichen Anstieg der Vermietungszahlen mit zunehmender Temperatur, wobei ein Maximum bei etwa 20°- 25°C erreicht wird. Jenseits dieses Temperaturwertes nimmt die Anzahl der Vermietungen trotz weiter steigender Temperaturen ab. Dies legt nahe, dass gemäßigte Temperaturen um 20°C optimal für Vermietungen sind, während höhere Temperaturen tendenziell eine negative Auswirkung auf die Nachfrage haben könnten.
+Die Abhängigkeit zwischen der Temperatur und der Anzahl der Vermietungen in @fig-vermietungen-temperatur zeigt einen anfänglichen Anstieg der Vermietungszahlen mit zunehmender Temperatur, wobei ein Maximum bei etwa 20°- 25°C erreicht wird. Jenseits dieses Temperaturwertes nimmt die Anzahl der Vermietungen trotz weiter steigender Temperaturen ab. Dies legt nahe, dass gemäßigte Temperaturen zwischen 20-25°C optimal für Vermietungen sind, während höhere Temperaturen tendenziell eine negative Auswirkung auf die Nachfrage haben könnten.
 
 ## Windgeschwindigkeit {#sec-datenanalyse-windgeschwindigkeit}
 
@@ -265,7 +267,7 @@ gf_dhistogram(~ luftfeuchtigkeit, data=raw.dataset) |>
   gf_dens(linewidth = 1, color = "blue")
 ```
 
-Das Histogramm in @fig-luftfeuchtigkeit zeigt die Verteilung der Luftfeuchtigkeitsdaten in %, mit einem Minimum von `r stats.luftfeuchtigkeit$min`% und einem Maximum von `r stats.luftfeuchtigkeit$max`%. Das Maximum von `r stats.luftfeuchtigkeit$max`% scheint hierbei ein fehlerhafter Wert zu sein, da Luftfeuchtigkeitswerte ein Höchstwert von 100 erreichen können. Der Mittelwert und der Median liegen bei `r stats.luftfeuchtigkeit$mean`% und `r stats.luftfeuchtigkeit$median`%. Im Gesamten ergibt sich hierbei eine Normalverteilung mit einer moderaten Streuung um den Mittelwert.
+Das Histogramm in @fig-luftfeuchtigkeit zeigt die Verteilung der Luftfeuchtigkeitsdaten in Prozent, mit einem Minimum von `r stats.luftfeuchtigkeit$min`% und einem Maximum von `r stats.luftfeuchtigkeit$max`%. Das Maximum von `r stats.luftfeuchtigkeit$max`% scheint hierbei ein fehlerhafter Wert zu sein, da Luftfeuchtigkeitswerte ein Höchstwert von 100 erreichen können. Der Mittelwert und der Median liegen bei `r stats.luftfeuchtigkeit$mean`% und `r stats.luftfeuchtigkeit$median`%. Im Gesamten ergibt sich hierbei eine Normalverteilung mit einer moderaten Streuung um den Mittelwert.
 
 ```{r}
 #| label: fig-vermietungen-luftfeuchtigkeit
@@ -302,13 +304,13 @@ Folgend wird für die Aufbereitung des Datensatz eine Funktion definiert, die sy
 
 Zunächst wird eine Kopie des ursprünglichen Datensatzes erstellt. Dies dient dem Zweck, die Originaldaten unverändert zu lassen und eine nicht-destruktive Bearbeitung zu ermöglichen. Diese Vorgehensweise stellt sicher, dass die Integrität der Ausgangsdaten während der Verarbeitung erhalten bleibt und bei Bedarf auf die Originaldaten zurückgegriffen werden kann.
 
-Im nächsten Schritt erfolgt die binäre Kodierung der Variablen "einfuehrungsphase" und "arbeitstag". Hierzu wird ein Mapping von "Nein" zu 0 und "Ja" zu 1 definiert. [@kumana5i2023]
+Im nächsten Schritt erfolgt die binäre Kodierung der Variablen "einfuehrungsphase" und "arbeitstag". Hierzu wird ein Mapping von "Nein" zu 0 und "Ja" zu 1 definiert [@kumana5i2023].
 
-Anschließend wird die Variable "wetter" ordinal kodiert. Die Werte "Schlecht", "Nicht gut" und "Gut" werden in die numerischen Werte 0, 1 und 2 überführt. Diese Kodierung reflektiert die natürliche Reihenfolge der Kategorien, um die hierarchische Beziehung zwischen den Kategorien zu berücksichtigen. [@kumana5i2023]
+Anschließend wird die Variable "wetter" ordinal kodiert. Die Werte "Schlecht", "Nicht gut" und "Gut" werden in die numerischen Werte 0, 1 und 2 überführt. Diese Kodierung reflektiert die natürliche Reihenfolge der Kategorien, um die hierarchische Beziehung zwischen den Kategorien zu berücksichtigen [@kumana5i2023].
 
-Für die Variable "jahreszeit" wird die One-Hot-Kodierung verwendet. Mithilfe der Funktion model.matrix werden für jede Kategorie der "jahreszeit"-Variable separate binäre Spalten erstellt. Hierdurch wird ermöglicht, dass jede Kategorie der Variable in einer eigenen Spalte dargestellt wird, wobei der Wert 1 angibt, dass die Kategorie zutrifft, die Ausprägung 0, dass sie nicht zutrifft. Die ursprüngliche "jahreszeit"-Spalte wird nach der Kodierung entfernt, um Redundanz zu vermeiden und den Datensatz zu bereinigen. [@kumana5i2023]
+Für die Variable "jahreszeit" wird die One-Hot-Kodierung verwendet. Mithilfe der Funktion model.matrix werden für jede Kategorie der "jahreszeit"-Variable separate binäre Spalten erstellt. Hierdurch wird ermöglicht, dass jede Kategorie der Variable in einer eigenen Spalte dargestellt wird, wobei der Wert 1 angibt, dass die Kategorie zutrifft, die Ausprägung 0, dass sie nicht zutrifft. Die ursprüngliche "jahreszeit"-Spalte wird nach der Kodierung entfernt, um Redundanz zu vermeiden und den Datensatz zu bereinigen [@kumana5i2023].
 
-Die Variablen "temperatur" und "windgeschwindigkeit" werden über Min-Max Scaling normalisiert und entsprechend in den Wertebereich von 0 bis 1 überführt. [@kumana5i2023] Bei dieser Berechnung ist es wichtig für die Vorhersagen mit zum Zeitpunkt des Training unbekannten Messdaten die gleichen Min-Max Werte zu verwenden, damit es zu keiner Verzerrung bei dem Ergebnis des Preprocessings kommt und das Modell diese richtig interpretiert.
+Die Variablen "temperatur" und "windgeschwindigkeit" werden über Min-Max Scaling normalisiert und entsprechend in den Wertebereich von 0 bis 1 überführt [@kumana5i2023]. Bei dieser Berechnung ist es wichtig, für die Vorhersagen mit zum Zeitpunkt des Training unbekannten Messdaten die gleichen Min-Max Werte zu verwenden, damit es zu keiner Verzerrung bei dem Ergebnis des Preprocessings kommt und das Modell diese richtig interpretiert.
 
 Bei der "luftfeuchtigkeit" handelt es sich um die Prozentwerte, die wir durch das Teilen durch 100 in den Wertebereich von 0 bis 1 skalieren.
 
@@ -363,10 +365,9 @@ preprocess <- function(dataset) {
 }
 ```
 
-Anschließend werden die Rohdaten sowohl für Anwendungen als auch für den Datensatz vorverarbeitet.
-Die vorverarbeiteten Daten werden in den Variablen *application* und *dataset* gespeichert.
+Anschließend werden die Rohdaten sowohl für Anwendungen als auch für den Datensatz vorverarbeitet. Die vorverarbeiteten Daten werden in den Variablen *application* und *dataset* gespeichert.
 
-Der Datensatz wird folgend für das Training von neuronale Netze mit Keras vorbereitet. Die Features werden aus dem vorverarbeiteten Datensatz *dataset* extrahiert, indem die Spalte vermietungen ausgeschlossen wird, während die Zielvariable *vermietungen* separat ausgewählt wird.
+Der Datensatz wird folgend für das Training von neuronale Netze mit Keras vorbereitet. Die Features werden aus dem vorverarbeiteten Datensatz *dataset* extrahiert, indem die Spalte *vermietungen* ausgeschlossen wird, während die Zielvariable *vermietungen* separat ausgewählt wird.
 
 ```{r}
 # Preprocess the data
@@ -416,43 +417,43 @@ head(clean.raw.dataset)
 head(dataset)
 ```
 
-Nach der Vorverarbeitung sind die Anzahl Variablen von `r dim(clean.raw.dataset)[2]` auf `r dim(dataset)[2]` gewachsen, alle nominalskalierten Variablen sind mit Zahlen representiert und die meisten Variablen liegen in einem Wertebereich von 0 bis 1. Die vorverarbeiteten Daten können somit ohne weitere Anpassungen für das Training von einem neuronalen Netz oder auch anderen Modellarten verwendet werden.
+Nach der Vorverarbeitung sind die Anzahl Variablen von `r dim(clean.raw.dataset)[2]` auf `r dim(dataset)[2]` gewachsen, alle nominalskalierten Variablen sind mit Zahlen representiert und die meisten Variablen liegen in einem Wertebereich von null bis eins. Die vorverarbeiteten Daten können somit ohne weitere Anpassungen für das Training von einem neuronalen Netz oder auch anderen Modellarten verwendet werden.
 
 # Methodenbeschreibung {#sec-methodenbeschreibung}
 
+```{=html}
 <!--
 Umfang von 2-4 Seiten
 Gehen Sie hier auf die verwendete Methode zur Modellierung, Variablen, und Modellauswahl ein. Zitieren Sie hier auch die methodische Literatur.
 -->
-
+```
 ## Modellauswahl {#sec-methodenbeschreibung-modellauswahl}
+
 https://www.datacamp.com/tutorial/neural-network-models-r
 
-Damit die Performance, zur Beurteilung hier der MAE, des Vorhersage-Modells bewertet werden kann, wird zuvor ein weiteres, zweites Modell erstellt. Hierbei wird ein lineares Modell als Vergleichs-Modell gewählt. Durch das simple Base-Line Modell, steht für den Vergleich ein einfaches und schnell zu trainierendes Modell zur Verfügung, welches auf Grund des Aufbaus einen geringen Ressourcen Bedarf hat. Dargestellt wird hierbei jedoch lediglich ein linearer Zusammenhang, der gegebenenfalls nicht ausreichend die Realität abbildet, wodurch es zu einem erhöhten MAE kommen kann. (Buch: Modellieren in R; Seite 322ff.) Dies wird in den nachfolgenden Kapiteln bezüglich der Anwendung der Modelle betrachtet.
+Damit die Performance, hier durch den MAE, des Vorhersage-Modells bewertet werden kann, wird zuvor ein weiteres, zweites Modell erstellt. Hierbei wird ein lineares Modell als Vergleichs-Modell gewählt. Durch das simple Base-Line Modell, steht für den Vergleich ein einfaches und schnell zu trainierendes Modell zur Verfügung, welches auf Grund des Aufbaus einen geringen Ressourcen Bedarf hat. Dargestellt wird hierbei jedoch lediglich ein linearer Zusammenhang, der gegebenenfalls nicht ausreichend die Realität abbildet, wodurch es zu einem erhöhten MAE kommen kann. (Buch: Modellieren in R; Seite 322ff.) Dies wird in den nachfolgenden Kapiteln bezüglich der Anwendung der Modelle betrachtet.
 
 Das Vorhersage-Modell basiert, im Gegensatz zum Vergleichs-Modell, auf einem neuronalen Netz. Dieses Netz wird aufgrund seiner höheren Komplexität eingesetzt, um den MAE signifikant zu verringern. Dies wird vor allem dadurch ermöglicht, dass das neuronale Netz in der Lage ist, von dem linearen Zusammenhang abzuweichen. In realen Szenarien existieren oft keine einfachen linearen Beziehungen zwischen den Variablen, weshalb das neuronale Netz, diese Beziehung erkennen und somit präzisere Vorhersagen liefern kann.
 
-Ein weiterer Aspekt für die Auswahl des neuronalen Netzes, ist die Gewichtung der Variablen im Modell. Während des Trainings passt das Netz die Gewichte der einzelnen Ergebnisse so an, dass die relevanten Zusammenhänge aus dem Trainingsdatensatz effektiv in das Modell eingebunden werden. Auf diese Weise trägt das Netz dazu bei, dass wichtige Korrelationen zwischen den Variablen erkannt und festgehalten werden. (https://www.ibm.com/de-de/topics/neural-networks)
+Ein weiterer Aspekt für die Auswahl des neuronalen Netzes ist die Gewichtung der Variablen im Modell. Während des Trainings passt das Netz die Gewichte der einzelnen Ergebnisse so an, dass die relevanten Zusammenhänge aus dem Trainingsdatensatz effektiv in das Modell eingebunden werden. Auf diese Weise trägt das Netz dazu bei, dass wichtige Korrelationen zwischen den Variablen erkannt und festgehalten werden. (https://www.ibm.com/de-de/topics/neural-networks)
 
 ## Modellierung {#sec-methodenbeschreibung-modellierung}
 
-Durch die Modellierung eines Vorhersage-Modells, für die Vermietung von Fahrrädern, kann ein Ausschnitt der Wirklichkeit betrachtet und nach Ermittlung von Regelmäßigkeiten auf andere Daten angewendet werden. Hierbei ist zu beachten, dass die Annäherung durch das Modell und somit der Zielvariable an die Wirklichkeit verzerrt oder falsch sein kann. Dies kann vorliegen, da nicht die ganze Gesamtheit zum trainieren des Modells bekannt ist. (Buch: Modellieren in R; Seite 246). Wie bereits im vorherigen Abschnitt beschrieben, wird bei der nachfolgenden Ausarbeitung ein lineares Regressions-Modell und ein Neuronales Netz trainiert und angewendet.
+Durch die Modellierung eines Vorhersage-Modells, für die Vermietung von Fahrrädern, kann ein Ausschnitt der Wirklichkeit betrachtet und nach Ermittlung von Regelmäßigkeiten auf andere Daten angewendet werden. Hierbei ist zu beachten, dass das Modell und somit auch die Zielvariable als Annäherung an die Wirklichkeit verzerrt oder falsch sein können. Dies kann passieren, da nicht die ganze Gesamtheit der Daten zum Trainieren des Modells genutzt wird. (Buch: Modellieren in R; Seite 246). Wie bereits im vorherigen Abschnitt beschrieben, wird bei der nachfolgenden Ausarbeitung ein lineares Regressions-Modell und ein Neuronales Netz trainiert und angewendet.
 
 Das lineare Regressions-Modell stellt den Zusammenhang zwischen der abhängigen Variable "Vermietung" und den im Datensatz vorhandenen unabhängigen Variablen dar. Dieses Zusammenhang ist, sofern vorhanden linear. Das Modell wird genutzt, um einen Trend abzubilden, der es ermöglicht, Vorhersagewerte für Kombinationen von Variablen aus dem Trainingsdatensatz zu ermitteln. Um die Genauigkeit des Modells zu bewerten, wird der MAE berechnet. (Buch: Modellieren in R; Seite 322ff.)
 
-Die Modellierung des neuronalen Netzes ist komplexer als das Base-Line Modell. Die einzelnen Neuronen in den nachfolgend erklärten Schichten, haben immer jeweils eine Verbindung zu allen Neuronen der folgenden Schicht. Es besteht aus einer Eingabeschicht, dem so genannten Inputlayer. Hier werden die zu betrachtenden Werte in das Netz geladen. Bei dem vorliegenden Datensatz sind dies die zehn Variablen. Nachfolgende Schichten im neuronalen Netz sind die versteckten Schichten, die Hiddenlayer. Diese verarbeiten die Werte aus der vorherigen Schicht. Von der Schicht der Hiddenlayer liegen zwei vor. Nach der Verarbeitung werden die Werte in die letzte Schicht, der Outputlayer, übertragen. In dem vorliegenden Anwendungsfall, gibt es für diese Schicht ein Neuron. Es wird ausgegeben, ob eine Vermietung stattfindet oder nicht. Die Verarbeitung in diesem Netzwerk findet von der Inputlayer zum Outputlayer statt und die Ergebnisse werden lediglich an die nächste Ebene weitergegeben. Dadurch liegt ein Feedforward neuronales Netz vor, da die Daten in Vorwärtsrichtung fließen. [@Awan2023] Das zu erstellende Modell wird 5000 Mal trainiert um die Gewichtungen und somit die Ergebnisse zu optimieren. Damit eine Optimierung möglich ist, werden die besten Gewichte der einzelnen Durchgänge gespeichert. Um das Modell vor Overfitting, also der Überanpassung auf den Trainingsdatensatz, zu schützen, wird eine Dropout-Rate gesetzt. Diese sperrt je Durchlauf zufällig einen angegebenen Prozentsatz an Neuronen je Layer, die somit temporär nicht trainiert werden. Somit wird ein gleichmäßiges Training gewährleistet. (QUELLE?)
+Die Modellierung des neuronalen Netzes ist komplexer als das Base-Line Modell. Die einzelnen Neuronen in den nachfolgend erklärten Schichten, haben immer jeweils eine Verbindung zu allen Neuronen der folgenden Schicht. Es besteht aus einer Eingabeschicht, dem so genannten Inputlayer. Hier werden die zu betrachtenden Werte in das Netz geladen. Bei dem vorliegenden Datensatz sind dies die zehn Variablen. Nachfolgende Schichten im neuronalen Netz sind die versteckten Schichten, die Hiddenlayer. Diese verarbeiten die Werte aus der vorherigen Schicht. Von der Schicht der Hiddenlayer liegen zwei vor. Nach der Verarbeitung werden die Werte in die letzte Schicht, der Outputlayer, übertragen. In dem vorliegenden Anwendungsfall, gibt es für diese Schicht ein Neuron. Es wird ausgegeben, ob eine Vermietung stattfindet oder nicht. Die Verarbeitung in diesem Netzwerk findet von der Inputlayer zum Outputlayer statt und die Ergebnisse werden lediglich an die nächste Ebene weitergegeben. Dadurch liegt ein Feedforward neuronales Netz vor, da die Daten in Vorwärtsrichtung fließen. [@Awan2023] Das zu erstellende Modell wird 5000 Mal trainiert um die Gewichtungen und somit die Ergebnisse zu optimieren. Damit eine Optimierung möglich ist, werden die besten Gewichte der einzelnen Durchgänge gespeichert. Um das Modell vor Overfitting, also der Überanpassung auf den Trainingsdatensatz, zu schützen, wird eine Dropout-Rate gesetzt. Diese sperrt je Durchlauf zufällig einen angegebenen Prozentsatz an Neuronen je Layer, die somit temporär nicht trainiert werden. Somit wird ein gleichmäßiges Training gewährleistet.
 
 ## Variablen {#sec-methodenbeschreibung-variablen}
 
-Die Grundlage für die Modellierung bilden die zur Verfügung gestellten Daten. Diese Daten liegen, wie im vorherigen Kapitel zur *Explorativen Datenanalyse und Datenvorverarbeitung* beschrieben, in Form verschiedener Attribute mit unterschiedlichen Ausprägungen vor. Um diese Daten für die Modellierung nutzbar zu machen, wurde ein Preprocessing durchgeführt, bei dem die Daten für die weitere Verarbeitung angepasst und bereinigt wurden. Diese vorverarbeiteten Daten wurden anschließend separat von den Originaldaten gespeichert, um sicherzustellen, dass nur die bereinigten und angepassten Variablen in der Modellierung verwendet werden. In der nachfolgenden Modellierungsphase werden ausschließlich diese verarbeitenden Datensätze verwendet. Für beide Modelle, dem Base-Line Modell und dem neuronalen Netz, wurden sämtliche verfügbaren Attribute verwendet, um die Modelle zu trainieren. Das neuronale Netzwerk gewichtet hierbei die Relevanz der einzelnen Variablen um die bestmögliche Annäherung an die Beziehungen in den vorliegenden Trainingsdaten zu finden. (Buch: Neuronale Netze kompakt; Seite 71ff.)
+Die Grundlage für die Modellierung bilden die zur Verfügung gestellten Daten. Diese Daten liegen, wie im vorherigen Kapitel zur *Explorativen Datenanalyse und Datenvorverarbeitung* beschrieben, in Form verschiedener Attribute mit unterschiedlichen Ausprägungen vor. Um diese Daten für die Modellierung nutzbar zu machen, wurde ein Preprocessing durchgeführt, bei dem die Daten für die weitere Verarbeitung angepasst und bereinigt wurden. Diese vorverarbeiteten Daten wurden anschließend separat von den Originaldaten gespeichert, um sicherzustellen, dass nur die bereinigten und angepassten Variablen in der Modellierung verwendet werden. In der nachfolgenden Modellierungsphase werden ausschließlich diese verarbeitenden Datensätze verwendet. Für beide Modelle, dem Base-Line Modell und dem neuronalen Netz, wurden sämtliche verfügbaren Attribute verwendet, um die Modelle zu trainieren. Das neuronale Netzwerk gewichtet hierbei die Relevanz der einzelnen Variablen, um die bestmögliche Annäherung an die Beziehungen in den vorliegenden Trainingsdaten zu finden. (Buch: Neuronale Netze kompakt; Seite 71ff.)
 
 Die Auswahl der Variablen innerhalb des Codes der zu trainierenden Modelle ist dynamisch gestaltet. Das bedeutet, dass das Hinzufügen neuer oder das Entfernen bestehender Attribute keine Anpassung des Codes erfordert. Dadurch bleibt die Modellierung und das Training flexibel gegenüber Änderungen im Datensatz.
 
 # Anwendung, Ergebnis und Vorhersage {#sec-anwendung}
 
 <!-- Umfang von 2-4 Seiten -->
-
-Wenden Sie hier Ihr Modell an und Interpretieren Sie Ihr Ergebnis. Bei Einzelarbeiten sollte der reine Text (ohne Code, Abbildungen etc.) einen Umfang von ca. 1--2 Seiten haben, bei Gruppenarbeiten einen von ca. 2--4 Seiten.
 
 ## Modell mit den Daten trainieren {#sec-anwendung-trainieren}
 
@@ -465,6 +466,8 @@ Um die Vorhersagegüte des neuronalen Netzes bestimmen zu können, wird zunächs
 result.base <- list()
 result.base$model <- lm(vermietungen ~ ., data = train.raw.dataset)
 result.base$model$name <- "Model.Base"
+result.base$model$neurons <- "nv"
+result.base$model$dropr <- "nv"
 summary(result.base$model)
 
 # Calculate the MAE to compare models
@@ -475,7 +478,7 @@ result.base$mae <- mae(
 result.base$mae
 ```
 
-Die Residuen reichen von -3641,3 bis 2384,8, wobei der Median nahe bei 0 liegt (-3,4). Dies deutet darauf hin, dass das Modell die Daten gut mittelt, obwohl einige Abweichungen auftreten. Die Variable *einfuehrungsphaseNein* hat den stärksten positiven Effekt auf die Vermietungen (2057,883), was darauf schließen lässt, dass die Vermietungen signifikant höher sind, wenn keine Einführungsphase vorliegt. Die Jahreszeiten zeigen unterschiedliche Effekte. Im Herbst steigen die Vermietungen signifikant (+562,431), während sie im Winter stark sinken (-765,179). Der Sommer zeigt einen leichten, aber nicht stark signifikanten Rückgang (-297,132). Wetterbedingungen spielen ebenfalls eine wichtige Rolle: Bei "Nicht gutem" und "Schlechtem" Wetter sinken die Vermietungen signifikant um -390,531 bzw. -2115,621. Die Temperatur hat einen positiven Effekt: Mit jedem Grad Anstieg erhöhen sich die Vermietungen um 120,920. Windgeschwindigkeit und Luftfeuchtigkeit haben negative Effekte auf die Vermietungen (-43,602 bzw. -10,445).
+Die Residuen reichen von -3641,3 bis 2384,8, wobei der Median nahe bei 0 liegt (-3,4). Dies deutet darauf hin, dass das Modell die Daten gut mittelt, obwohl einige Abweichungen auftreten. Die Variable *einfuehrungsphaseNein* hat den stärksten positiven Effekt auf die Vermietungen (2057,883), was darauf schließen lässt, dass die Vermietungen signifikant höher sind, wenn keine Einführungsphase vorliegt. Die Jahreszeiten zeigen unterschiedliche Effekte. Im Herbst steigen die Vermietungen signifikant (+562,431), während sie im Winter stark sinken (-765,179). Der Sommer zeigt einen leichten, aber nicht stark signifikanten Rückgang (-297,132). Wetterbedingungen spielen ebenfalls eine wichtige Rolle: Bei den Ausprägungen "Nicht gut" und "Schlecht" der Variable "Wetter" sinken die Vermietungen signifikant um -390,531 bzw. -2115,621. Die Temperatur hat einen positiven Effekt: Mit jedem Grad Anstieg erhöhen sich die Vermietungen um 120,920. Windgeschwindigkeit und Luftfeuchtigkeit haben negative Effekte auf die Vermietungen (-43,602 bzw. -10,445).
 
 Der Multiple R-squared-Wert von 0,7975 zeigt, dass fast 80% der Variabilität in den Vermietungen durch die erklärenden Variablen im Modell erfasst wird und weist somit eine solide Anpassung des Modells auf.
 
@@ -487,7 +490,7 @@ Die lineare Regression stellt dar, dass insbesondere die Einfuehrungsphase und e
 
 ### Unser Modell {#sec-anwendung-trainieren-ours}
 
-Zunächst wird, wie in dem Base-Line Modell, ein zufälliger Seed gesetzt (*set_random_seed(69)*), um die Reproduzierbarkeit der Ergebnisse zu gewährleisten. Zusätzlich die Nutzung der GPU ermöglicht, sofern diese verfügbar ist. Im Anschluss wird der Pfad für die Speicherung der Modellgewichte definiert (*checkpoint_path*), sodass das Modell während des Trainings regelmäßig gesichert werden kann.
+Zunächst wird, wie in dem Base-Line Modell, ein zufälliger Seed gesetzt (*set_random_seed(69)*), um die Reproduzierbarkeit der Ergebnisse zu gewährleisten. Zusätzlich wird die Nutzung der GPU ermöglicht, sofern diese verfügbar ist. Im Anschluss wird der Pfad für die Speicherung der Modellgewichte definiert (*checkpoint_path*), sodass das Modell während des Trainings regelmäßig gesichert werden kann.
 
 Um eine optimale Skalierung der Eingabedaten zu gewährleisten, wird ein Normalisierungslayer (*layer_normalization*) erstellt und an die Verteilung der Features im Datensatz (*dataset_features*) angepasst. Hierdurch wird sichergstellt, dass die Eingabedaten vor dem Durchlaufen des neuronalen Netzes auf eine vergleichebare Skala gebracht werden.
 
@@ -506,7 +509,7 @@ Die abschließende Bewertung des Modells erfolgt anhand der Testdaten, wobei die
 #| include: false
 
 # Define training for neural networks
-train.nn <- function(name, layers_hidden, epochs) {
+train.nn <- function(name,neurons,dropr, layers_hidden, epochs) {
   # Set random seed
   set_random_seed(69, disable_gpu = FALSE)
 
@@ -536,6 +539,8 @@ train.nn <- function(name, layers_hidden, epochs) {
     )
   nn.model <- keras_model(inputs, outputs)
   nn.model$name <- name
+  nn.model$neurons <- neurons
+  nn.model$dropr <- dropr
 
   # Assign the optimizer and the metrics to use (mse and mae for regression)
   nn.model |> compile(
@@ -591,10 +596,12 @@ train.nn <- function(name, layers_hidden, epochs) {
 }
 
 # Define results table
-results <- data.frame(Name=c(), MAE=c(), Result=c())
+results <- data.frame(Name=c(),Neurons=c(),Dropr=c(), MAE=c(), Result=c())
 results.add <- function(result) {
   df <- data.frame(
     Name=c(result$model$name),
+    Neurons=c(result$model$neurons),
+    Dropr=c(result$model$dropr),
     MAE=c(result$mae),
     Result=c(deparse(substitute(result)))
   )
@@ -611,6 +618,8 @@ normalizer |> adapt(as.matrix(dataset_features))
 # Train model A
 result.A <- train.nn(
   name = "Model.A",
+  neurons = "32",
+  dropr="5%",
   layers_hidden = \(inputs) inputs |>
     normalizer() |>
     layer_dropout(rate = 0.05) |>
@@ -623,6 +632,8 @@ results.add(result.A)
 # Train model B
 result.B <- train.nn(
   name = "Model.B",
+  neurons = "32",
+  dropr="10%",
   layers_hidden = \(inputs) inputs |>
     normalizer() |>
     layer_dense(units = 32, activation = 'relu') |>
@@ -635,6 +646,8 @@ results.add(result.B)
 # Train model C
 result.C <- train.nn(
   name = "Model.C",
+  neurons = "32",
+  dropr="5%",
   layers_hidden = \(inputs) inputs |>
     layer_dropout(rate = 0.05) |>
     layer_dense(units = 32, activation = 'relu') |>
@@ -646,6 +659,8 @@ results.add(result.C)
 # Train model D
 result.D <- train.nn(
   name = "Model.D",
+  neurons = "64",
+  dropr="5%",
   layers_hidden = \(inputs) inputs |>
     normalizer() |>
     layer_dropout(rate = 0.05) |>
@@ -658,6 +673,8 @@ results.add(result.D)
 # Train model E
 result.E <- train.nn(
   name = "Model.E",
+  neurons = "16",
+  dropr="5%",
   layers_hidden = \(inputs) inputs |>
     normalizer() |>
     layer_dropout(rate = 0.05) |>
@@ -686,6 +703,7 @@ ggplot(results, aes(x = MAE, y = Name)) +
 results <- results[order(results$MAE), ]
 result.best <- get(results$Result[1])
 result.best$training |> plot()
+
 ```
 
 ```{r}
@@ -707,17 +725,17 @@ write.csv2(pred.application, file = "Prognose_IhrName.csv")
 # Zusammenfassung {#sec-zusammenfassung}
 
 <!-- Umfang von 0,5-1 Seiten -->
-
-Fassen Sie kurz die zentralen Ergebnisse zusammen (0,5--1 Seite). Gehen Sie auch auf die Grenzen Ihrer Analyse ein. In der vorliegenden Ausarbeitung konnte ein Modell zur Vorhersage der Vermietungen in Abhängigkeit verschiedener Faktoren erarbeitet werden. Als Modell wurde ein neuronales Netz gewählt, welches einen MAE von (`r result.best$MAE`) erreicht. *Hinweis:* Laden Sie das aus der qmd-Datei gerenderte pdf-Dokument als Prüfungsleistung im OC hoch (keine gedruckte Abgabe erforderlich). Als Zusatzmaterial laden Sie die qmd-Datei und die csv-Datei mit den Daten Ihrer Prognose (`Prognose_IhrName.csv`) hoch.
+In der vorliegenden Ausarbeitung konnte ein Modell zur Vorhersage der Vermietungen in Abhängigkeit verschiedener Faktoren erarbeitet werden. 
+Die zentrale Aufgabenstellung der vorliegenden Arbeit befasst sich damit, auf Basis verschiedener erklärenden Variablen ein Vorhersagemodell von täglichen Fahrradvermietungen zu entwickeln.
+Der gegebene Datensatz setzt sich aus 500 Beobachtungen mit sieben verschiedenen Variablen zusammen. 
+Hierbei standen Variablen, wie beispielsweise Windgeschwindigkeit, Luftfeuchtigkeit, Jahreszeit, Temperatur oder generelle Wetterbedingungen zur Verfügung.
+Zunächst konnte durch die explorative Datenanalyse festgestellt werden, dass die Qualität des Wetters einen signifikanten Einfluss auf die Anzahl der Fahrradvermietungen hat, hierbei begünstigt die Ausprägung "gut" die Anzahl der Vermietungen.  Die Temperatur hat dementsprechend auch einen Einfluss auf die Vermietungen, hierbei befindet sich ein positiver Faktor für die Anzahl der Vermietungen im Temperaturbereich zwischen um 20-25°C, steigt die Temperatur über 25°C, nimmt die Anzahl der Vermietungen deutlich ab. Vermietungen finden eher an Arbeitstagen, als an Wochenenden, Feiertagen oder in den Ferien statt. Es wurden auch noch optimale Bereiche für andere Variablen festgestellt, diese wurden in der explorativen Datenanalyse ausführlich dargestellt.
+Im Anschluss an die explorativen Datenanalyse wurde die Datenvorverarbeitung vorgenommen. Dazu wurde eine Kopie des ursprünglichen Datensatzes erstellt, um diese unverändert zu lassen und die Integrität der ursprünglichen Daten zu erhalten. Anhand des Datensatzes der Verarbeitung wurden zunächst binäre Kodierungen der Variablen "einfuehrungsphase" sowie "arbeitstag" vorgenommen. Die Variable "wetter" wurde ordinal kodiert. Für die Variable "jahreszeit" war ein "one-hot-encoding" notwendig, welches für jede Ausprägung eine Spalte mit binärer Zuordnung erstellt, um eine Wertigkeit wie bei einer ordinal Kodierung, der Jahreszeiten zu vermeiden. Für die verbleibenden Variablen "temperatur" und "windgeschwindigkeit" wurde eine min-max-Skalierung zur Begrenzung des Wertebereiches vorgenommen. Für die Luftfeuchtigkeit wurde die Angabe vom prozentualen Wert auf die dezimal Schreibweise geändert, was Faktor 100 entspricht.
+Nach dem Preprocessing der Daten wurden zur Modellierung zwei verschiedene Modelle trainiert. Das erste Modell dient als Base-Line-Modell, welches initiale Vorhersagen treffen soll, die im späteren Verlauf als Benchmarking komplexerer Modelle dienen soll. Bei dem Base-Line-Modell handelt es sich um ein einfaches lineares Regressionsmodell, welches einen mittleren absoluten Fehler von ```r result.base$mae``` erreicht. Für das zweites Modell wurden verschiedene neuronale Netzwerke trainiert, hierbei wurden verschiedene Hyperparameter Werte getestet, um die optimale Konfiguration des neuronalen Netzwerkes sicherzustellen. Während des Trainings haben die Modelle zum overfitting tendiert, woraufhin ein dropout den Modellen hinzugefügt wurde. Das Modell mit den besten Werten der Hyperparameter war `r  result.best$model$name`. Das `r  result.best$model$name` hat einen MAE Wert von `r results$MAE[1]` erreicht, hierzu wurden `r results$Neurons[1]` Neuronen im Input Layer verwendet, außerdem wurde eine dropout Rate von `r results$Dropr[1]` genutzt. Das Base-Line-Modell erzielte moderate Werte, allerdings hat das neuronale Netz, aufgrund seiner Komplexität ein besseres Ergebnis erzielt 
+In einer weiteren Betrachtung des Themas könnte zur Optimierung der Hyperparameter das Verfahren (random) Gridsearch genutzt werden. Außerdem könnte zur Erkennung von längerfristigen Wirkung von zeitlichen Ereignissen auch eine Analyse der Zeitreihen Daten stattfinden, dieses könnte sich auf das Wetter des Vortages beziehen, beispielsweise: wenn das Wetter am Vortag schlecht war und die Vermietungen niedrig werden am nächsten Tag mehr/weniger Fahrräder vermietet, dafür müssten die Daten jedoch um eine Variable "Datum" erweitert werden.
 
 # Literatur {#sec-literatur}
 
 <!-- Literatur wird automatisch erweitert, wenn von references.bib eine referenz verwendet -->
 
 Hier stehen die im Text verwendeten Quellen:
-
--   Nachname Autor1, Anfangsbuchstabe Vorname Autor1, Nachname Autor2, Anfangsbuchstabe Vorname Autor2 1 & Nachname Autor3, Anfangsbuchstabe Vorname Autor3 (Jahr der Veröffentlichung). Titel des Beitrags. Weitere Publikationsinformationen.
-
-Im Text werden die Quellen nach der Harvard-Intext-Zitation in Klammern angegeben (siehe Leitfaden).
-
-**ChatGPT & Co:** Beachten Sie die Hinweise dazu im Leitfaden zur formalen Gestaltung von Seminar- und Abschlussarbeiten, Stand 24/01.
